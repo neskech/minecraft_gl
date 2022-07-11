@@ -1,0 +1,8 @@
+/Users/shauntemellor/Documents/CS/comsci/Projects/MinecraftGL/minecraft_gl/target/debug/build/glfw-sys-8ee8b38e41a03148/out/lib/libglfw3.a
+/Users/shauntemellor/Documents/CS/comsci/Projects/MinecraftGL/minecraft_gl/target/debug/build/glfw-sys-8ee8b38e41a03148/out/include/GLFW/glfw3.h
+/Users/shauntemellor/Documents/CS/comsci/Projects/MinecraftGL/minecraft_gl/target/debug/build/glfw-sys-8ee8b38e41a03148/out/include/GLFW/glfw3native.h
+/Users/shauntemellor/Documents/CS/comsci/Projects/MinecraftGL/minecraft_gl/target/debug/build/glfw-sys-8ee8b38e41a03148/out/lib/cmake/glfw3/glfw3Config.cmake
+/Users/shauntemellor/Documents/CS/comsci/Projects/MinecraftGL/minecraft_gl/target/debug/build/glfw-sys-8ee8b38e41a03148/out/lib/cmake/glfw3/glfw3ConfigVersion.cmake
+/Users/shauntemellor/Documents/CS/comsci/Projects/MinecraftGL/minecraft_gl/target/debug/build/glfw-sys-8ee8b38e41a03148/out/lib/cmake/glfw3/glfw3Targets.cmake
+/Users/shauntemellor/Documents/CS/comsci/Projects/MinecraftGL/minecraft_gl/target/debug/build/glfw-sys-8ee8b38e41a03148/out/lib/cmake/glfw3/glfw3Targets-debug.cmake
+/Users/shauntemellor/Documents/CS/comsci/Projects/MinecraftGL/minecraft_gl/target/debug/build/glfw-sys-8ee8b38e41a03148/out/lib/pkgconfig/glfw3.pc

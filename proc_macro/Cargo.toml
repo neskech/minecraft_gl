@@ -1,0 +1,10 @@
+[package]
+name = "proc_macro"
+version = "0.1.0"
+edition = "2021"
+
+#Was stated that I needed a nested crate for creating a procedural macro, not sure why
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
