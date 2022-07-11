@@ -1,1 +1,0 @@
-/Users/shauntemellor/Documents/CS/comsci/Projects/MinecraftGL/MinecraftGL/target/debug/libproc_macro_derive.dylib: /Users/shauntemellor/Documents/CS/comsci/Projects/MinecraftGL/MinecraftGL/proc_macro/proc_macro_derive/src/lib.rs
