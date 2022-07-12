@@ -2,3 +2,8 @@ target/
 minecraft_gl/target/
 proc_macro/target/
 proc_macro/proc_macro_derive/target/
+
+.Ds_Store
+minecraft_gl/.Ds_Store
+proc_macro/.Ds_Store
+proc_macro/proc_macro_derive/.Ds_Store

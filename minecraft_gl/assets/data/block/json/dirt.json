@@ -1,0 +1,13 @@
+{
+    "Name": "Dirt",
+    "ID": 0,
+    "Texture": "dirt.png",
+
+    "Attributes": {
+        "Toughness": 1.0,
+        "Friction": 0.0,
+        "EffectiveTool": "shovel",
+        "DropItem": "dirt",
+        "CraftingRecipe": []
+    }
+}

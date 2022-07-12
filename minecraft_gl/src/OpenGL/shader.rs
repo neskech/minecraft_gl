@@ -1,6 +1,7 @@
 
 use std::{fs::{File}, io::{self, BufRead}, path::Path, ffi::{CStr, CString}, os::raw::c_char};
 use gl::types::*;
+use nalgebra as na;
 
 pub struct Shader{
     id : GLuint
@@ -13,7 +14,6 @@ impl Shader{
             id : 0
         };
 
-        //TODO propogate the message all the way up to here using concat
         if let Err(msg) = s.Construct(path) {
             eprint!("{}", msg);
         }
@@ -148,45 +148,45 @@ impl Shader{
         }
    }
 
-   pub fn UploadVec2(&self, location: CString){
+   pub fn UploadVec2(&self, val: na::Vector2<f32>, location: CString){
         unsafe { 
             let loc = gl::GetUniformLocation(self.id, location.as_ptr());
-            //gl::Uniform2f(loc, val as i32); 
+            gl::Uniform2f(loc, val.x, val.y); 
         }
    }
 
-   pub fn UploadVec3(&self, location: CString){
+   pub fn UploadVec3(&self, val: na::Vector3<f32>, location: CString){
         unsafe { 
             let loc = gl::GetUniformLocation(self.id, location.as_ptr());
-            //gl::Uniform3f (loc, val as i32); 
+            gl::Uniform3f(loc, val.x, val.y, val.z); 
         }
    }
 
-   pub fn UploadVec4(&self, location: CString){
+   pub fn UploadVec4(&self, val: na::Vector4<f32>, location: CString){
         unsafe { 
             let loc = gl::GetUniformLocation(self.id, location.as_ptr());
-            //gl::Uniform4f (loc, val as i32); 
+            gl::Uniform4f(loc, val.x, val.y, val.z, val.w); 
         }
    }
 
-   pub fn UploadMatrix2x2(&self, location: CString){
+   pub fn UploadMatrix2x2(&self, val: na::Matrix2<f32>, location: CString){
         unsafe { 
             let loc = gl::GetUniformLocation(self.id, location.as_ptr());
-            //gl::UniformMatrix2fv (loc, val as i32); 
+            gl::UniformMatrix2fv(loc, 1, 0, val.as_ptr()); 
         }
    }
 
-   pub fn UploadMatrix3x3(&self, location: CString){
+   pub fn UploadMatrix3x3(&self, val: na::Matrix3<f32>, location: CString){
         unsafe { 
             let loc = gl::GetUniformLocation(self.id, location.as_ptr());
-            //gl::UniformMatrix3fv  (loc, val as i32); 
+            gl::UniformMatrix3fv(loc, 1, 0, val.as_ptr()); 
         }
    }  
 
-   pub fn UploadMatrix4x4(&self, location: CString){
+   pub fn UploadMatrix4x4(&self, val: na::Matrix4<f32>, location: CString){
         unsafe { 
             let loc = gl::GetUniformLocation(self.id, location.as_ptr());
-            //gl::UniformMatrix4fv (loc, val as i32); 
+            gl::UniformMatrix4fv(loc, 1, 0, val.as_ptr()); 
         }
    }
 

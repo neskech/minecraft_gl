@@ -64,6 +64,23 @@ impl TextureAtlas{
         })
     }
 
+    pub fn FromImage(image: DynamicImage, rows: u32, cols: u32, textureResolution: u32) -> Self{
+        let channels = if image.color().has_alpha(){
+                            gl::RGBA 
+                    } else { 
+                            gl::RGB 
+                    };
+
+        Self {
+            Image: image,
+            Rows: rows,
+            Columns: cols,
+            CellHeight: textureResolution,
+            CellWidth: textureResolution,
+            format: channels as i32
+        }
+    }
+
     pub fn GrabSubImage(&self, row: u32, col: u32) ->  SubImage<&DynamicImage>{
         let x = col * self.CellWidth;
         let y = row * self.CellHeight;

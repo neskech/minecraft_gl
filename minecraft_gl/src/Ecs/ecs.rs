@@ -4,7 +4,6 @@ use super::component::GetInnerComponent;
 use super::component::GetInnerComponentMut;
 use proc_macro::CompObj;
 
-
 const INVALID_ID: usize = usize::MAX;
 
 #[derive(Clone)]
