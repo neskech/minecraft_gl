@@ -3,9 +3,9 @@
 const INVALID_ITEM_ID: u8 = u8::MAX;
 
 //TODO ENUM for ID? Either u8 or INVALID similiar to an option
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Item{
-    pub ID: u8
+    pub ID: u8,
 }
 
 impl Item{
@@ -39,55 +39,20 @@ use serde_json::Value;
 use std::error::Error;
 use std::io::BufReader;
 use std::fs::{self};
+use crate::OpenGL::texture::Texture;
 use crate::Util::atlas::TextureAtlas;
 use crate::Util::resource;
-use super::GenericError;
+use super::{GenericError, State};
 use super::crafting::{CraftingRecipe, CraftingRegistry};
 use super::itemBehavior::ItemBehavior;
 use super::block::Block;
 
-#[derive(Clone)]
-pub enum ItemData {
-    Container((Vec<Item>, u32, u32)),
-    FloatAttribute(f32),
-    IntAttribute(i32),
-    BoolAttribute(bool)
-}
 
-impl ItemData{
-    pub fn AsInt(&self) -> Option<&i32>{
-        if let Self::IntAttribute(val) = self {
-            return Some(val);
-        }
-        None
-    }
-
-    pub fn AsFloat(&self) -> Option<&f32>{
-        if let Self::FloatAttribute(val) = self {
-            return Some(val);
-        }
-        None
-    }
-
-    pub fn AsArray(&self) -> Option<(&Vec<Item>, u32, u32)>{
-        if let Self::Container(val) = self {
-            //Vector, Rows, Columns
-            return Some((&val.0, val.1, val.2));
-        }
-        None
-    }
-
-    pub fn AsBool(&self) -> Option<&bool>{
-        if let Self::BoolAttribute(val) = self {
-            return Some(val);
-        }
-        None
-    }
-}
 
 #[derive(Clone)]
 pub struct ItemAttribute{
-    pub Attributes: HashMap<String, ItemData>,
+    //To be cloned upon creation of a new item of this type. Serves as a template
+    pub Attributes: HashMap<String, State>,
     pub PlaceableBlock: Option<Block>,
     pub Texture: Option<String>,
 }
@@ -132,8 +97,10 @@ impl ItemRegistry{
          let mut itemCount = 0;
          let mut textureCount = 0;
 
-         for file in fs::read_dir("../../assets/data/block/json")? {
-            let file = File::open(file?.path())?;
+         let path = std::path::Path::new("./minecraft_gl/assets/data/block/json/");
+         for file in fs::read_dir(path).map_err(|e| format!("Error! Could not find ./minecraft_gl/assets/data/block/json/! The error:\n{}", e.to_string()))? {
+            let path = file.map_err(|e| GenericError::NewBoxed(format!("Error! Could not retrieve file in ../../assets/data/block/json/ directory! The error:\n{}", e.to_string())))?.path();
+            let file = File::open(path).map_err(|e| GenericError::NewBoxed(format!("Error! Could not open file of path in ../../assets/data/block/json/ directory! The error:\n{}", e.to_string())))?;
             let buff = BufReader::new(file);
             let json: Value = serde_json::from_reader(buff)?;
 
@@ -148,24 +115,31 @@ impl ItemRegistry{
                 let obj = attributes.as_object().unwrap();
 
                 for pair in obj.iter() {
-                    if pair.1.is_object() {
+                    if pair.1.is_string() {
+                        let val = match State::StateType(pair.1.as_str().unwrap()) {
+                            Ok(val) => val,
+                            Err(msg) => return Err(GenericError::NewBoxed(format!("{}. Error orignated from Item type {} of Id {}", msg, name, id)))
+                        };
+                        attrib.Attributes.insert(pair.0.clone(), val);
+                    }
+                    else if pair.1.is_object() {
                         let rows = pair.1["Rows"].as_u64().unwrap() as u32;
                         let cols = pair.1["Cols"].as_u64().unwrap() as u32;
                         let mut vec: Vec<Item> = Vec::new();
                         vec.reserve((rows * cols) as usize);
-                        attrib.Attributes.insert(pair.0.clone(), ItemData::Container((vec, rows, cols)));
+                        attrib.Attributes.insert(pair.0.clone(), State::Container((vec, rows, cols)));
                     }
                     else if pair.1.is_i64() {
                         let val = pair.1.as_i64().unwrap() as i32;
-                        attrib.Attributes.insert(pair.0.clone(), ItemData::IntAttribute(val));
+                        attrib.Attributes.insert(pair.0.clone(), State::IntAttribute(val));
                     }
                     else if pair.1.is_f64() {
                         let val = pair.1.as_f64().unwrap() as f32;
-                        attrib.Attributes.insert(pair.0.clone(), ItemData::FloatAttribute(val));
+                        attrib.Attributes.insert(pair.0.clone(), State::FloatAttribute(val));
                     }
                     else if pair.1.is_boolean() {
                         let val = pair.1.as_bool().unwrap();
-                        attrib.Attributes.insert(pair.0.clone(), ItemData::BoolAttribute(val));
+                        attrib.Attributes.insert(pair.0.clone(), State::BoolAttribute(val));
                     }
                     else {
                         return Err(GenericError::NewBoxed(format!("Error! Item attribute {} for Item {} is not a valid type!\n
@@ -178,6 +152,7 @@ impl ItemRegistry{
                 }
             }
 
+            //TODO ITEM registry needs block reg and block reg needs item, fix this!!!!!!!
             if let Some(block) = json.get("PlaceableBlock") {
                 let block = Block { ID: block.as_u64().unwrap() as u8 };
                 attrib.PlaceableBlock = Some(block);
@@ -227,7 +202,7 @@ impl ItemRegistry{
          Ok(())
     }
 
-    pub fn GenerateAtlas(&self, textureResolution: u32) -> Result<TextureAtlas, String> {
+    pub fn GenerateAtlas(&self, texture: Texture, textureResolution: u32) -> Result<TextureAtlas, String> {
          //attemp to make a square image out of the atlas...
          let dims = f32::ceil(f32::sqrt(self.NumRegisteredItems as f32)) as u32;
          let mut img = image::RgbaImage::new(textureResolution * dims, textureResolution * dims);
@@ -249,7 +224,7 @@ impl ItemRegistry{
   
          }
          
-         Ok(TextureAtlas::FromImage(image::DynamicImage::ImageRgba8(img), dims, dims, textureResolution))
+         Ok(TextureAtlas::FromImage(image::DynamicImage::ImageRgba8(img), texture, dims, dims, textureResolution))
     }
 
     pub fn OnLeftClick(&self, blockName: &str) {
@@ -279,6 +254,7 @@ impl ItemRegistry{
     }
 
     pub fn IDofItem(&self, itemName: &str) -> u8{
+        //TODO Return Result<u8, &str> saying in the error that ID for {itemName} doesn't exist
         self.StringToID[itemName]
     }
 }

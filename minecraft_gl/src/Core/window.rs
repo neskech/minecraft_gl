@@ -1,4 +1,6 @@
 extern crate glfw;
+use core::ffi::CStr;
+use std::ffi::CString;
 use std::{sync::mpsc::Receiver, ops::Deref};
 use glfw::{Key, Action, Context};
 use crate::Event::event::*;
@@ -19,7 +21,11 @@ pub struct Window{
 
 impl Window{
     pub fn New(size: (i32, i32), eventBus: &Rc<RefCell<EventBus>>) -> Self{
-        let glfw = glfw::init(glfw::FAIL_ON_ERRORS).unwrap();
+        let mut glfw = glfw::init(glfw::FAIL_ON_ERRORS).unwrap();
+
+        glfw::Glfw::window_hint(&mut glfw, glfw::WindowHint::ContextVersion(4, 1));
+       glfw::Glfw::window_hint(&mut glfw, glfw::WindowHint::OpenGlForwardCompat(true));
+       glfw::Glfw::window_hint(&mut glfw, glfw::WindowHint::OpenGlProfile(glfw::OpenGlProfileHint::Core));
 
         //TODO turn the window size back to a u32
         let (mut window, events) = glfw.create_window(size.0 as u32, size.1 as u32, "Hello this is window", glfw::WindowMode::Windowed)
@@ -28,8 +34,16 @@ impl Window{
         Self::SetPollingTypes(&mut window);
 
         window.make_current();
-        gl::load_with(|s| window.get_proc_address(s) as *const _);
         
+        gl::load_with(|s|  window.get_proc_address(s) as *const _ );
+
+
+
+    // glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    // glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
         return Self{
             GlfwWindow: window,
             GLFW: glfw,
@@ -89,6 +103,13 @@ impl Window{
 
     pub fn SwapBuffers(&mut self){
         self.GlfwWindow.swap_buffers();
+    }
+
+    pub fn ClearBuffers(&mut self){
+        unsafe {
+            gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT);
+            gl::ClearColor(1f32, 0.2f32, 0.1f32, 1f32);
+        }
     }
 
     pub fn GetTime(&self) -> f64{

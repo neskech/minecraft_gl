@@ -1,13 +1,17 @@
 {
     "Name": "Dirt",
     "ID": 0,
-    "Texture": "dirt.png",
+    "Textures": [
+        "dirt.jpeg",
+        "dirt.jpeg",
+        "dirt.jpeg",
+        "dirt.jpeg",
+        "dirt.jpeg",
+        "dirt.jpeg"
+    ],
 
-    "Attributes": {
-        "Toughness": 1.0,
-        "Friction": 0.0,
-        "EffectiveTool": "shovel",
-        "DropItem": "dirt",
-        "CraftingRecipe": []
-    }
+    "Toughness": 1.0,
+    "Friction": 0.0,
+    "DropItem": "Dirt"
+
 }

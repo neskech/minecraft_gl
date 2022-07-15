@@ -28,10 +28,10 @@ impl FrameBuffer{
 
         self.TextureAttachment = Texture::New()
             .SetTextureParams(TextureParams{
-                WrapX: gl::CLAMP_TO_EDGE as i32,
-                WrapY: gl::CLAMP_TO_EDGE as i32,
-                MinFilter: gl::LINEAR as i32,
-                MagFilter: gl::LINEAR as i32,
+                WrapX: gl::CLAMP_TO_EDGE,
+                WrapY: gl::CLAMP_TO_EDGE,
+                MinFilter: gl::LINEAR,
+                MagFilter: gl::LINEAR,
                 MipmapLevels: None,
             })
             .AllocateImage(size, gl::RGB);

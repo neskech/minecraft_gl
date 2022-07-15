@@ -6,10 +6,10 @@ use image::*;
 use image::io::Reader as ImageReader;
 
 pub struct TextureParams{
-    pub WrapX: GLint,
-    pub WrapY: GLint,
-    pub MinFilter: GLint,
-    pub MagFilter: GLint,
+    pub WrapX: GLuint,
+    pub WrapY: GLuint,
+    pub MinFilter: GLuint,
+    pub MagFilter: GLuint,
     pub MipmapLevels: Option<i32>
 }
 
@@ -29,10 +29,10 @@ impl Texture{
     pub fn SetTextureParams(self, params: TextureParams) -> Self {
         unsafe {
             self.Bind(); 
-            gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_S, params.WrapX);
-            gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_T, params.WrapY);
-            gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MIN_FILTER, params.MinFilter);
-            gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MAG_FILTER, params.MagFilter);
+            gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_S, params.WrapX as i32);
+            gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_T, params.WrapY as i32);
+            gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MIN_FILTER, params.MinFilter as i32);
+            gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MAG_FILTER, params.MagFilter as i32);
 
             if let Some(mipMapLevels) = params.MipmapLevels {
                 gl::GenerateMipmap(gl::TEXTURE_2D);
@@ -44,7 +44,7 @@ impl Texture{
     }
 
     //builder pattern -- meant to be called last
-    pub fn SetTextureImage(self, path: &str) -> Result<Self, String> {
+    pub fn SetImageFromPath(self, path: &str) -> Result<Self, String> {
         let img = ImageReader::open(path);
         if let Err(_) = img {
             return Err(format!("Error! Could not read image from path of: {}", path));
@@ -78,6 +78,25 @@ impl Texture{
         }
 
         Ok(self)
+    }
+
+    pub fn SetImage(self, image: &DynamicImage, channels: u32) -> Self{
+        unsafe {
+            self.Bind();
+            gl::TexImage2D(
+                gl::TEXTURE_2D,
+                0,
+                channels as i32,
+                image.width() as i32,
+                image.height() as i32,
+                0,
+                channels,
+                gl::UNSIGNED_BYTE,
+                image.as_bytes() as *const _ as *const c_void
+            );
+            self.UnBind();
+        }
+        self
     }
 
     pub fn AllocateImage(self, size: (i32, i32), format: GLenum) -> Self{

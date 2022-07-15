@@ -9,11 +9,11 @@ use crate::Dispatch;
 use crate::Event::event::Event;
 use crate::Event::event::EventDispatcher;
 use crate::Event::eventBus::*;
+use crate::Scene::sceneManager::SceneManager;
 
 pub struct Application{
     Window: RefCell<Window>,
-    KeyListener: KeyListener,
-    MouseListener: MouseListener,
+    SceneManager: SceneManager,
     EventBus: Rc<RefCell<EventBus>>,
 
 }
@@ -23,18 +23,13 @@ impl Application{
          let bus = Rc::new(RefCell::new(EventBus::New()));
          Self {
             Window: RefCell::new(Window::New(defaultSize, &bus)),
-            KeyListener: KeyListener::New(),
-            MouseListener: MouseListener::New(),
+            SceneManager: SceneManager::New(),
             EventBus: bus
         }
 
     }
 
-    pub fn Init(& mut self){
-        
-    }
-
-    pub fn Run(&self){
+    pub fn Run(&mut self){
 
         let mut then = 0f32;
         let mut now: f32;
@@ -45,19 +40,21 @@ impl Application{
             delta = now - then;
             then = self.Window.borrow().GetTime() as f32;
 
-            println!("Delta: {}", 1f32/delta);
-
+           // println!("Delta: {}", 1f32/delta);
+            self.Window.borrow_mut().ClearBuffers();
             self.HandleEvents();
 
+            self.SceneManager.Update(delta);
+            self.SceneManager.Render();
             //call on scene
-
+        
             self.Window.borrow_mut().SwapBuffers();
             self.Window.borrow_mut().ProcessEvents();
         }
 
     }
 
-    pub fn HandleEvents(&self){
+    pub fn HandleEvents(&mut self){
         while self.EventBus.deref().borrow().Size() > 0 {
 
             let ev: Event = self.EventBus.deref().borrow_mut().Remove();
@@ -67,7 +64,7 @@ impl Application{
 
             //Call OnEvent w/ scene
             if !dispatcher.Handled {
-
+                self.SceneManager.OnEvent(&ev);
             }
         }
     }

@@ -1,0 +1,16 @@
+{
+    "Name": "Gravel",
+    "ID": 2,
+    "Textures": [
+        "gravel.png",
+        "gravel.png",
+        "gravel.png",
+        "gravel.png",
+        "gravel.png",
+        "gravel.png"
+    ],
+
+    "Toughness": 1.0,
+    "Friction": 0.0
+
+}

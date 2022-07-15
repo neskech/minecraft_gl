@@ -1,6 +1,6 @@
 
 use std::{fs::{File}, io::{self, BufRead}, path::Path, ffi::{CStr, CString}, os::raw::c_char};
-use gl::types::*;
+use gl::types::{*, self};
 use nalgebra as na;
 
 pub struct Shader{
@@ -14,8 +14,9 @@ impl Shader{
             id : 0
         };
 
+        //TODO just return Result<Self, Error>
         if let Err(msg) = s.Construct(path) {
-            eprint!("{}", msg);
+            panic!("{}", msg);
         }
         
         return s;
@@ -23,11 +24,12 @@ impl Shader{
 
     fn Construct(&mut self, path: &str) -> Result<(), String>{
         let shaders = ReadGLSL(path);
+        println!("THE VERTEX {}THE FRAGMENT {}\n\n\n", shaders.0, shaders.1);
 
         unsafe {
             let vShader: GLuint = gl::CreateShader(gl::VERTEX_SHADER);
             gl::ShaderSource(vShader, 1, 
-                &CStr::from_ptr(shaders.0.as_ptr() as *const c_char).as_ptr(), 
+                &(CString::new(shaders.0.as_str()).unwrap().as_c_str().as_ptr() as *const GLchar), 
                 std::ptr::null());
             gl::CompileShader(vShader);
 
@@ -38,7 +40,7 @@ impl Shader{
 
             let fShader: GLuint = gl::CreateShader(gl::FRAGMENT_SHADER);
             gl::ShaderSource(fShader, 1, 
-                &CStr::from_ptr(shaders.1.as_ptr() as *const c_char).as_ptr(), 
+                &(CString::new(shaders.1.as_str()).unwrap().as_c_str().as_ptr() as *const GLchar), 
                 std::ptr::null());
             gl::CompileShader(fShader);
 
@@ -84,12 +86,11 @@ impl Shader{
             gl::GetShaderiv(shader, gl::INFO_LOG_LENGTH, &mut length as *mut i32);
 
             let error = create_whitespace_cstring_with_len(length as usize);
-            gl::GetShaderInfoLog(shader, length, std::ptr::null_mut(), error.as_ptr() as *mut GLchar);
-
+            gl::GetShaderInfoLog(shader, length, std::ptr::null_mut(),  error.as_ptr() as *mut GLchar);
             
-            
+                 
             return Err(
-                format!("Error! {} Shader failed to compile! The issue: {:?}", shaderType, error.to_string_lossy().to_owned())
+                format!("Error! {} Shader failed to compile! The issue: {:?}", shaderType, error.to_string_lossy().into_owned())
             );
 
         }
@@ -248,20 +249,20 @@ fn ReadGLSL(path: &str) -> (String, String){
     for line in fileLines {
         let content = line.unwrap();
 
-        if content.contains("#vertex"){
+        if content.contains("#type vertex"){
             shaderID = 0;
             continue;
         }
-        else if content.contains("#fragment"){
+        else if content.contains("#type fragment"){
             shaderID = 1;
             continue;
         }
         
         if shaderID == 0 {
-            vertex = format!("{}{}", vertex, content);
+            vertex = format!("{}\n{}", vertex, content);
         }
         else {
-            fragment = format!("{}{}", fragment, content);
+            fragment = format!("{}\n{}", fragment, content);
         }
     }
 
@@ -282,3 +283,4 @@ fn create_whitespace_cstring_with_len(len: usize) -> CString {
     // convert buffer to CString
     unsafe { CString::from_vec_unchecked(buffer) }
 }
+

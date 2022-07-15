@@ -1,0 +1,16 @@
+{
+    "Name": "Wood",
+    "ID": 1,
+    "Textures": [
+        "wood.jpeg",
+        "wood.jpeg",
+        "wood.jpeg",
+        "wood.jpeg",
+        "trunk.jpeg",
+        "trunk.jpeg"
+    ],
+
+    "Toughness": 1.0,
+    "Friction": 0.0
+
+}

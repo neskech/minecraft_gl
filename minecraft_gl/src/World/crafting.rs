@@ -1,11 +1,11 @@
 
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use super::item::{Item, self};
 
 pub enum MatchType{
     TotalMatch,
-    PartialMatch,
+    PartialMatch(u32),
     ZeroMatch
 }
 
@@ -34,8 +34,67 @@ impl CraftingRecipe{
         )
     }
 
-    pub fn MatchType(&self, grid: &Vec<Item>) -> MatchType {
-        MatchType::TotalMatch
+    pub fn MatchType(&self, other: &CraftingRecipe) -> MatchType {
+        if self.Rows != other.Rows || self.Cols != other.Cols { return MatchType::ZeroMatch; }
+        let mut selfSet: HashMap<&Item, u16> = HashMap::new();
+        let mut otherSet: HashMap<&Item, u16> = HashMap::new();
+
+        let mut matches = true;
+        let mut matchCount = 0;
+        for r in 0..self.Rows {
+            for c in 0..self.Cols {
+                let idx = r * self.Cols + c;
+                let item1 = &self.Grid[idx as usize];
+                let item2 = &other.Grid[idx as usize];
+
+                if !selfSet.contains_key(item1) {
+                    selfSet.insert(item1, 1);
+                }
+                else {
+                    *selfSet.get_mut(item1).unwrap() += 1;
+                }
+
+                if !otherSet.contains_key(item2) {
+                    otherSet.insert(item2, 1);
+                }
+                else {
+                    *otherSet.get_mut(item2).unwrap() += 1;
+                }
+
+                if item1 != item2 {
+                    matches = false;
+                }
+                else{
+                    //at the end of the loop, this is incremented by a total of 2
+                    //Makes it more favorable to have matches AND matches at the same index
+                    matchCount += 1; 
+                }
+
+                if selfSet.contains_key(item2) {
+                    matchCount += 1;
+
+                    *selfSet.get_mut(item2).unwrap() -= 1;
+                    if selfSet[item2] == 0 { selfSet.remove(item2); }
+                    *otherSet.get_mut(item2).unwrap() -= 1;
+                    if otherSet[item2] == 0 { otherSet.remove(item2); }
+                }
+                else if otherSet.contains_key(item1) {
+                    matchCount += 1;
+
+                    *selfSet.get_mut(item1).unwrap() -= 1;
+                    if selfSet[item1] == 0 { selfSet.remove(item1); }
+                    *otherSet.get_mut(item1).unwrap() -= 1;
+                    if otherSet[item1] == 0 { otherSet.remove(item1); }
+                }
+                
+            }
+        }
+
+        if matches {
+            return MatchType::TotalMatch;
+        }
+        MatchType::PartialMatch(matchCount)
+
     }
 }
 

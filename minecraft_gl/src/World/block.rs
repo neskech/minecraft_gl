@@ -3,6 +3,12 @@
 pub struct Block{
     pub ID: u8
 }
+
+impl Block{
+    pub fn Air() -> Self {
+        Block { ID: 0 }
+    }
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -13,8 +19,11 @@ use std::error::Error;
 use std::io::BufReader;
 use std::collections::HashMap;
 use std::fs::{self, File};
+use std::path::PathBuf;
+use crate::OpenGL::texture::Texture;
 use crate::Util::atlas::TextureAtlas;
-use super::item::{Item};
+use super::{State, GenericError, item};
+use super::item::{Item, ItemRegistry};
 use super::blockBehavior::BlockBehavior;
 use glfw::WindowEvent;
 use super::super::Util::resource;
@@ -24,8 +33,9 @@ use serde_json;
 
 #[derive(Clone)]
 pub struct TextureData{
-    Textures: [String; 6],
-    Offsets: [u32; 6],
+    pub Textures: [String; 6],
+    pub TextureID: u32,
+    pub Offsets: [u32; 6],
 }
 
 #[derive(Clone)]
@@ -35,6 +45,8 @@ pub struct BlockAttribute{
     pub DropItem: Option<Item>,
     pub EffectiveTool: Option<Item>,
     pub TextureData: Option<TextureData>,
+    //TODO rename the Item Attribute's name for this to 'custom' too
+    pub CustomAttributes: HashMap<String, State>,
 }
 
 impl Default for BlockAttribute{
@@ -44,7 +56,8 @@ impl Default for BlockAttribute{
             Friction: 1f32, 
             DropItem: None, 
             EffectiveTool: None,
-            TextureData: None
+            TextureData: None,
+            CustomAttributes: HashMap::new()
         }
     }
 }
@@ -58,7 +71,7 @@ pub struct BlockRegistry{
 }
 
 impl BlockRegistry{
-    pub fn New() -> Result<Self, Box<dyn Error>> {
+    pub fn New(itemRegistry: &ItemRegistry) -> Result<Self, Box<dyn Error>> {
         let mut s = Self {
             BlocksAttributes: Vec::new(),
             BlockBehaviors: Vec::new(),
@@ -67,21 +80,22 @@ impl BlockRegistry{
             NumRegisteredTextures: 0,
         };
 
-        if let Err(msg) = s.ReadBlockAttributes() {
+        if let Err(msg) = s.ReadBlockAttributes(itemRegistry) {
             return Err(msg);
         }
 
         Ok(s)
     }
 
-    fn ReadBlockAttributes(&mut self) -> Result<(), Box<dyn Error>>{
+    fn ReadBlockAttributes(&mut self, itemRegistry: &ItemRegistry) -> Result<(), Box<dyn Error>>{
 
          let mut blockCount = 0;
          let mut textureCount = 0;
-
-         for file in fs::read_dir("../../assets/data/block/json")? {
-            let path = file?.path();
-            let file = File::open(path)?;
+         //TODO GET RID OF GENERIC ERRORS AND JUST USE MAP_ERR
+         let path = std::path::Path::new("./minecraft_gl/assets/data/block/json/");
+         for file in fs::read_dir(path).map_err(|e| format!("Error! Could not find ./minecraft_gl/assets/data/block/json/! The error:\n{}", e.to_string()))? {
+            let path = file.map_err(|e| GenericError::NewBoxed(format!("Error! Could not retrieve file in ../../assets/data/block/json/ directory! The error:\n{}", e.to_string())))?.path();
+            let file = File::open(path).map_err(|e| GenericError::NewBoxed(format!("Error! Could not open file of path in ../../assets/data/block/json/ directory! The error:\n{}", e.to_string())))?;
             let buff = BufReader::new(file);
             let json: Value = serde_json::from_reader(buff)?;
 
@@ -89,22 +103,76 @@ impl BlockRegistry{
             let name = json["Name"].as_str().unwrap();
             self.StringToID.insert(String::from(name), id);
 
-            //get the attributes...
-            let attributes = &json["Attributes"];
 
             let mut attrib = BlockAttribute::default();
+            //get the attributes...
+            //TODO Make this function miror the other function more
+            //TODO move all the base attributes out of the attribute tag in the json
+            //TODO also rename it to custom attributes maybe idk
+            if let Some(attributes) = json.get("Attributes") {
+                let obj = attributes.as_object().unwrap();
 
-            if let Some(val) = attributes.get("Toughness") { attrib.Toughness = val.as_f64().unwrap() as f32; }
-            if let Some(val) = attributes.get("Friction") { attrib.Friction = val.as_f64().unwrap() as f32; }
-            if let Some(val) = attributes.get("DropItem") { attrib.DropItem = Some(Item { ID: val.as_u64().unwrap() as u8 }); }
-            if let Some(val) = attributes.get("EffectiveTool") { attrib.EffectiveTool = Some(Item { ID: val.as_u64().unwrap() as u8 }); }
+                for pair in obj.iter() {
+                    if pair.1.is_string() {
+                        let val = match State::StateType(pair.1.as_str().unwrap()) {
+                            Ok(val) => val,
+                            Err(msg) => return Err(GenericError::NewBoxed(format!("{}. Error orignated from Item type {} of Id {}", msg, name, id)))
+                        };
+                        attrib.CustomAttributes.insert(pair.0.clone(), val);
+                    }
+                    else if pair.1.is_object() {
+                        let rows = pair.1["Rows"].as_u64().unwrap() as u32;
+                        let cols = pair.1["Cols"].as_u64().unwrap() as u32;
+                        let mut vec: Vec<Item> = Vec::new();
+                        vec.reserve((rows * cols) as usize);
+                        attrib.CustomAttributes.insert(pair.0.clone(), State::Container((vec, rows, cols)));
+                    }
+                    else if pair.1.is_i64() {
+                        let val = pair.1.as_i64().unwrap() as i32;
+                        attrib.CustomAttributes.insert(pair.0.clone(), State::IntAttribute(val));
+                    }
+                    else if pair.1.is_f64() {
+                        let val = pair.1.as_f64().unwrap() as f32;
+                        attrib.CustomAttributes.insert(pair.0.clone(), State::FloatAttribute(val));
+                    }
+                    else if pair.1.is_boolean() {
+                        let val = pair.1.as_bool().unwrap();
+                        attrib.CustomAttributes.insert(pair.0.clone(), State::BoolAttribute(val));
+                    }
+                    else {
+                        return Err(GenericError::NewBoxed(format!("Error! Item attribute {} for Item {} is not a valid type!\n
+                        The only valid types are...\n
+                        List: {{Rows, Cols}}\n
+                        Integer: int\n
+                        Float: float\n
+                        Bool: boolean\n", pair.0, name)));
+                    }  
+                }
+            }
 
-            if let Some(textures) = attributes.get("Textures") {
+
+            if let Some(val) = json.get("Toughness") { attrib.Toughness = val.as_f64().unwrap() as f32; }
+            if let Some(val) = json.get("Friction") { attrib.Friction = val.as_f64().unwrap() as f32; }
+            if let Some(val) = json.get("DropItem") { 
+                if val.is_string() {
+                    attrib.DropItem = Some(Item { ID: itemRegistry.IDofItem(val.as_str().unwrap()) }); 
+                }
+                else {
+                     attrib.DropItem = Some(Item { ID: val.as_u64().unwrap() as u8 }); 
+                }
+            }
+            if let Some(val) = json.get("EffectiveTool") { attrib.EffectiveTool = Some(Item { ID: val.as_u64().unwrap() as u8 }); }
+
+            if let Some(textures) = json.get("Textures") {
+                //TODO handle error if the texturees aren't an array
+                 if ! textures.is_array() {
+                    return Err(GenericError::NewBoxed(format!("Error in block registry creation! Texture attribute for {} of id {} must be an array of 6 elements", name, id)));
+                 }
                  let paths = textures.as_array().unwrap();
                  
                  //intialize an empty texture array
                  let texs = [String::new(), String::new(), String::new(), String::new(), String::new(), String::new()];
-                 let mut texData = TextureData { Textures: texs, Offsets: [0; 6] };
+                 let mut texData = TextureData { Textures: texs, TextureID: textureCount, Offsets: [0; 6] };
 
                  let mut cumul = 0;
                  for i in 0..6 {
@@ -116,6 +184,7 @@ impl BlockRegistry{
                     texData.Offsets[i] = cumul;
                  }
                  textureCount += cumul + 1;
+                 attrib.TextureData = Some(texData);
             }
             else {
                 textureCount += 1; //for the null texture
@@ -136,7 +205,7 @@ impl BlockRegistry{
          Ok(())
     }
 
-    pub fn GenerateAtlas(&self, textureResolution: u32) -> Result<TextureAtlas, String> {
+    pub fn GenerateAtlas(&self, texture: Texture, textureResolution: u32) -> Result<TextureAtlas, String> {
         //attemp to make a square image out of the atlas...
         let dims = f32::ceil(f32::sqrt(self.NumRegisteredTextures as f32)) as u32;
         let mut img = image::RgbaImage::new(textureResolution * dims, textureResolution * dims);
@@ -145,11 +214,15 @@ impl BlockRegistry{
         for idx in 0..self.NumRegisteredBlocks {
 
             if let Some(texData) = &self.BlocksAttributes[idx as usize].TextureData {
+   
                 for i in 0..6 {
                     if i == 0 || (i > 0 && texData.Offsets[i] != texData.Offsets[i - 1]) {
-            
-                        let mut texture = resource::GetImageFromPath(texData.Textures[i].as_str())?;
-                        image::imageops::resize(&mut texture, textureResolution, textureResolution, image::imageops::FilterType::Nearest);
+                        println!("IM IN HERE AGAIN BABY AT INDEX {} WITH {} AND {}", i, texData.Offsets[i], if i > 0 {texData.Offsets[i - 1]} else {0});
+                        let mut pathBuf = PathBuf::new();
+                        pathBuf.push("./minecraft_gl/assets/data/block/img");
+                        pathBuf.push(texData.Textures[i].as_str());
+                        let mut texture = resource::GetImageFromPath(pathBuf.as_path().as_os_str().to_str().unwrap())?;
+                        texture = image::DynamicImage::ImageRgba8(image::imageops::resize(&texture, textureResolution, textureResolution, image::imageops::FilterType::Nearest));
                         let coords = ((runningTextureCount % dims) * textureResolution, (runningTextureCount / dims) * textureResolution);
                         image::imageops::overlay(&mut img, &mut texture, coords.0, coords.1);
                         runningTextureCount += 1;
@@ -158,7 +231,7 @@ impl BlockRegistry{
             }
             else{
 
-                let mut texture = resource::GetImageFromPath("../../assets/data/block/img/nullTexture.png")?;
+                let mut texture = resource::GetImageFromPath("./minecraft_gl/assets/data/block/img/nullTexture.png")?;
                 image::imageops::resize(&mut texture, textureResolution, textureResolution, image::imageops::FilterType::Nearest);
                 let coords = ((runningTextureCount % dims) * textureResolution, (runningTextureCount / dims) * textureResolution);
                 image::imageops::overlay(&mut img, &texture, coords.0, coords.1);
@@ -167,7 +240,9 @@ impl BlockRegistry{
  
         }
         
-        Ok(TextureAtlas::FromImage(image::DynamicImage::ImageRgba8(img), dims, dims, textureResolution))
+        let image = image::DynamicImage::ImageRgba8(img);
+        image.save("./test.png");
+        Ok(TextureAtlas::FromImage(image, texture, dims, dims, textureResolution))
     }
 
     pub fn InitBehaviors(&self){

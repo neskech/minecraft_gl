@@ -2,8 +2,11 @@
 use image::*;
 use image::io::Reader as ImageReader;
 
+use crate::OpenGL::texture::Texture;
+
 
 pub struct TextureAtlas{
+    pub Texture: Texture,
     pub Image: DynamicImage,
     pub Rows: u32,
     pub Columns: u32,
@@ -13,6 +16,7 @@ pub struct TextureAtlas{
 }
 
 pub struct CubeMapAtlas{
+    pub Texture: Texture,
     pub Image: DynamicImage,
     pub Rows: u32,
     pub Columns: u32,
@@ -33,8 +37,8 @@ pub enum CubeMapFace{
 
 
 impl TextureAtlas{
-    pub fn New(path: &str, rows: u32, cols: u32) -> Result<TextureAtlas, String>{
-
+    pub fn New(path: &str, texture: Texture, rows: u32, cols: u32) -> Result<TextureAtlas, String>{
+        //Assume that the texture passed already has its texture parameters set
         let img = ImageReader::open(path);
         if let Err(_) = img {
             return Err(format!("Error! Could not read texture atlas from path of: {}", path));
@@ -55,6 +59,7 @@ impl TextureAtlas{
         let cellHeight = (finalImage.height() as f32 / rows as f32) as u32;
         let cellWidth = (finalImage.width() as f32 / cols as f32) as u32;
         Ok(Self {
+            Texture: texture.SetImage(&finalImage, channels),
             Image: finalImage,
             Rows: rows,
             Columns: cols,
@@ -64,7 +69,8 @@ impl TextureAtlas{
         })
     }
 
-    pub fn FromImage(image: DynamicImage, rows: u32, cols: u32, textureResolution: u32) -> Self{
+    pub fn FromImage(image: DynamicImage, texture: Texture, rows: u32, cols: u32, textureResolution: u32) -> Self{
+        //Assume that the texture passed already has its texture parameters set
         let channels = if image.color().has_alpha(){
                             gl::RGBA 
                     } else { 
@@ -72,6 +78,7 @@ impl TextureAtlas{
                     };
 
         Self {
+            Texture: texture.SetImage(&image, channels),
             Image: image,
             Rows: rows,
             Columns: cols,
@@ -87,11 +94,12 @@ impl TextureAtlas{
         SubImage::new(&self.Image, x, y, self.CellWidth, self.CellHeight) 
     }
 
+
 }
 
 
 impl CubeMapAtlas{
-    pub fn New(path: &str, rows: u32, cols: u32) -> Result<CubeMapAtlas, String>{
+    pub fn New(path: &str, texture: Texture, rows: u32, cols: u32) -> Result<CubeMapAtlas, String>{
 
         let img = ImageReader::open(path);
         if let Err(_) = img {
@@ -114,6 +122,7 @@ impl CubeMapAtlas{
         let cellHeight = (finalImage.height() as f32 / rows as f32) as u32;
         let cellWidth = (finalImage.width() as f32 / cols as f32) as u32;                 
         Ok(Self {
+            Texture: texture.SetImage(&finalImage, channels),
             Image: finalImage,
             Rows: rows,
             Columns: cols,
@@ -138,4 +147,5 @@ impl CubeMapAtlas{
         let y = row * self.CellHeight + offsetY;
         SubImage::new(&self.Image, x, y, self.FaceWidth, self.FaceHeight) 
     }
+
 }

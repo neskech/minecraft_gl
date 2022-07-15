@@ -13,11 +13,11 @@ pub struct VertexBuffer{
 impl VertexBuffer{
     pub fn New() -> Self{
         let mut me = Self {id: 0};
-        unsafe { gl::GenBuffers(1, &mut me.id as *mut GLuint) };
+        unsafe { gl::GenBuffers(1, &mut me.id) };
         me
     }
 
-    pub fn BufferData<T>(data: &Vec<T>, usage: u32){
+    pub fn BufferData<T>(&self, data: &Vec<T>, usage: u32){
         unsafe { 
 
             gl::BufferData(
@@ -29,7 +29,7 @@ impl VertexBuffer{
         };
     }
 
-    pub fn BufferSubData<T>(data: &Vec<T>, offset: usize, length: usize){
+    pub fn BufferSubData<T>(&self, data: &Vec<T>, offset: usize, length: usize){
         unsafe { 
  
             gl::BufferSubData(
@@ -42,7 +42,7 @@ impl VertexBuffer{
         };
     }
 
-    pub fn AllocateData<T>(length: usize, usage: u32){
+    pub fn AllocateData<T>(&self, length: usize, usage: u32){
         unsafe { 
 
             gl::BufferData(
@@ -93,11 +93,11 @@ pub struct IndexBuffer{
 impl IndexBuffer{
     pub fn New() -> Self{
         let mut me = Self {id: 0};
-        unsafe { gl::GenBuffers(1, &mut me.id as *mut GLuint) };
+        unsafe { gl::GenBuffers(1, &mut me.id) };
         me
     }
 
-    pub fn BufferData(data: &Vec<u32>, usage: u32){
+    pub fn BufferData(&self, data: &Vec<u32>, usage: u32){
         unsafe { 
 
             gl::BufferData(
@@ -109,7 +109,7 @@ impl IndexBuffer{
         };
     }
 
-    pub fn BufferSubData(data: &Vec<u32>, offset: usize, length: usize){
+    pub fn BufferSubData(&self, data: &Vec<u32>, offset: usize, length: usize){
         unsafe { 
  
             gl::BufferSubData(
@@ -122,7 +122,7 @@ impl IndexBuffer{
         };
     }
 
-    pub fn AllocateData(length: usize, usage: u32){
+    pub fn AllocateData(&self, length: usize, usage: u32){
         unsafe { 
 
             gl::BufferData(
