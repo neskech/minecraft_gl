@@ -41,7 +41,7 @@ impl Scene for MainMenu{
         
     }
 
-    fn Render(&self, renderer: &crate::Renderer::renderer::Renderer) {
+    fn Render(&mut self, renderer: &mut crate::Renderer::renderer::Renderer, target: &mut glium::Frame) {
         
     }
 

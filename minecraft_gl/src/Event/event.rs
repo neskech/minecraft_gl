@@ -1,3 +1,5 @@
+use glium::glutin::event::{ModifiersState, MouseButton, VirtualKeyCode};
+
 
 
 
@@ -14,46 +16,45 @@ pub enum Event{
     WindowClose(WindowCloseEvent),
 }
 
+
 #[derive(Clone)]
 pub struct MouseMovedEvent{
-    pub X: f64,
-    pub Y: f64,
+    pub X: f32,
+    pub Y: f32,
 }
 
 #[derive(Clone)]
 pub struct MouseButtonPressedEvent{
-    pub MouseButton: glfw::MouseButton,
-    pub Mods: glfw::Modifiers,
+    pub MouseButton: MouseButton,
+    pub Mods: ModifiersState,
 }
 
 #[derive(Clone)]
 pub struct MouseButtonReleasedEvent{
-    pub MouseButton: glfw::MouseButton,
-    pub Mods: glfw::Modifiers,
+    pub MouseButton: MouseButton,
 }
 
 #[derive(Clone)]
 pub struct MouseScrollEvent{
-    pub ScrollX: f64,
-    pub ScrollY: f64
+    pub ScrollX: f32,
+    pub ScrollY: f32
 }
 
 #[derive(Clone)]
 pub struct KeyPressedEvent{
-    pub Key: glfw::Key,
-    pub Action: glfw::Action,
-    pub Mods: glfw::Modifiers,
+    pub Key: VirtualKeyCode,
+    pub Mods: ModifiersState,
 }
 
 #[derive(Clone)]
 pub struct KeyReleasedEvent{
-    pub Key: glfw::Key,
+    pub Key: VirtualKeyCode,
 }
 
 #[derive(Clone)]
 pub struct WindowResizeEvent{
-    pub Width: i32,
-    pub Height: i32,
+    pub Width: u32,
+    pub Height: u32,
 }
 
 #[derive(Clone)]

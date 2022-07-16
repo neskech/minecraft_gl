@@ -1,14 +1,17 @@
 
+use glium::glutin::event::VirtualKeyCode;
 use nalgebra as na;
 
-use crate::Event::event::{Event, MouseMovedEvent};
+use crate::Event::event::{Event, MouseMovedEvent, KeyPressedEvent};
 
-const FOV: f32 = 90f32;
+const FOV: f32 = 1.2f32;
 const ZNEAR: f32 = 0.01f32;
 const ZFAR: f32 = 100f32;
 
 pub struct Camera{
     Position: na::Vector3<f32>,
+    CameraRight: na::Vector3<f32>,
+    CameraUp: na::Vector3<f32>,
     Pitch: f32,
     Yaw: f32,
     //TODO change the mouse moved event's type to F32
@@ -19,37 +22,60 @@ pub struct Camera{
 impl Camera{
     pub fn New() -> Self {
         Self {
-            Position: na::Vector3::zeros(),
+            Position: na::Vector3::new(0f32, 0f32, 0f32),
+            CameraRight: na::Vector3::zeros(),
+            CameraUp: na::Vector3::zeros(),
             Pitch: 0f32,
             Yaw: 0f32,
-            Direction: na::Vector3::zeros(),
+            Direction: na::Vector3::new(0f32, 0f32, 2f32),
             PreviousCursorPos: (0f32, 0f32),
         }
     }
 
-    pub fn GetProjectionMatrix(&self) -> na::Matrix4<f32>{
+    pub fn GetProjectionMatrixVectorized(&self) -> na::Matrix4<f32>{
         *na::Perspective3::new(1f32, FOV, ZNEAR, ZFAR).as_matrix()
     }
 
-    pub fn GetViewMatrix(&self) -> na::Matrix4<f32>{
-        let up: na::Vector3<f32> = na::Vector3::new(0.0f32, 1.0f32, 0.0f32); 
-        let camRight = up.cross(&self.Direction).normalize();
-        let camUp = self.Direction.cross(&camRight);
+    pub fn GetViewMatrixVectorized(&self) -> na::Matrix4<f32>{
 
 
-        let m = na::Matrix4::new(camRight.x, camRight.y, camRight.z, 0f32,
-                                   camUp.x, camUp.y, camUp.z, 0f32,
-                                   self.Direction.x, self.Direction.y ,self.Direction.z, 0f32,
-                                   0f32, 0f32, 0f32, 0f32 );
+        // let m = na::Matrix4::new(self.CameraRight.x, self.CameraRight.y, self.CameraRight.z, 0f32,
+        //                            self.CameraUp.x, self.CameraUp.y, self.CameraUp.z, 0f32,
+        //                            self.Direction.x, self.Direction.y ,self.Direction.z, 0f32,
+        //                            0f32, 0f32, 0f32, 0f32 );
 
-        let m2 = na::Matrix4::new(0f32, 0f32, 0f32, self.Position.x,
-                                                                       0f32, 0f32, 0f32, self.Position.y,
-                                                                       0f32, 0f32, 0f32, self.Position.z,        
-                                                                       0f32, 0f32, 0f32, 0f32
+        // let m2 = na::Matrix4::new(0f32, 0f32, 0f32, self.Position.x,
+        //                                                                0f32, 0f32, 0f32, self.Position.y,
+        //                                                                0f32, 0f32, 0f32, self.Position.z,        
+        //                                                                0f32, 0f32, 0f32, 0f32
 
-                                                                  );
+        //                                                           );
+        let eye = na::Point3::new(self.Position.x, self.Position.y, self.Position.z);
+        let target = na::Point3::new(self.Position.x + self.Direction.x, self.Position.y + self.Direction.y, self.Position.z + self.Direction.z);
+        na::Isometry3::look_at_lh(&eye, &target, &self.CameraUp).to_matrix()
+    }
 
-        m * m2
+    pub fn GetViewMatrix(&self) -> [[f32; 4]; 4]{
+        let mat = self.GetViewMatrixVectorized();
+       // println!("MATRIX {:?}", mat);
+        [
+            [mat[0], mat[1], mat[2], mat[3]],
+            [mat[4], mat[5], mat[6], mat[7]],
+            [mat[8], mat[9], mat[10], mat[11]],
+            [mat[12], mat[13], mat[14], mat[15]],
+
+        ]
+    }
+
+    pub fn GetProjectionMatrix(&self) -> [[f32; 4]; 4]{
+        let mat = self.GetProjectionMatrixVectorized();
+        [
+            [mat[0], mat[1], mat[2], mat[3]],
+            [mat[4], mat[5], mat[6], mat[7]],
+            [mat[8], mat[9], mat[10], mat[11]],
+            [mat[12], mat[13], mat[14], mat[15]],
+
+        ]
     }
 
     pub fn OnEvent(&mut self, event: &Event){
@@ -57,13 +83,46 @@ impl Camera{
             let dMouse = (*x as f32 - self.PreviousCursorPos.0, *y as f32 - self.PreviousCursorPos.1);
             self.PreviousCursorPos = (*x as f32, *y as f32);
             
-            self.Pitch += dMouse.0;
-            self.Yaw += dMouse.1;
+            let sensitivity = 0.5f32;
+            // let noZone = 100f32;
+            // let dist = f32::sqrt((x - 400f32) * (x - 400f32) + (y - 400f32) * (y - 400f32) );
+            // println!("Dist {}", dist);
+            // if dist > noZone {
+            //     self.Yaw -= f32::abs(x - 400f32 - 300f32) * sensitivity;
+            //     self.Pitch -= f32::abs(-y - 400f32 - 300f32) * sensitivity;
+            // }
+            self.Pitch -= dMouse.1 * sensitivity;
+            self.Yaw += dMouse.0 * sensitivity;
+            // self.Yaw= 360f32 * ( x/ 800f32 );
+            // self.Pitch = 360f32 * ( y / 800f32 );
 
             self.Direction.x = f32::cos(f32::to_radians(self.Pitch)) * f32::cos(f32::to_radians(self.Yaw));
             self.Direction.y = f32::sin(f32::to_radians(self.Pitch));
             self.Direction.z = f32::sin(f32::to_radians(self.Yaw)) * f32::cos(f32::to_radians(self.Pitch));
-
+            self.Direction = self.Direction.normalize();
+            //println!("Yaw {} Pitch {}", self.Yaw % 360f32, self.Pitch % 360f32);
+            self.CameraRight = na::Vector3::y_axis().cross(&self.Direction).normalize();
+            self.CameraUp = self.Direction.cross(&self.CameraRight);
+          //  println!("Direction {:?}, camRight {:?}, camUp {:?}", self.Direction, self.CameraRight, self.CameraUp);
+        }
+        else if let Event::KeyPressed(KeyPressedEvent { Key, ..}) = event {
+            let speed = 0.3f32;
+            match *Key {
+                VirtualKeyCode::S => {
+                    self.Position += self.Direction * speed;
+                },
+                VirtualKeyCode::W => {
+                    self.Position -= self.Direction * speed;
+                },
+                VirtualKeyCode::D => {
+                    self.Position -= self.Direction.cross(&self.CameraUp).normalize() * speed;
+                },
+                VirtualKeyCode::A => {
+                    self.Position += self.Direction.cross(&self.CameraUp).normalize() * speed;
+                }
+                _ => {}
+            }
+            println!("Position {:?}", self.Position);
         }
     }
 }

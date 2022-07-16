@@ -1,14 +1,12 @@
+
 use std::rc::Rc;
 
-use std::ffi::CString;
+use glium::Surface;
+use glium::uniforms::{MinifySamplerFilter, MagnifySamplerFilter};
+use image::GenericImageView;
 use nalgebra as na;
-use crate::OpenGL::texture::Texture;
-use crate::OpenGL::texture::TextureParams;
 use crate::Scene::camera::Camera;
 use crate::World::chunk::{CHUNK_BOUNDS_X, CHUNK_BOUNDS_Y, CHUNK_BOUNDS_Z};
-use crate::OpenGL::buffer::{VertexBuffer, IndexBuffer};
-use crate::OpenGL::shader::Shader;
-use crate::OpenGL::vao::VAO;
 use crate::Util::atlas::TextureAtlas;
 use crate::Util::resource::ResourceManager;
 use crate::World::block::BlockRegistry;
@@ -16,46 +14,42 @@ use crate::World::chunk::Chunk;
 
 const BLOCK_TEXTURE_RESOLUTION: u32 = 16;
 
+#[derive(Clone, Copy, Debug)]
 pub struct Vertex{
-   pub Data: u32
+   pub pos: [f32; 3],
+   pub texID: u32,
+   pub quadID: u32
 }
 
 pub struct WorldRenderer{
-    VertexBuffer: VertexBuffer,
-    IndexBuffer: IndexBuffer,
-    VAO: VAO,
-    Shader: Rc<Shader>,
+    VertexBuffer: glium::VertexBuffer<Vertex>,
+    IndexBuffer: glium::IndexBuffer<u32>,
+    Shader: Rc<glium::Program>,
     TextureAtlas: TextureAtlas
 }
 
 //TODO change all the errors to be Result<_, Str&> to avoid heap allcoation
 impl WorldRenderer{
-    pub fn New(resourceManager: &mut ResourceManager, blockRegistry: &BlockRegistry) -> Result<Self, String> {
-        let atlasTexture = Texture::New().SetTextureParams(TextureParams {
-            WrapX: gl::CLAMP_TO_EDGE,
-            WrapY: gl::CLAMP_TO_EDGE,
-            MinFilter: gl::NEAREST,
-            MagFilter: gl::NEAREST,
-            MipmapLevels: Some(2),
-        });
+    pub fn New(resourceManager: &mut ResourceManager, blockRegistry: &BlockRegistry, display: &glium::Display) -> Result<Self, String> {
 
-        let atlas = match blockRegistry.GenerateAtlas(atlasTexture, BLOCK_TEXTURE_RESOLUTION) {
+        let atlas = match blockRegistry.GenerateAtlas(BLOCK_TEXTURE_RESOLUTION, display) {
             Ok(val) => val,
             Err(msg) => {
                 return Err(format!("Error! World renderer creation failed due to block atlas creation. The error:\n{}.", msg));
             }
         };
 
+        implement_vertex!(Vertex, pos, texID, quadID);
+
         let path = "./minecraft_gl/assets/shaders/world.glsl";
-        let shader = match resourceManager.GetShader(path) {
-             Some(val) => val,
-             None => resourceManager.InsertShader(path, Shader::New(path))
-        };
+        let shader = resourceManager.GetShader(path, display);
       
         let mut s = Self {
-            VertexBuffer: VertexBuffer::New(),
-            IndexBuffer: IndexBuffer::New(),
-            VAO: VAO::New(),
+            VertexBuffer: glium::VertexBuffer::empty_dynamic(display, (CHUNK_BOUNDS_X * CHUNK_BOUNDS_Y * CHUNK_BOUNDS_Z * 4 * 6) as usize)
+            .expect("Sprite Renderer's Vertex buffer creation failed!"),
+            IndexBuffer: glium::IndexBuffer::empty(display, glium::index::PrimitiveType::TrianglesList,
+        (CHUNK_BOUNDS_X * CHUNK_BOUNDS_Y * CHUNK_BOUNDS_Z * 6 * 6) as usize)
+            .expect("Sprite Renderer's Index buffer creation failed!"),
             Shader: shader,
             TextureAtlas: atlas,
         };
@@ -71,23 +65,10 @@ impl WorldRenderer{
     }
 
     pub fn Init(&mut self){
-         self.VAO.Bind();
-         println!("HEHEHEHHEHE {}", self.IndexBuffer.IsValid());
-         self.IndexBuffer.Bind();
-         CheckGLError();
-        self.VertexBuffer.Bind();
-        CheckGLError();
-        let vertSizeBytes = 4; //4 bytes
-        //1D local block index (position) -> 2 bytes
-        //texture ID (range: 0-u8::limit, 0-255) -> 1 byte //TODO get validation that the num textures doesnt exceed u8::limit
-        //face ID (range :0-6) -> 3 bits 
-        println!("Before");
-        //CheckGLError();
-        //self.VAO.AddAtribute::<u32>(1, vertSizeBytes, None);
-       // CheckGLError();
-        print!("after");
+   
 
-        let maxNumQuads: usize = (CHUNK_BOUNDS_X * CHUNK_BOUNDS_Y * CHUNK_BOUNDS_Z * 4) as usize;
+
+        let maxNumQuads: usize = (CHUNK_BOUNDS_X * CHUNK_BOUNDS_Y * CHUNK_BOUNDS_Z * 6) as usize;
         let mut indices: Vec<u32> = vec![0; maxNumQuads * 6];
         for i in 0..maxNumQuads {
             let c = i as u32;
@@ -99,57 +80,56 @@ impl WorldRenderer{
             indices[5 + i * 6] = 2 + c * 4;
         }
         
-        self.IndexBuffer.BufferData(&indices, gl::STATIC_DRAW);
-        println!("after index buffer buffer");
-        CheckGLError();
-        self.VertexBuffer.UnBind();
-        self.IndexBuffer.UnBind();
-        self.VAO.UnBind();
+        self.IndexBuffer.write(indices.as_slice());
+ 
+
     }
 
-    pub fn Render(&self, chunks: &Vec<Chunk>, renderList: &Vec<usize>, camera: &Camera){
-        self.VAO.Bind();
-        self.VertexBuffer.Bind();
-        CheckGLError();
-        println!("after vbo bind!!!!");
-        self.Shader.Activate();
-        self.TextureAtlas.Texture.Bind();
-        CheckGLError();
-        println!("after bind and atvitate");
-        self.Shader.UploadMatrix4x4(camera.GetProjectionMatrix(), CString::new("proj").unwrap());
-        self.Shader.UploadMatrix4x4(camera.GetViewMatrix(), CString::new("view").unwrap());
-        self.Shader.UploadVec2(na::Vector2::new(16 as f32, 16 as f32), CString::new("sprite_dimensions").unwrap());
-        self.Shader.UploadFloat(self.TextureAtlas.Columns as f32, CString::new("atlas_cols").unwrap());
-        self.Shader.UploadVec2(na::Vector2::new((self.TextureAtlas.CellWidth * self.TextureAtlas.Columns) as f32, (self.TextureAtlas.CellHeight * self.TextureAtlas.Rows) as f32), CString::new("texSize").unwrap());
-        CheckGLError();
+    pub fn Render(&mut self, chunks: &Vec<Chunk>, renderList: &Vec<usize>, camera: &Camera, target: &mut glium::Frame){
+
+        let behavior = glium::uniforms::SamplerBehavior {
+            minify_filter: MinifySamplerFilter ::Nearest,
+            magnify_filter: MagnifySamplerFilter::Nearest,
+            ..Default::default()
+        };
+
         for idx in renderList {
             let chunk = &chunks[*idx];
+            let dims = (self.TextureAtlas.Image.dimensions().0 as f32, self.TextureAtlas.Image.dimensions().1 as f32);
+            let uniforms = uniform! {
+                proj: camera.GetProjectionMatrix(),
+                view: camera.GetViewMatrix(),
+                sprite_dimensions: [16f32, 16f32],
+                atlas_cols: 2 as f32,
+                texSize: [32f32, 32f32],
+                chunk_pos: [chunk.ChunkPosition.0 as f32, chunk.ChunkPosition.1 as f32],
+                atlas: glium::uniforms::Sampler(&self.TextureAtlas.Texture, behavior)
+            };
 
-            self.Shader.UploadVec2(na::Vector2::new(chunk.ChunkPosition.0 as f32, chunk.ChunkPosition.1 as f32), CString::new("chunk_pos").unwrap());
-            CheckGLError();
-            println!("After vec 2!");
-            self.VertexBuffer.BufferData::<Vertex>(&chunk.Mesh, gl::STATIC_DRAW);
-            println!("After buffer!");
-            CheckGLError();
-            unsafe {
-                gl::DrawElements(gl::TRIANGLES, ((chunk.Mesh.len() / 4) * 6) as i32, gl::UNSIGNED_INT, std::ptr::null());
-            }
+           // self.VertexBuffer.write(&chunk.Mesh);
+           let mapping = self.VertexBuffer.map().as_mut_ptr();
+        //     for i in 0..chunk.Mesh.len() {
+        //         unsafe { *mapping.add(i) = chunk.Mesh[i]; 
+        //             //println!("Vert {:?}", *mapping.add(i));
+        //         }
+        //     }
+            unsafe { mapping.copy_from(chunk.Mesh.as_ptr(), chunk.Mesh.len()); }
+
+            let params = glium::DrawParameters {
+                depth: glium::Depth {
+                    test: glium::draw_parameters::DepthTest::IfLess,
+                    write: true,
+                    .. Default::default()
+                },
+                backface_culling: glium::BackfaceCullingMode::CullingDisabled,
+
+                .. Default::default()
+            };
+
+            target.draw(&self.VertexBuffer, &self.IndexBuffer, &self.Shader, &uniforms,
+                &params).unwrap();
+         
         }
-        self.TextureAtlas.Texture.UnBind();
-        self.Shader.DeActivate();
 
-        self.VAO.UnBind();
-        self.VertexBuffer.UnBind();
-    }
-}
-
-fn CheckGLError()
-{
-    unsafe {
-        let mut err: gl::types::GLenum = gl::GetError();
-        while err != gl::NO_ERROR{
-            println!("{}", err);
-            err = gl::GetError();
-        }  
     }
 }

@@ -16,18 +16,17 @@ impl Block{
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
 use std::error::Error;
-use std::io::BufReader;
-use std::collections::HashMap;
+use std::io::{BufReader, BufRead, Write};
+use std::collections::{HashMap, HashSet};
 use std::fs::{self, File};
-use std::path::PathBuf;
-use crate::OpenGL::texture::Texture;
+use std::path::{PathBuf, Path};
 use crate::Util::atlas::TextureAtlas;
 use super::{State, GenericError, item};
 use super::item::{Item, ItemRegistry};
 use super::blockBehavior::BlockBehavior;
 use glfw::WindowEvent;
 use super::super::Util::resource;
-use image;
+use image::{self, GenericImageView};
 use serde_json::Value;
 use serde_json;
 
@@ -175,13 +174,16 @@ impl BlockRegistry{
                  let mut texData = TextureData { Textures: texs, TextureID: textureCount, Offsets: [0; 6] };
 
                  let mut cumul = 0;
+                 let mut set: HashMap<String, u32> = HashMap::new();
                  for i in 0..6 {
                     texData.Textures[i] = String::from(paths[i].as_str().unwrap());
 
-                    if i > 0 && texData.Textures[i] != texData.Textures[i - 1] {
-                        cumul += 1;
+                    if ! set.contains_key(&texData.Textures[i]) {
+                        cumul += 1 * (i != 0) as u32;
+                        set.insert(texData.Textures[i].clone(), cumul);
                     }
-                    texData.Offsets[i] = cumul;
+                    
+                    texData.Offsets[i] = set[&texData.Textures[i]];
                  }
                  textureCount += cumul + 1;
                  attrib.TextureData = Some(texData);
@@ -205,7 +207,50 @@ impl BlockRegistry{
          Ok(())
     }
 
-    pub fn GenerateAtlas(&self, texture: Texture, textureResolution: u32) -> Result<TextureAtlas, String> {
+    fn ValidatePreviousAtlas(&self) -> Result<bool, String> {
+
+        if  Path::new("./minecraft_gl/assets/data/block/atlas/atlas.png").exists() {
+            //now check if it has the same textures through the data file...
+            let file = std::fs::File::open("./minecraft_gl/assets/data/block/atlas/metaData.json")
+            .map_err(|e| format!("Could not open metaData file of path {} for the block atlas.", "./minecraft_gl/assets/data/block/atlas/metaData.json"))?;
+            
+            let buff = BufReader::new(file);
+            let json: Value = serde_json::from_reader(buff)
+            .map_err(|e| format!("Could not read json meta data file for the block atlas!"))?;
+            let items = json.get("Items").unwrap().as_array().unwrap();
+
+            for item in items {
+                let str = item.as_str().unwrap();
+                if ! self.StringToID.contains_key(str) {
+                    return Ok(false);
+                }
+
+            }
+            return Ok(true);
+        }
+        Ok(false)
+    }
+
+    pub fn GenerateAtlas(&self, textureResolution: u32, display: &glium::Display) -> Result<TextureAtlas, String> {
+
+        //TODO HAVE atlases of different texture resolutions and put the tex resolution in the name of file and in the json
+        //TODO or have one master jason with all the atlas names and their resolutions
+        //First check if the atlas already exists...
+        if self.ValidatePreviousAtlas()? {
+            let res = resource::GetImageFromPath("./minecraft_gl/assets/data/block/atlas/atlas.png")
+            .expect("Could not open the pre-existing block atlas in ./minecraft_gl/assets/block/atlas/atlas.png!");
+            
+            //open the json again, would be sloppy to return the rows and cols from validatePreviousAtlas()
+            let file = std::fs::File::open("./minecraft_gl/assets/data/block/atlas/metaData.json")
+            .map_err(|e| format!("Could not open metaData file of path {} for the block atlas.", "./minecraft_gl/assets/data/block/atlas/metaData.json"))?;
+            
+            let buff = BufReader::new(file);
+            let json: Value = serde_json::from_reader(buff).expect("Could not open block atlas metadata json!");
+            let rows = json.get("Rows").unwrap().as_u64().unwrap() as u32;
+            let cols = json.get("Cols").unwrap().as_u64().unwrap() as u32;
+
+            return Ok(TextureAtlas::FromImage(res, rows, cols, textureResolution, display))
+        }
         //attemp to make a square image out of the atlas...
         let dims = f32::ceil(f32::sqrt(self.NumRegisteredTextures as f32)) as u32;
         let mut img = image::RgbaImage::new(textureResolution * dims, textureResolution * dims);
@@ -232,7 +277,7 @@ impl BlockRegistry{
             else{
 
                 let mut texture = resource::GetImageFromPath("./minecraft_gl/assets/data/block/img/nullTexture.png")?;
-                image::imageops::resize(&mut texture, textureResolution, textureResolution, image::imageops::FilterType::Nearest);
+                let texture = image::DynamicImage::ImageRgba8(image::imageops::resize(&mut texture, textureResolution, textureResolution, image::imageops::FilterType::Nearest));
                 let coords = ((runningTextureCount % dims) * textureResolution, (runningTextureCount / dims) * textureResolution);
                 image::imageops::overlay(&mut img, &texture, coords.0, coords.1);
                 runningTextureCount += 1;
@@ -241,8 +286,20 @@ impl BlockRegistry{
         }
         
         let image = image::DynamicImage::ImageRgba8(img);
-        image.save("./test.png");
-        Ok(TextureAtlas::FromImage(image, texture, dims, dims, textureResolution))
+        
+        //Save the image and some metadata about it
+        image.save("./minecraft_gl/assets/data/block/atlas/atlas.png").expect("Could not save block atlas png!");
+        let mut file = File::create("./minecraft_gl/assets/data/block/atlas/metadata.json").expect("Could not create block atlas metadata file!");
+
+        let mut blocks: Vec<&str> = Vec::with_capacity(self.NumRegisteredBlocks as usize);
+        for attrib in self.StringToID.keys() {
+            blocks.push(&attrib);
+        }
+        let serialized = serde_json::to_string(&blocks).expect("Could not serialize block names to json fromat!");
+        let finalStr = format!("{{\n\"Items\": {},\n\"Rows\": {},\n\"Cols\": {}\n}}", serialized, dims, dims);
+        file.write_all(finalStr.as_bytes()).expect("Could not write to block atlas metadata file!");
+
+        Ok(TextureAtlas::FromImage(image, dims, dims, textureResolution, display))
     }
 
     pub fn InitBehaviors(&self){

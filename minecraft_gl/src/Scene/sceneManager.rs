@@ -13,7 +13,7 @@ pub enum SceneState{
 }
 pub trait Scene{
     fn Update(&mut self, timeStep: f32);
-    fn Render(&self, renderer: &Renderer);
+    fn Render(&mut self, renderer: &mut Renderer, target: &mut glium::Frame);
     fn OnEvent(&mut self, event: &Event);
 
     fn AsAny(&self) -> &dyn std::any::Any;
@@ -31,7 +31,7 @@ pub struct SceneManager{
 }
 
 impl SceneManager{
-    pub fn New() -> Self {
+    pub fn New(display: &glium::Display) -> Self {
 
         let mut craftingR = CraftingRegistry::New();
 
@@ -45,14 +45,16 @@ impl SceneManager{
             Err(error) => { panic!("Error! Block registry creation failed in scene manager. The error:\n{}", error.to_string()) }
         });
 
-        Self {
-            CurrentScene: Box::new(MainMenu::New(&blockR,&itemR)),
-            CurrentSceneState: SceneState::MainMenu,
+        let mut craftingR = Rc::new(craftingR);
 
-            Renderer: Renderer::New(&blockR, &itemR),
+        Self {
+            CurrentScene: Box::new(WorldScene::New(&blockR, &itemR, &mut craftingR)),
+            CurrentSceneState: SceneState::WorldScene,
+
+            Renderer: Renderer::New(&blockR, &itemR, display),
             BlockRegistry: blockR,
             ItemRegistry: itemR,
-            CraftingRegistry: Rc::new(craftingR)
+            CraftingRegistry: craftingR
         }
     }
 
@@ -60,8 +62,8 @@ impl SceneManager{
         //self.CurrentScene.Update(timeStep);
     }
 
-    pub fn Render(&self){
-        //self.Renderer.Render(chunks)
+    pub fn Render(&mut self, target: &mut glium::Frame){
+        self.CurrentScene.Render(&mut self.Renderer, target);
     }
 
     pub fn OnEvent(&mut self, event: &Event){

@@ -25,6 +25,7 @@ pub struct ItemStack{
 }
 
 
+use std::path::Path;
 use std::{collections::HashMap, fs::File};
 
 use glfw::WindowEvent;
@@ -37,9 +38,8 @@ use serde_json::Value;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
 use std::error::Error;
-use std::io::BufReader;
+use std::io::{BufReader, Write};
 use std::fs::{self};
-use crate::OpenGL::texture::Texture;
 use crate::Util::atlas::TextureAtlas;
 use crate::Util::resource;
 use super::{GenericError, State};
@@ -52,6 +52,8 @@ use super::block::Block;
 #[derive(Clone)]
 pub struct ItemAttribute{
     //To be cloned upon creation of a new item of this type. Serves as a template
+    //TODO Put the item name in attributes
+    pub Name: String,
     pub Attributes: HashMap<String, State>,
     pub PlaceableBlock: Option<Block>,
     pub Texture: Option<String>,
@@ -60,6 +62,7 @@ pub struct ItemAttribute{
 impl Default for ItemAttribute{
     fn default() -> Self {
         Self { 
+            Name: String::from(""),
             Attributes: HashMap::new(),
             PlaceableBlock: None,
             Texture: None 
@@ -97,18 +100,20 @@ impl ItemRegistry{
          let mut itemCount = 0;
          let mut textureCount = 0;
 
-         let path = std::path::Path::new("./minecraft_gl/assets/data/block/json/");
-         for file in fs::read_dir(path).map_err(|e| format!("Error! Could not find ./minecraft_gl/assets/data/block/json/! The error:\n{}", e.to_string()))? {
-            let path = file.map_err(|e| GenericError::NewBoxed(format!("Error! Could not retrieve file in ../../assets/data/block/json/ directory! The error:\n{}", e.to_string())))?.path();
-            let file = File::open(path).map_err(|e| GenericError::NewBoxed(format!("Error! Could not open file of path in ../../assets/data/block/json/ directory! The error:\n{}", e.to_string())))?;
+         let path = std::path::Path::new("./minecraft_gl/assets/data/item/json/");
+         for file in fs::read_dir(path).map_err(|e| format!("Error! Could not find ./minecraft_gl/assets/data/item/json/! The error:\n{}", e.to_string()))? {
+            let path = file.map_err(|e| GenericError::NewBoxed(format!("Error! Could not retrieve file in ../../assets/data/item/json/ directory! The error:\n{}", e.to_string())))?.path();
+            let file = File::open(path).map_err(|e| GenericError::NewBoxed(format!("Error! Could not open file of path in ../../assets/data/item/json/ directory! The error:\n{}", e.to_string())))?;
             let buff = BufReader::new(file);
             let json: Value = serde_json::from_reader(buff)?;
+
+            let mut attrib = ItemAttribute::default();
 
             let id = json["ID"].as_u64().unwrap() as u8;
             let name = json["Name"].as_str().unwrap();
             self.StringToID.insert(String::from(name), id);
 
-            let mut attrib = ItemAttribute::default();
+            attrib.Name = String::from(name);
             
             //get the attributes...
             if let Some(attributes) = json.get("Attributes") {
@@ -202,7 +207,49 @@ impl ItemRegistry{
          Ok(())
     }
 
-    pub fn GenerateAtlas(&self, texture: Texture, textureResolution: u32) -> Result<TextureAtlas, String> {
+    fn ValidatePreviousAtlas(&self) -> Result<bool, String> {
+
+        if Path::new("./minecraft_gl/assets/data/item/atlas/atlas.png").exists() {
+            //now check if it has the same textures through the data file...
+            let file = std::fs::File::open("./minecraft_gl/assets/data/item/atlas/metaData.json")
+            .map_err(|e| format!("Could not open metaData file of path {} for the item atlas.", "./minecraft_gl/assets/data/item/atlas/metaData.json"))?;
+            
+            let buff = BufReader::new(file);
+            let json: Value = serde_json::from_reader(buff)
+            .map_err(|e| format!("Could not read json meta data file for the item atlas!"))?;
+            let items = json.get("Items").unwrap().as_array().unwrap();
+
+            for item in items {
+                let str = item.as_str().unwrap();
+                if ! self.StringToID.contains_key(str) {
+                    return Ok(false);
+                }
+
+            }
+            return Ok(true);
+        }
+        Ok(false)
+    }
+
+    pub fn GenerateAtlas(&self, textureResolution: u32, display: &glium::Display) -> Result<TextureAtlas, String> {
+
+        //First check if the atlas already exists...
+        if self.ValidatePreviousAtlas()? {
+            let res = resource::GetImageFromPath("./minecraft_gl/assets/data/item/atlas/atlas.png")
+            .expect("Could not open the pre-existing item atlas in ./minecraft_gl/assets/block/atlas/atlas.png!");
+            
+            //open the json again, would be sloppy to return the rows and cols from validatePreviousAtlas()
+            let file = std::fs::File::open("./minecraft_gl/assets/data/item/atlas/metaData.json")
+            .map_err(|e| format!("Could not open metaData file of path {} for the item atlas.", "./minecraft_gl/assets/data/item/atlas/metaData.json"))?;
+            
+            let buff = BufReader::new(file);
+            let json: Value = serde_json::from_reader(buff).expect("Could not open item atlas metadata json!");
+            let rows = json.get("Rows").unwrap().as_u64().unwrap() as u32;
+            let cols = json.get("Cols").unwrap().as_u64().unwrap() as u32;
+
+            return Ok(TextureAtlas::FromImage(res, rows, cols, textureResolution, display))
+        }
+
          //attemp to make a square image out of the atlas...
          let dims = f32::ceil(f32::sqrt(self.NumRegisteredItems as f32)) as u32;
          let mut img = image::RgbaImage::new(textureResolution * dims, textureResolution * dims);
@@ -213,18 +260,31 @@ impl ItemRegistry{
                         tex.clone()
                     }
                     else {
-                        String::from("../../assets/data/item/img/nullTexture.png")
+                        String::from("./minecraft_gl/assets/data/item/img/nullTexture.png")
                     };
 
              
-            let mut texture = resource::GetImageFromPath(&path)?;
-            image::imageops::resize(&mut texture, textureResolution, textureResolution, image::imageops::FilterType::Nearest);
+            let mut texture = resource::GetImageFromPath(&path)
+            .map_err(|e| format!("Error! Could not read image texture for item '{}' of id '{}'. The error:\n{}", self.ItemAttributes[idx as usize].Name, idx, e.to_string()))?;
+            texture = image::DynamicImage::ImageRgba8(image::imageops::resize(&mut texture, textureResolution, textureResolution, image::imageops::FilterType::Nearest));
             let coords = ((idx % dims) * textureResolution, (idx / dims) * textureResolution);
             image::imageops::overlay(&mut img, &mut texture, coords.0, coords.1);
   
          }
+
+                 //sSave the image and some metadata about it
+        img.save("./minecraft_gl/assets/data/item/atlas/atlas.png").expect("Could not save item atlas png!");
+        let mut file = File::create("./minecraft_gl/assets/data/item/atlas/metadata.json").expect("Could not create item atlas metadata file!");
+
+        let mut items: Vec<&str> = Vec::with_capacity(self.NumRegisteredItems as usize);
+        for attrib in self.StringToID.keys() {
+            items.push(&attrib);
+        }
+        let serialized = serde_json::to_string(&items).expect("Could not serialize block names to json fromat!");
+        let finalStr = format!("{{\n\"Items\": {},\n\"Rows\": {},\n\"Cols\": {}\n}}", serialized, dims, dims);
+        file.write_all(finalStr.as_bytes()).expect("Could not write to item atlas metadata file!");
          
-         Ok(TextureAtlas::FromImage(image::DynamicImage::ImageRgba8(img), texture, dims, dims, textureResolution))
+         Ok(TextureAtlas::FromImage(image::DynamicImage::ImageRgba8(img), dims, dims, textureResolution, display))
     }
 
     pub fn OnLeftClick(&self, blockName: &str) {

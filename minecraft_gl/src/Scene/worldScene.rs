@@ -42,8 +42,8 @@ impl Scene for WorldScene{
         
     }
 
-    fn Render(&self, renderer: &crate::Renderer::renderer::Renderer) {
-        renderer.Render(&self.World.Chunks, &self.World.RenderList, &self.Camera);
+    fn Render(&mut self, renderer: &mut crate::Renderer::renderer::Renderer, target: &mut glium::Frame) {
+        renderer.Render(&self.World.Chunks, &self.World.RenderList, &self.Camera, target);
     }
 
     fn OnEvent(&mut self, event: &Event) {

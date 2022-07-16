@@ -18,15 +18,15 @@ pub struct Renderer{
 }
 
 impl Renderer{
-    pub fn New(blockRegistry: &BlockRegistry, itemRegistry: &ItemRegistry) -> Self {
+    pub fn New(blockRegistry: &BlockRegistry, itemRegistry: &ItemRegistry, display: &glium::Display) -> Self {
         let mut resourceManager = ResourceManager::New();
 
-        let worldRenderer = match WorldRenderer::New(&mut resourceManager, blockRegistry) {
+        let worldRenderer = match WorldRenderer::New(&mut resourceManager, blockRegistry, display) {
             Ok(val) => val,
             Err(msg) => panic!("Error! World renderer construction failed! The error:\n{}", msg) //TODO be more specific. What failed?
         };
 
-        let spriteRenderer = match SpriteRenderer::New(&mut resourceManager, itemRegistry) {
+        let spriteRenderer = match SpriteRenderer::New(&mut resourceManager, itemRegistry, display) {
             Ok(val) => val,
             Err(msg) => panic!("Error! Sprite renderer construction failed! The error:\n{}", msg)
         };
@@ -42,13 +42,13 @@ impl Renderer{
     }
 
     pub fn Init(&mut self){
-        self.WorldRenderer.Init();
+        //self.WorldRenderer.Init();
        // self.SpriteRenderer.Init();
     }
 
-    pub fn Render(&self, chunks: &Vec<Chunk>, renderList: &Vec<usize>, camera: &Camera){
-        self.WorldRenderer.Render(chunks, renderList, camera);
-       // self.SpriteRenderer.Render();
+    pub fn Render(&mut self, chunks: &Vec<Chunk>, renderList: &Vec<usize>, camera: &Camera, target: &mut glium::Frame){
+        self.WorldRenderer.Render(chunks, renderList, camera, target);
+        self.SpriteRenderer.Render(camera, target);
     }
 
     pub fn OnEvent(&mut self, event: &Event){

@@ -4,10 +4,10 @@
     "Textures": [
         "wood.jpeg",
         "wood.jpeg",
-        "wood.jpeg",
-        "wood.jpeg",
         "trunk.jpeg",
-        "trunk.jpeg"
+        "trunk.jpeg",
+        "wood.jpeg",
+        "wood.jpeg"
     ],
 
     "Toughness": 1.0,

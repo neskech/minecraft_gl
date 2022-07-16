@@ -25,7 +25,7 @@ impl World{
     pub fn New(craftingRegistry: &Rc<CraftingRegistry>, blockRegistry: &Rc<BlockRegistry>, itemRegistry: &Rc<ItemRegistry>) -> Self{
         let mut chunks: Vec<Chunk> = Vec::new();
         chunks.reserve(DEFAULT_RENDER_DISTANCE * DEFAULT_RENDER_DISTANCE);
-        chunks.push(Chunk::OfHeight(10));
+        chunks.push(Chunk::OfHeight(5));
         chunks[0].GenerateMesh(blockRegistry.deref());
         
         let mut renderList: Vec<usize> = Vec::new();

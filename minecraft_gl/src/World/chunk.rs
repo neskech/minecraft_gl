@@ -6,9 +6,9 @@ use super::{block::{Block, BlockRegistry}, State};
 use nalgebra as na;
 
 //TODO HAVE Z REPRESENT THE HEIGHT. IN THE ACUTAL GAME WORLD, JUST CALL THE y COORDINATE Z and BE DONE WITH IT
-pub const CHUNK_BOUNDS_X: u32 = 16;
-pub const CHUNK_BOUNDS_Y: u32 = 16;
-pub const CHUNK_BOUNDS_Z: u32 = 255;
+pub const CHUNK_BOUNDS_X: u32 = 8;
+pub const CHUNK_BOUNDS_Y: u32 = 8;
+pub const CHUNK_BOUNDS_Z: u32 = 16;
 //placeholder
 pub struct Chunk{
     pub Blocks: Vec<Block>,
@@ -35,7 +35,11 @@ impl Chunk{
 
     pub fn OfHeight(heightLevel: u32) -> Self {
         let mut blocks = Vec::new();
-        blocks.reserve((CHUNK_BOUNDS_X * CHUNK_BOUNDS_Y * CHUNK_BOUNDS_Z) as usize);
+        let size = (CHUNK_BOUNDS_X * CHUNK_BOUNDS_Y * CHUNK_BOUNDS_Z) as usize;
+        blocks.reserve(size);
+        for i in 0..size {
+            blocks.push(Block { ID: 3 } );
+        }
         
         let offset =  CHUNK_BOUNDS_X *  heightLevel * CHUNK_BOUNDS_Y;
         blocks.iter_mut().skip(offset as usize).for_each(|b| *b = Block { ID : 1 });
@@ -108,38 +112,52 @@ impl Chunk{
                 for z in 0..CHUNK_BOUNDS_Z {
 
                     let mut i: u8 = 0;
+                    let currIDX = To1DVec(na::Vector3::new(x as i32, y as i32, z as i32));
+                    let currBlock = &self.Blocks[currIDX as usize];
+                    if currBlock.ID == airID {
+                        continue;
+                    }
                     for direc in directions {
                         
                         let new3D = na::Vector3::new(x as i32, y as i32, z as i32) + direc;
-                        let idx = To1DVec(new3D);
-                        let block = &self.Blocks[idx as usize];
-                        if block.ID == airID {continue}
+
+              
 
                         if new3D.x >= 0 && new3D.x < CHUNK_BOUNDS_X as i32 && new3D.y >= 0 && new3D.y < CHUNK_BOUNDS_Y as i32 &&  new3D.z >= 0 && new3D.z < CHUNK_BOUNDS_Z as i32 {
-                            if block.ID != airID {
-                                continue;
-                            }
 
-                            let offset = na::Vector3::new(0.5f32, 0.5f32, 0.5f32) + 0.5f32 * na::Vector3::new(direc.x as f32, direc.y as f32, direc.z as f32);
-                            let intOffset = na::Vector3::new(offset.x as i32, offset.y as i32, offset.z as i32);
-                            let axisA = na::Vector3::new(new3D.y, new3D.z, new3D.x);
-                            let axisB = axisA.cross(&direc);
-                            
+                            let idx = To1DVec(new3D);
+ 
+                            let block = &self.Blocks[idx as usize];
+                            if block.ID != airID { i += 1; continue;}
+                        }
 
-                            let off = [-1, 1];
-                            for a in 0..2 {
-                                for b in 0..2 {
-                                    let pos = axisA * off[a] + axisB * off[b] + intOffset + na::Vector3::new(x as i32, y as i32, z as i32);
-                                    let mut texID = 0;
-                                    if let Some(data) = &blockRegistry.GetAttributesOf(&block).TextureData {
-                                        texID = data.TextureID;
-                                    }
-                                    self.Mesh.push(Vertex { Data: ( (pos.x as u8 & 16) | (pos.y as u8 & 16) >> 4 | (pos.z as u8) >> 8 |  (texID as u8) >> 16 | (((a * 2 + b) as u8) >> 24) & 4 | (i & 8) >> 26 ) as u32 });
-                                    //TODO Build the vertex data
-                                    //TODO provide the texture ID using the face index, position data using 1D chunk cords, and face index for lighting
+                     
+
+                        let offset = na::Vector3::new(0.5f32, 0.5f32, 0.5f32) + 0.5f32 * na::Vector3::new(direc.x as f32, direc.y as f32, direc.z as f32);
+                        let intOffset = na::Vector3::new(offset.x as i32, offset.y as i32, offset.z as i32);
+                        let axisA = na::Vector3::new(direc.y, direc.z, direc.x);
+                        let axisB = axisA.cross(&direc).abs();
+                        
+                        println!("Block at {}, {}, {}", x, y, z);
+                        let off = [0, 1];
+                        for a in 0..2 {
+                            for b in 0..2 {
+                                let pos = axisA.abs() * off[a] + axisB * off[b] + na::Vector3::new(x as i32, y as i32, z as i32) + intOffset;
+                                println!("POS!! {:?} offset direc {:?} axis A {:?} axis B {:?}", pos, direc, axisA, axisB);
+                                let mut texID = 0;
+                                if let Some(data) = &blockRegistry.GetAttributesOf(&currBlock).TextureData {
+                                    texID = data.TextureID + data.Offsets[i as usize];
                                 }
+                                self.Mesh.push(Vertex { pos: [pos.x as f32, pos.y as f32, pos.z as f32],
+                                texID: texID, 
+                            quadID: (a * 2 + b) as u32});
+                                //self.Mesh.push(Vertex { Data: ( (pos.x & 0b1111) | (pos.y & 0b1111) << 4 | (pos.z & 0b11111111) << 8 |  (texID as i32 & 0b11111111) << 16 | ((a * 2 + b) as i32 & 0b11) << 24 | (i as i32 & 0b111) >> 26 ) as u32 });
+                                //println!("Pos from bits {}, {}", self.Mesh[self.Mesh.len() - 1].Data & 0b1111, self.Mesh[self.Mesh.len() - 1].Data >> 4 & 0b1111)
+                                //TODO Build the vertex data
+                                //TODO provide the texture ID using the face index, position data using 1D chunk cords, and face index for lighting
                             }
                         }
+                    
                         i += 1;
                    }
 
@@ -151,6 +169,7 @@ impl Chunk{
           
             //look in all 6 directions, only building faces if an air block is present
         }
+    
         
     }
 
