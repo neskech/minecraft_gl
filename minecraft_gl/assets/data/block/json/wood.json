@@ -1,6 +1,8 @@
 {
+    "Enabled": true,
+    
     "Name": "Wood",
-    "ID": 1,
+    "ID": 3,
     "Textures": [
         "wood.jpeg",
         "wood.jpeg",

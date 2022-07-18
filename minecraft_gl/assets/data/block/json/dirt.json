@@ -1,6 +1,8 @@
 {
+    "Enabled": true,
+    
     "Name": "Dirt",
-    "ID": 0,
+    "ID": 1,
     "Textures": [
         "dirt.jpeg",
         "dirt.jpeg",

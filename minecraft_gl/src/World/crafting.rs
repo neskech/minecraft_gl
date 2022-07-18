@@ -1,7 +1,6 @@
 
-use std::collections::{HashMap, HashSet};
-
-use super::item::{Item, self};
+use std::collections::HashMap;
+use super::item::ItemID;
 
 pub enum MatchType{
     TotalMatch,
@@ -12,7 +11,7 @@ pub enum MatchType{
 //TODO add support for variable length crafting recipes
 #[derive(Clone)]
 pub struct CraftingRecipe{
-    Grid: Vec<Item>,
+    Grid: Vec<ItemID>,
     Rows: u32,
     Cols: u32
 }
@@ -23,7 +22,7 @@ impl CraftingRecipe{
             return Err(format!("Error! Invalid crafting grid dimensions of {} rows and {} columns!", rows, cols));
         }
 
-        let itemGrid: Vec<Item> = grid.into_iter().map(|val| Item { ID: val } ).collect();
+        let itemGrid: Vec<ItemID> = grid.into_iter().map(|val| ItemID::New(val) ).collect();
 
         Ok (
             Self {
@@ -36,29 +35,29 @@ impl CraftingRecipe{
 
     pub fn MatchType(&self, other: &CraftingRecipe) -> MatchType {
         if self.Rows != other.Rows || self.Cols != other.Cols { return MatchType::ZeroMatch; }
-        let mut selfSet: HashMap<&Item, u16> = HashMap::new();
-        let mut otherSet: HashMap<&Item, u16> = HashMap::new();
+        let mut selfSet: HashMap<ItemID, u16> = HashMap::new();
+        let mut otherSet: HashMap<ItemID, u16> = HashMap::new();
 
         let mut matches = true;
         let mut matchCount = 0;
         for r in 0..self.Rows {
             for c in 0..self.Cols {
                 let idx = r * self.Cols + c;
-                let item1 = &self.Grid[idx as usize];
-                let item2 = &other.Grid[idx as usize];
+                let item1 = self.Grid[idx as usize];
+                let item2 = other.Grid[idx as usize];
 
-                if !selfSet.contains_key(item1) {
+                if !selfSet.contains_key(&item1) {
                     selfSet.insert(item1, 1);
                 }
                 else {
-                    *selfSet.get_mut(item1).unwrap() += 1;
+                    *selfSet.get_mut(&item1).unwrap() += 1;
                 }
 
-                if !otherSet.contains_key(item2) {
+                if !otherSet.contains_key(&item2) {
                     otherSet.insert(item2, 1);
                 }
                 else {
-                    *otherSet.get_mut(item2).unwrap() += 1;
+                    *otherSet.get_mut(&item2).unwrap() += 1;
                 }
 
                 if item1 != item2 {
@@ -70,21 +69,21 @@ impl CraftingRecipe{
                     matchCount += 1; 
                 }
 
-                if selfSet.contains_key(item2) {
+                if selfSet.contains_key(&item2) {
                     matchCount += 1;
 
-                    *selfSet.get_mut(item2).unwrap() -= 1;
-                    if selfSet[item2] == 0 { selfSet.remove(item2); }
-                    *otherSet.get_mut(item2).unwrap() -= 1;
-                    if otherSet[item2] == 0 { otherSet.remove(item2); }
+                    *selfSet.get_mut(&item2).unwrap() -= 1;
+                    if selfSet[&item2] == 0 { selfSet.remove(&item2); }
+                    *otherSet.get_mut(&item2).unwrap() -= 1;
+                    if otherSet[&item2] == 0 { otherSet.remove(&item2); }
                 }
-                else if otherSet.contains_key(item1) {
+                else if otherSet.contains_key(&item1) {
                     matchCount += 1;
 
-                    *selfSet.get_mut(item1).unwrap() -= 1;
-                    if selfSet[item1] == 0 { selfSet.remove(item1); }
-                    *otherSet.get_mut(item1).unwrap() -= 1;
-                    if otherSet[item1] == 0 { otherSet.remove(item1); }
+                    *selfSet.get_mut(&item1).unwrap() -= 1;
+                    if selfSet[&item1] == 0 { selfSet.remove(&item1); }
+                    *otherSet.get_mut(&item1).unwrap() -= 1;
+                    if otherSet[&item1] == 0 { otherSet.remove(&item1); }
                 }
                 
             }
@@ -128,18 +127,18 @@ impl CraftingRegistry{
         self.Recipes.insert(itemID, recipe);
     }
 
-    pub fn DoesRecipeExistFor(&self, item: &Item) -> bool{
+    pub fn DoesRecipeExistFor(&self, item: &ItemID) -> bool{
         self.Recipes.contains_key(&item.ID)
     }
 
-    pub fn GetRecipeFor(&self, item: &Item) -> Option<&CraftingRecipe> {
+    pub fn GetRecipeFor(&self, item: &ItemID) -> Option<&CraftingRecipe> {
         self.Recipes.get(&item.ID)
     }
 
-    pub fn MatchRecipe(&self, recipe: &CraftingRecipe) -> Option<Item> {
+    pub fn MatchRecipe(&self, recipe: &CraftingRecipe) -> Option<ItemID> {
         let result = self.Recipes.iter().find(|&x| x.1 == recipe);
         if let Some(val) = result {
-            return Some(Item { ID: *val.0 });
+            return Some(ItemID::New(*val.0));
         }
         None
     }

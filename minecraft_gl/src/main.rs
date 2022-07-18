@@ -3,6 +3,7 @@
 #![allow(non_snake_case)] //I need to stop changing my naming convenctions ):
 // #![feature(specialization)]
 #![feature(backtrace)]
+#![feature(trace_macros)]
 #![feature(core_intrinsics)]
 #![feature(core_c_str)]
 #![feature(concat_idents)]
@@ -24,11 +25,16 @@ mod Ecs;
 mod World;
 mod Renderer;
 
+struct Test<'a> {
+    data: u32,
+    dataRef: &'a u32,
+}
+
 fn main() {
     std::env::set_var("RUST_BACKTRACE", "1");
-    let app = Core::application::Application::New((800, 800));
+    let app = Core::application::Application::New();
     app.Run();
-    
+
 //     let pos = nalgebra::Vector3::new(1, 5, 6);
 //     let texID = 25;
 //     let a = 0;
@@ -43,6 +49,7 @@ fn main() {
 }
 
 fn test(Data: u32, chunk_pos: (f32, f32), atlas_cols: u32){
+    {
     let x = (Data & 0xF) as f32 + chunk_pos.0 * 16.0;
     let y = ( (Data >> 4u32) & 0b1111 ) as f32 + chunk_pos.1 * 16.0;
     let z = ( (Data >> 8u32) & 0b11111111 ) as f32;
@@ -60,6 +67,7 @@ fn test(Data: u32, chunk_pos: (f32, f32), atlas_cols: u32){
     // top_left_uv = (top_left_uv + offsets[quadID] * sprite_dimensions) / texSize;
     // top_left_uv.y = 1.0 - top_left_uv.y;
     // fuvs = top_left_uv;
+    }
 }
 
 

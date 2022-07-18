@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use std::io::BufRead;
+use std::path::Path;
 use std::rc::Rc;
 
 use image::{self, DynamicImage, GenericImageView};
@@ -54,10 +55,18 @@ pub fn GetImageFromPath(path: &str) -> Result<DynamicImage, String> {
     Ok(decoded.unwrap())
 }
 
+pub fn GetImageOrNull(path: &str) -> Result<DynamicImage, DynamicImage> {
+    if Path::new(path).exists() {
+       return Ok(GetImageFromPath(path).unwrap());
+    }
+
+    Err(GetImageFromPath("./minecraft_gl/assets/data/block/img/nullTexture.png").unwrap())
+}
+
 pub fn GetShaderFromPath(path: &str, display: &glium::Display) -> Result<glium::Program, String>{
     let file = std::fs::File::open(path)
-    .map_err(|e| format!("Could not open file of path {} in 'GetShaderFromPath' function", path))?;
-    
+    .map_err(|_| format!("Could not open file of path {} in 'GetShaderFromPath' function", path))?;
+
     let fileLines = std::io::BufReader::new(file).lines();
 
     let mut vertex = String::from("");

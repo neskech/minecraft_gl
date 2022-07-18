@@ -75,6 +75,34 @@ macro_rules! Dispatch {
     }; 
 }
 
+//TODO test this in action. Make it so that we do enum::variant (ref data) <- the 'ref data' piece in the macro
+#[macro_export]
+macro_rules! DispatchParams { 
+    ($variant:pat, $dispatcher:expr, $function:expr, $self:expr) => {
+        if let $variant = & $dispatcher.Event {
+            $dispatcher.DispatchWithParams($function, $self, params);
+        }
+    }; 
+}
+
+#[macro_export]
+macro_rules! DispatchMut { 
+    ($variant:pat, $dispatcher:expr, $function:expr, $self:expr) => {
+        if let $variant = $dispatcher.Event {
+            $dispatcher.DispatchMut($function, $self);
+        }
+    }; 
+}
+
+#[macro_export]
+macro_rules! DispatchMutParams { 
+    ($variant:pat, $dispatcher:expr, $function:expr, $self:expr) => {
+        if let $variant = $dispatcher.Event {
+            $dispatcher.DispatchMut($function, $self,params);
+        }
+    }; 
+}
+
 pub struct EventDispatcher<'a>{
     pub Event: &'a Event,
     pub Handled: bool,
@@ -91,6 +119,27 @@ impl<'a> EventDispatcher<'a>{
     {
        if self.Handled { return; }
        self.Handled = func(s, &self.Event);
+    }
+
+    pub fn DispatchWithParams<T, F, P>(&mut self, func: F, s: &T, params: &P)
+    where F: Fn(&T, &P) -> bool
+    {
+       if self.Handled { return; }
+       self.Handled = func(s, params);
+    }
+
+    pub fn DispatchMut<T, F>(&mut self, func: F, s: &mut T)
+    where F: Fn(&mut T, &Event) -> bool
+    {
+       if self.Handled { return; }
+       self.Handled = func(s, &self.Event);
+    }
+
+    pub fn DispatchMutWithParams<T, F, P>(&mut self, func: F, s: &mut T, params: &P)
+    where F: Fn(&mut T, &P) -> bool
+    {
+       if self.Handled { return; }
+       self.Handled = func(s, params);
     }
 }
 

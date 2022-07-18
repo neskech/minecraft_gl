@@ -1,11 +1,7 @@
-
-
-use std::collections::HashMap;
-use glfw::WindowEvent;
+use crate::Event::event::Event;
 use crate::World::block::BlockAttribute;
-
 use super::item::Item;
-use super::block::{BlockRegistry};
+use super::block::BlockRegistry;
 
 
 pub struct BlockBehavior{
@@ -13,9 +9,9 @@ pub struct BlockBehavior{
     //TODO and also the initialization of the attribute hashmap's fields
     //TODO perhaps make it return an Option<> of its hashmap. If some, add to chunk State
     pub OnLeftClick: fn(attributes: &BlockAttribute, hit: Item),
-    pub OnRightClick: fn(attributes: &BlockAttribute) -> Option<fn(attributes: &BlockAttribute, WindowEvent) -> bool>,
+    pub OnRightClick: fn(attributes: &BlockAttribute) -> Option<fn(attributes: &BlockAttribute, Event) -> bool>,
     //the bool is for if the window / behavior should close / stop
-    CustomBehavor: Option<fn(attributes: &BlockAttribute, WindowEvent) -> bool>, //returned in onRightClick
+    CustomBehavor: Option<fn(attributes: &BlockAttribute, Event) -> bool>, //returned in onRightClick
 }
 
 impl Default for BlockBehavior{
@@ -27,7 +23,7 @@ impl Default for BlockBehavior{
         }
 
         #[allow(unused)]
-        fn onRight(attributes: &BlockAttribute) -> Option<fn(attributes: &BlockAttribute, WindowEvent) -> bool>{
+        fn onRight(attributes: &BlockAttribute) -> Option<fn(attributes: &BlockAttribute, Event) -> bool>{
             None
         }
 
@@ -39,23 +35,28 @@ impl Default for BlockBehavior{
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // ///////////////////////////////////////////////////////////////////////////////////////////////./
 
-pub fn BindCraftingTable(nameToID: HashMap<&str, u8>, registry: &mut BlockRegistry) {
-    let craftingTableID = nameToID.get("craftingTable").unwrap();
-    #[allow(unused)]
-    fn onLeft(attributes: &BlockAttribute, hit: Item){
+crate::CreateBinding!(BlockBindingFunction,
 
-    }
-    
-    #[allow(unused)]
-    fn onRight(attributes: &BlockAttribute) -> Option<fn(attributes: &BlockAttribute, WindowEvent) -> bool>{
-        None
+    pub fn BindCraftingTable(registry: &mut BlockRegistry) {
+        let craftingTableID = registry.NameToID("craftingTable");
+        #[allow(unused)]
+        fn onLeft(attributes: &BlockAttribute, hit: Item){
+
+        }
+        
+        #[allow(unused)]
+        fn onRight(attributes: &BlockAttribute) -> Option<fn(attributes: &BlockAttribute, Event) -> bool>{
+            None
+        }
+
+        #[allow(unused)]
+        fn CustomBehavior(attributes: &BlockAttribute, inputEvent: Event) -> bool{
+            false
+        }
+
+        let behavior = BlockBehavior { OnLeftClick: onLeft, OnRightClick: onRight, CustomBehavor: Some(CustomBehavior) };
+        registry.BlockBehaviors.insert(craftingTableID, behavior); //move into the vector
     }
 
-    #[allow(unused)]
-    fn CustomBehavior(attributes: &BlockAttribute, inputEvent: WindowEvent) -> bool{
-        false
-    }
+);
 
-    let behavior = BlockBehavior { OnLeftClick: onLeft, OnRightClick: onRight, CustomBehavor: Some(CustomBehavior) };
-    registry.BlockBehaviors[*craftingTableID as usize] = Some(behavior); //move into the vector
-}

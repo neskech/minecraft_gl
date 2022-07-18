@@ -1,7 +1,3 @@
-use std::rc::Rc;
-
-use lazy_static::__Deref;
-
 use super::{block::BlockRegistry, chunk::Chunk, item::ItemRegistry, crafting::CraftingRegistry};
 
 
@@ -12,9 +8,9 @@ const MAX_CHUNK_REMESH_PER_FRAME: usize = 3;
 pub struct World{
     pub Chunks: Vec<Chunk>,
     RenderDistance: usize,
-    BlockRegistry: Rc<BlockRegistry>,
-    ItemRegistry: Rc<ItemRegistry>,
-    CraftingRegistry: Rc<CraftingRegistry>,
+    BlockRegistry: BlockRegistry,
+    ItemRegistry: ItemRegistry,
+    CraftingRegistry: CraftingRegistry,
 
     RegenerationList: Vec<usize>,
     RemeshList: Vec<usize>,
@@ -22,11 +18,11 @@ pub struct World{
 }
 
 impl World{
-    pub fn New(craftingRegistry: &Rc<CraftingRegistry>, blockRegistry: &Rc<BlockRegistry>, itemRegistry: &Rc<ItemRegistry>) -> Self{
+    pub fn New(craftingRegistry: CraftingRegistry, blockRegistry: BlockRegistry, itemRegistry: ItemRegistry) -> Self{
         let mut chunks: Vec<Chunk> = Vec::new();
         chunks.reserve(DEFAULT_RENDER_DISTANCE * DEFAULT_RENDER_DISTANCE);
-        chunks.push(Chunk::OfHeight(5));
-        chunks[0].GenerateMesh(blockRegistry.deref());
+        chunks.push(Chunk::OfHeight(5, (0, 0)));
+        chunks[0].GenerateMesh(&blockRegistry);
         
         let mut renderList: Vec<usize> = Vec::new();
         renderList.push(0);
@@ -34,9 +30,9 @@ impl World{
         Self{
             Chunks: chunks,
             RenderDistance: DEFAULT_RENDER_DISTANCE,
-            BlockRegistry: Rc::clone(blockRegistry),
-            ItemRegistry: Rc::clone(itemRegistry),
-            CraftingRegistry: Rc::clone(craftingRegistry),
+            BlockRegistry: blockRegistry,
+            ItemRegistry: itemRegistry,
+            CraftingRegistry: craftingRegistry,
 
             RegenerationList: Vec::new(),
             RemeshList: Vec::new(),

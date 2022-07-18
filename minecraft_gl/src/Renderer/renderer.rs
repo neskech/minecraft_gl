@@ -1,12 +1,8 @@
-use core::panic;
-use std::rc::Rc;
-
 use crate::Event::event::Event;
 use crate::Scene::camera::Camera;
+use crate::Util::atlas::TextureAtlas;
 use crate::Util::resource::ResourceManager;
-use crate::World::block::BlockRegistry;
 use crate::World::chunk::Chunk;
-use crate::World::item::ItemRegistry;
 use super::worldRenderer::WorldRenderer;
 use super::spriteRenderer::SpriteRenderer;
 
@@ -18,18 +14,12 @@ pub struct Renderer{
 }
 
 impl Renderer{
-    pub fn New(blockRegistry: &BlockRegistry, itemRegistry: &ItemRegistry, display: &glium::Display) -> Self {
+    pub fn New(blockAtlas: TextureAtlas, itemAtlas: TextureAtlas, display: &glium::Display) -> Self {
         let mut resourceManager = ResourceManager::New();
 
-        let worldRenderer = match WorldRenderer::New(&mut resourceManager, blockRegistry, display) {
-            Ok(val) => val,
-            Err(msg) => panic!("Error! World renderer construction failed! The error:\n{}", msg) //TODO be more specific. What failed?
-        };
+        let worldRenderer = WorldRenderer::New(&mut resourceManager, blockAtlas, display);
 
-        let spriteRenderer = match SpriteRenderer::New(&mut resourceManager, itemRegistry, display) {
-            Ok(val) => val,
-            Err(msg) => panic!("Error! Sprite renderer construction failed! The error:\n{}", msg)
-        };
+        let spriteRenderer = SpriteRenderer::New(&mut resourceManager, itemAtlas, display);
 
         let mut s = Self {
             ResourceManager: resourceManager,
@@ -51,7 +41,7 @@ impl Renderer{
         self.SpriteRenderer.Render(camera, target);
     }
 
-    pub fn OnEvent(&mut self, event: &Event){
+    pub fn OnEvent(&mut self, _event: &Event){
        // self.SpriteRenderer.OnEvent(event);
     }
 }

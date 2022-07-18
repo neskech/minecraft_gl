@@ -1,18 +1,13 @@
-use std::rc::Rc;
 
-use crate::{World::{block::BlockRegistry, item::ItemRegistry}, Event::event::Event};
-
+use crate::Event::event::Event;
 use super::sceneManager::Scene;
 pub struct MainMenu {
-    BlockRegistry: Rc<BlockRegistry>,
-    ItemRegistry: Rc<ItemRegistry>,
 }
 
 impl MainMenu{ 
-    pub fn New(blockRegistry: &Rc<BlockRegistry>, itemRegistry: &Rc<ItemRegistry>) -> Self {
+    pub fn New() -> Self {
         let mut s =Self {
-            BlockRegistry: Rc::clone(blockRegistry),
-            ItemRegistry: Rc::clone(itemRegistry),
+
         };
 
         s.Init();
@@ -23,7 +18,7 @@ impl MainMenu{
         
     }
 
-    pub fn Load(&mut self, savePath: &str) {
+    pub fn Load(&mut self, _savePath: &str) {
         
     }
 
@@ -37,15 +32,15 @@ impl MainMenu{
 }
 
 impl Scene for MainMenu{
-    fn Update(&mut self, timeStep: f32) {
+    fn Update(&mut self, _timeStep: f32) {
         
     }
 
-    fn Render(&mut self, renderer: &mut crate::Renderer::renderer::Renderer, target: &mut glium::Frame) {
+    fn Render(&mut self, _renderer: &mut crate::Renderer::renderer::Renderer, _target: &mut glium::Frame) {
         
     }
 
-    fn OnEvent(&mut self, event: &Event) {
+    fn OnEvent(&mut self, _event: &Event) {
         
     }
 

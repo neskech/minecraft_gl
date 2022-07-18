@@ -1,10 +1,6 @@
-use std::rc::Rc;
-
-use lazy_static::__Deref;
-
-use crate::{Renderer::renderer::Renderer, World::{world, block::BlockRegistry, item::ItemRegistry, crafting::CraftingRegistry}, Event::event::Event};
-
+use crate::{Renderer::renderer::Renderer, World::{block::BlockRegistry, item::ItemRegistry, crafting::CraftingRegistry, ReadAttributes}, Event::event::Event, Util::resource};
 use super::{worldScene::WorldScene, mainmenu::MainMenu};
+use crate::Renderer::worldRenderer::BLOCK_TEXTURE_RESOLUTION;
 
 #[derive(PartialEq, Eq, Debug)]
 pub enum SceneState{
@@ -25,40 +21,46 @@ pub struct SceneManager{
     CurrentSceneState: SceneState,
 
     Renderer: Renderer,
-    BlockRegistry: Rc<BlockRegistry>,
-    ItemRegistry: Rc<ItemRegistry>,
-    CraftingRegistry: Rc<CraftingRegistry>,
 }
 
 impl SceneManager{
     pub fn New(display: &glium::Display) -> Self {
 
         let mut craftingR = CraftingRegistry::New();
+        let mut itemR = ItemRegistry::New(); 
+        let mut blockR = BlockRegistry::New();
 
-        let itemR = Rc::new(match ItemRegistry::New(&mut craftingR) {
+        match ReadAttributes(&mut blockR, &mut itemR, &mut craftingR) {
+            Err(msg) => {
+                panic!("Error! Attribute reading failed for registries. The error:\n{}", msg.to_string());
+            },
+            _ => {}
+        };
+
+        let blockAtlas = match blockR.GenerateAtlas(BLOCK_TEXTURE_RESOLUTION, display) {
             Ok(val) => val,
-            Err(error) => { panic!("Error! Item registry creation failed in scene manager. The error:\n{}", error.to_string()) }
-        });
+            Err(msg) => {
+                  panic!("Error! World renderer creation failed due to block atlas creation. The error:\n{}.", msg);
+            }
+        };
 
-        let blockR = Rc::new(match BlockRegistry::New(&itemR) {
+        let itemAtlas = match itemR.GenerateAtlas(BLOCK_TEXTURE_RESOLUTION, display) {
             Ok(val) => val,
-            Err(error) => { panic!("Error! Block registry creation failed in scene manager. The error:\n{}", error.to_string()) }
-        });
-
-        let mut craftingR = Rc::new(craftingR);
+            Err(msg) => {
+                panic!("Error! Sprite renderer creation failed due to item atlas creation. The error:\n{}.", msg);
+            }
+        };
 
         Self {
-            CurrentScene: Box::new(WorldScene::New(&blockR, &itemR, &mut craftingR)),
+            CurrentScene: Box::new(WorldScene::New(blockR, itemR,  craftingR)),
             CurrentSceneState: SceneState::WorldScene,
-
-            Renderer: Renderer::New(&blockR, &itemR, display),
-            BlockRegistry: blockR,
-            ItemRegistry: itemR,
-            CraftingRegistry: craftingR
+            //TODO create the atlases here and dont worry about passing the registrys down to the renderer
+            //TODO also prevent the mainMenu from having the registries, I dont care
+            Renderer: Renderer::New(blockAtlas, itemAtlas, display),
         }
     }
 
-    pub fn Update(&mut self, timeStep: f32){
+    pub fn Update(&mut self, _timeStep: f32){
         //self.CurrentScene.Update(timeStep);
     }
 
@@ -81,18 +83,29 @@ impl SceneManager{
         }
 
         match state {
-            MainMenu => {
+            SceneState::MainMenu => {
                 let worldScene = self.CurrentScene.AsAnyMut().downcast_mut::<WorldScene>().unwrap();
                 worldScene.Save();
                 worldScene.Destroy();
-                self.CurrentScene = Box::new(MainMenu::New(&self.BlockRegistry, &self.ItemRegistry));
+                self.CurrentScene = Box::new(MainMenu::New());
             },
-            WorldScene => {
+            SceneState::WorldScene => {
                 //TODO add logic for serializtion and deserilaztion
                 let mainMenu = self.CurrentScene.AsAnyMut().downcast_mut::<MainMenu>().unwrap();
                 mainMenu.Destroy();
+
+                let mut craftingR = CraftingRegistry::New();
+                let mut itemR = ItemRegistry::New(); 
+                let mut blockR = BlockRegistry::New();
+        
+                match ReadAttributes(&mut blockR, &mut itemR, &mut craftingR) {
+                    Err(msg) => {
+                        panic!("Error! Attribute reading failed for registries. The error:\n{}", msg.to_string());
+                    },
+                    _ => {}
+                };
                 
-                let worldScene = WorldScene::New(&self.BlockRegistry, &self.ItemRegistry, &self.CraftingRegistry);
+                let worldScene = WorldScene::New(blockR, itemR,  craftingR);
                 self.CurrentScene = Box::new(worldScene);
                 
             }

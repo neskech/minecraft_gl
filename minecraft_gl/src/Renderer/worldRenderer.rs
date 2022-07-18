@@ -1,24 +1,19 @@
 
 use std::rc::Rc;
-
 use glium::Surface;
 use glium::uniforms::{MinifySamplerFilter, MagnifySamplerFilter};
 use image::GenericImageView;
-use nalgebra as na;
 use crate::Scene::camera::Camera;
 use crate::World::chunk::{CHUNK_BOUNDS_X, CHUNK_BOUNDS_Y, CHUNK_BOUNDS_Z};
 use crate::Util::atlas::TextureAtlas;
 use crate::Util::resource::ResourceManager;
-use crate::World::block::BlockRegistry;
 use crate::World::chunk::Chunk;
 
-const BLOCK_TEXTURE_RESOLUTION: u32 = 16;
+pub const BLOCK_TEXTURE_RESOLUTION: u32 = 16;
 
 #[derive(Clone, Copy, Debug)]
 pub struct Vertex{
-   pub pos: [f32; 3],
-   pub texID: u32,
-   pub quadID: u32
+   pub Data: u32
 }
 
 pub struct WorldRenderer{
@@ -30,16 +25,8 @@ pub struct WorldRenderer{
 
 //TODO change all the errors to be Result<_, Str&> to avoid heap allcoation
 impl WorldRenderer{
-    pub fn New(resourceManager: &mut ResourceManager, blockRegistry: &BlockRegistry, display: &glium::Display) -> Result<Self, String> {
-
-        let atlas = match blockRegistry.GenerateAtlas(BLOCK_TEXTURE_RESOLUTION, display) {
-            Ok(val) => val,
-            Err(msg) => {
-                return Err(format!("Error! World renderer creation failed due to block atlas creation. The error:\n{}.", msg));
-            }
-        };
-
-        implement_vertex!(Vertex, pos, texID, quadID);
+    pub fn New(resourceManager: &mut ResourceManager, atlas: TextureAtlas, display: &glium::Display) -> Self {
+        implement_vertex!(Vertex, Data);
 
         let path = "./minecraft_gl/assets/shaders/world.glsl";
         let shader = resourceManager.GetShader(path, display);
@@ -57,11 +44,11 @@ impl WorldRenderer{
         //validate that the size of a chunk is enough to cover with 2 bytes
         let size = CHUNK_BOUNDS_X * CHUNK_BOUNDS_Y * CHUNK_BOUNDS_Z;
         if size > u16::MAX as u32 {
-            return Err(format!("Error! Cannot create world renderer because the size of a chunk ({} blocks) is to large for the 2 byte unsigned int ceiling ({})", size, u16::MAX));
+            panic!("Error! Cannot create world renderer because the size of a chunk ({} blocks) is to large for the 2 byte unsigned int ceiling ({})", size, u16::MAX);
         }
 
         s.Init();
-        Ok(s)
+        s
     }
 
     pub fn Init(&mut self){
@@ -100,9 +87,9 @@ impl WorldRenderer{
                 proj: camera.GetProjectionMatrix(),
                 view: camera.GetViewMatrix(),
                 sprite_dimensions: [16f32, 16f32],
-                atlas_cols: 2 as f32,
-                texSize: [32f32, 32f32],
-                chunk_pos: [chunk.ChunkPosition.0 as f32, chunk.ChunkPosition.1 as f32],
+                atlas_cols: self.TextureAtlas.Columns as f32,
+                texSize: [dims.0, dims.1],
+                chunk_pos: [chunk.Position.0 as f32, chunk.Position.1 as f32],
                 atlas: glium::uniforms::Sampler(&self.TextureAtlas.Texture, behavior)
             };
 

@@ -31,15 +31,7 @@ implement_vertex!(Vertex, pos);
 
 //TODO change all the errors to be Result<_, Str&> to avoid heap allcoation
 impl SpriteRenderer{
-    pub fn New(resourceManager: &mut ResourceManager, itemRegistry: &ItemRegistry, display: &glium::Display) -> Result<Self, String> {
-
-        let atlas = match itemRegistry.GenerateAtlas(BLOCK_TEXTURE_RESOLUTION, display) {
-            Ok(val) => val,
-            Err(msg) => {
-                return Err(format!("Error! Sprite renderer creation failed due to item atlas creation. The error:\n{}.", msg));
-            }
-        };
-
+    pub fn New(resourceManager: &mut ResourceManager, atlas: TextureAtlas, display: &glium::Display) -> Self {
         let path = "./minecraft_gl/assets/shaders/triangle.glsl";
         let shader = resourceManager.GetShader(path, display);
       
@@ -54,7 +46,7 @@ impl SpriteRenderer{
         };
 
         s.Init();
-        Ok(s)
+        s
     }
 
     pub fn Init(&mut self){

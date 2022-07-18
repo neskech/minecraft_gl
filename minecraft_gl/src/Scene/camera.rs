@@ -1,5 +1,6 @@
 
 use glium::glutin::event::VirtualKeyCode;
+use crate::Core::application::WINDOW_SIZE;
 use nalgebra as na;
 
 use crate::Event::event::{Event, MouseMovedEvent, KeyPressedEvent};
@@ -33,7 +34,7 @@ impl Camera{
     }
 
     pub fn GetProjectionMatrixVectorized(&self) -> na::Matrix4<f32>{
-        *na::Perspective3::new(1f32, FOV, ZNEAR, ZFAR).as_matrix()
+        *na::Perspective3::new(unsafe { WINDOW_SIZE.0 as f32 / WINDOW_SIZE.1 as f32 }, FOV, ZNEAR, ZFAR).as_matrix()
     }
 
     pub fn GetViewMatrixVectorized(&self) -> na::Matrix4<f32>{
@@ -92,6 +93,9 @@ impl Camera{
             //     self.Pitch -= f32::abs(-y - 400f32 - 300f32) * sensitivity;
             // }
             self.Pitch -= dMouse.1 * sensitivity;
+            if f32::abs(self.Pitch) > 89f32 {
+                self.Pitch = self.Pitch / f32::abs(self.Pitch) * 89f32;
+            }
             self.Yaw += dMouse.0 * sensitivity;
             // self.Yaw= 360f32 * ( x/ 800f32 );
             // self.Pitch = 360f32 * ( y / 800f32 );

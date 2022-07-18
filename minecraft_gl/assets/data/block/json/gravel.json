@@ -1,4 +1,6 @@
 {
+    "Enabled": true,
+    
     "Name": "Gravel",
     "ID": 2,
     "Textures": [

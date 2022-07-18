@@ -1,7 +1,5 @@
-use std::rc::Rc;
 
 use crate::{World::{block::BlockRegistry, world::World, item::ItemRegistry, crafting::CraftingRegistry}, Event::event::Event};
-
 use super::{sceneManager::Scene, camera::Camera};
 
 pub struct WorldScene{
@@ -10,7 +8,7 @@ pub struct WorldScene{
 }
 
 impl<'a> WorldScene{
-    pub fn New(blockRegistry: &Rc<BlockRegistry>, itemRegistry: &Rc<ItemRegistry>, craftingRegistry: &Rc<CraftingRegistry>) -> WorldScene {
+    pub fn New(blockRegistry: BlockRegistry, itemRegistry: ItemRegistry, craftingRegistry: CraftingRegistry) -> WorldScene {
         let mut s = Self {  
             World: World::New(craftingRegistry, blockRegistry, itemRegistry),
             Camera: Camera::New(),
@@ -28,7 +26,7 @@ impl<'a> WorldScene{
 
     }
 
-    pub fn Load(&mut self, savePath: &str) {
+    pub fn Load(&mut self, _savePath: &str) {
 
     }
 
@@ -38,7 +36,7 @@ impl<'a> WorldScene{
 
 }
 impl Scene for WorldScene{
-    fn Update(&mut self, timeStep: f32) {
+    fn Update(&mut self, _timeStep: f32) {
         
     }
 

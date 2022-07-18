@@ -1,0 +1,19 @@
+{
+    "Enabled": true,
+    
+    "Name": "Grass",
+    "ID": 4,
+    "Textures": [
+        "grassSide.png",
+        "grassSide.png",
+        "grass.png",
+        "grassSide.png",
+        "grassSide.png",
+        "grassSide.png"
+    ],
+
+    "Toughness": 1.0,
+    "Friction": 0.0,
+    "DropItem": "Dirt"
+
+}
