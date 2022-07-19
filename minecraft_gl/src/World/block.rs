@@ -1,5 +1,5 @@
 
-#[derive(Clone)]
+#[derive(Clone, Copy)]
 pub struct Block{
     pub ID: u8
 }

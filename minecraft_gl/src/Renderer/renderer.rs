@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use crate::Event::event::Event;
 use crate::Scene::camera::Camera;
 use crate::Util::atlas::TextureAtlas;
@@ -36,7 +38,7 @@ impl Renderer{
        // self.SpriteRenderer.Init();
     }
 
-    pub fn Render(&mut self, chunks: &Vec<Chunk>, renderList: &Vec<usize>, camera: &Camera, target: &mut glium::Frame){
+    pub fn Render(&mut self, chunks: &Vec<Chunk>, renderList: &HashSet<usize>, camera: &Camera, target: &mut glium::Frame){
         self.WorldRenderer.Render(chunks, renderList, camera, target);
         self.SpriteRenderer.Render(camera, target);
     }

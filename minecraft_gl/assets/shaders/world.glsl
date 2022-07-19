@@ -11,9 +11,6 @@ uniform float atlas_cols;
 uniform vec2 sprite_dimensions;
 uniform vec2 texSize;
 
-// out int texID;
-// out int quadID;
-// out int faceID;
 out vec2 fuvs;
 out float faceID;
 

@@ -1,4 +1,5 @@
 
+use std::collections::HashSet;
 use std::rc::Rc;
 use glium::Surface;
 use glium::uniforms::{MinifySamplerFilter, MagnifySamplerFilter};
@@ -72,7 +73,7 @@ impl WorldRenderer{
 
     }
 
-    pub fn Render(&mut self, chunks: &Vec<Chunk>, renderList: &Vec<usize>, camera: &Camera, target: &mut glium::Frame){
+    pub fn Render(&mut self, chunks: &Vec<Chunk>, renderList: &HashSet<usize>, camera: &Camera, target: &mut glium::Frame){
 
         let behavior = glium::uniforms::SamplerBehavior {
             minify_filter: MinifySamplerFilter ::Nearest,

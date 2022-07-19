@@ -10,6 +10,7 @@ pub const CHUNK_BOUNDS_Y: u32 = 8;
 pub const CHUNK_BOUNDS_Z: u32 = 20;
 pub const TOTAL_CHUNK_SIZE: u32 = CHUNK_BOUNDS_X * CHUNK_BOUNDS_Y * CHUNK_BOUNDS_Z;
 
+#[derive(Clone)]
 pub struct Chunk{
     pub Blocks: Vec<Block>,
     pub Mesh: Vec<Vertex>,
@@ -37,7 +38,7 @@ impl Chunk{
         }
         
         let offset = CHUNK_BOUNDS_X * heightLevel * CHUNK_BOUNDS_Y;
-        blocks.iter_mut().skip(offset as usize).for_each(|b| *b = Block { ID : 4 });
+        blocks.iter_mut().skip(offset as usize).for_each(|b| *b = Block { ID : 2 });
 
         Self {
             Blocks: blocks,
@@ -125,6 +126,11 @@ impl Chunk{
                             let block = &self.Blocks[idx as usize];
                             if block.ID != airID { i += 1; continue;}
                         }
+                        //TODO Else if it is is over bounds (only on the x and y) then check an adjacent chunk in the direction
+                        //TODO use the out of bounds direction (e.g. out of bounds on <1,0,0>) to index into the chunk array
+                        //TODO sample the block at that other chunk. If other chunk is None, continue
+                        //TODO for sampling, z is the same. If out of bounds postive (<1,0,0>) thats the start of a new range from 0..CHUNK_BOUNDS_X
+                        //TODO so for that example, newX = 0. If negative, newX = CHUNK_BOUNDS_X - 1. Y is the same as the current y
 
                      
 
