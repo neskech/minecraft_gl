@@ -10,7 +10,7 @@ use crate::Util::atlas::TextureAtlas;
 use crate::Util::resource::ResourceManager;
 use crate::World::chunk::Chunk;
 
-pub const BLOCK_TEXTURE_RESOLUTION: u32 = 16;
+pub const BLOCK_TEXTURE_RESOLUTION: u32 = 64;
 
 #[derive(Clone, Copy, Debug)]
 pub struct Vertex{
@@ -21,7 +21,7 @@ pub struct WorldRenderer{
     VertexBuffer: glium::VertexBuffer<Vertex>,
     IndexBuffer: glium::IndexBuffer<u32>,
     Shader: Rc<glium::Program>,
-    TextureAtlas: TextureAtlas
+    TextureAtlas: TextureAtlas,
 }
 
 //TODO change all the errors to be Result<_, Str&> to avoid heap allcoation
@@ -81,13 +81,15 @@ impl WorldRenderer{
             ..Default::default()
         };
 
+       // let buffer = glium::VertexBuffer::dynamic(facade, data)
+
         for idx in renderList {
             let chunk = &chunks[*idx];
             let dims = (self.TextureAtlas.Image.dimensions().0 as f32, self.TextureAtlas.Image.dimensions().1 as f32);
             let uniforms = uniform! {
                 proj: camera.GetProjectionMatrix(),
                 view: camera.GetViewMatrix(),
-                sprite_dimensions: [16f32, 16f32],
+                sprite_dimensions: [self.TextureAtlas.CellWidth as f32, self.TextureAtlas.CellHeight as f32],
                 atlas_cols: self.TextureAtlas.Columns as f32,
                 texSize: [dims.0, dims.1],
                 chunk_pos: [chunk.Position.0 as f32, chunk.Position.1 as f32],
@@ -102,6 +104,7 @@ impl WorldRenderer{
         //         }
         //     }
             unsafe { mapping.copy_from(chunk.Mesh.as_ptr(), chunk.Mesh.len()); }
+            let slice = self.IndexBuffer.slice(0 .. chunk.Mesh.len() / 4 * 6).unwrap();
 
             let params = glium::DrawParameters {
                 depth: glium::Depth {
@@ -114,9 +117,10 @@ impl WorldRenderer{
                 .. Default::default()
             };
 
-            target.draw(&self.VertexBuffer, &self.IndexBuffer, &self.Shader, &uniforms,
+            target.draw(&self.VertexBuffer, &slice, &self.Shader, &uniforms,
                 &params).unwrap();
-         
+            
+            // unsafe { mapping.copy_from(self.EmptyBuffer.as_ptr(), chunk.Mesh.len()); }
         }
 
     }

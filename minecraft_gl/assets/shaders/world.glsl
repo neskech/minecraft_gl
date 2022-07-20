@@ -23,9 +23,9 @@ void main(){
     // X (4), Y(4) ,   Z(8)   , TexId(8) , QuadId(2),  FaceId(3)
     // 0000 | 0000 | 00000000 | 00000000 | 00 | 000
 
-    float x = float(Data & 0xFu); //+ chunk_pos.x * 16.0;
-    float y = float( (Data >> 4u) & 0xFu ); //+ chunk_pos.y * 16.0;
-    float z = float( (Data >> 8u) & 0xFFu );
+    float x = float(Data & 0xFu) + chunk_pos.x * 8.0;
+    float z = float( (Data >> 4u) & 0xFu ) + chunk_pos.y * 8.0;
+    float y = float( (Data >> 8u) & 0xFFu );
 
     uint texID = (Data >> 16u) & 0xFFu; //8 bits
     uint quadID = (Data >> 24u) & 0x3u; //2 bits

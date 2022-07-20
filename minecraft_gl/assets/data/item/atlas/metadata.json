@@ -1,6 +1,6 @@
 {
-"Items": ["Dirt","Biden"],
+"Items": ["Biden","Dirt"],
 "Rows": 2,
 "Cols": 2,
-"Texture Resolution": 16
+"Texture Resolution": 64
 }

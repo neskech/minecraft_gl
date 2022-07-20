@@ -364,6 +364,8 @@ impl BlockRegistry{
     }
 
     pub fn GenerateAtlas(&self, textureResolution: u32, display: &glium::Display) -> Result<TextureAtlas, String> {
+        //TODO Create a loading bar when creating a new texture atlas
+        //TODO Make a loading bar thing in resource which takes a percentage and prints a bar for you and some metadata
         //attemp to make a square image out of the atlas...
         let dims = f32::ceil(f32::sqrt(self.NumRegisteredTextures as f32)) as u32;
 

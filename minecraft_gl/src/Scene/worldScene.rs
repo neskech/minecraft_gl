@@ -37,7 +37,7 @@ impl<'a> WorldScene{
 }
 impl Scene for WorldScene{
     fn Update(&mut self, _timeStep: f32) {
-        
+        self.World.Update((self.Camera.Position.x, self.Camera.Position.z), &self.Camera)
     }
 
     fn Render(&mut self, renderer: &mut crate::Renderer::renderer::Renderer, target: &mut glium::Frame) {

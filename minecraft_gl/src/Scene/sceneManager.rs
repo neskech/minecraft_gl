@@ -1,4 +1,4 @@
-use crate::{Renderer::renderer::Renderer, World::{block::BlockRegistry, item::ItemRegistry, crafting::CraftingRegistry, ReadAttributes}, Event::event::Event, Util::resource};
+use crate::{Renderer::renderer::Renderer, World::{block::BlockRegistry, item::ItemRegistry, crafting::CraftingRegistry, ReadAttributes}, Event::event::Event};
 use super::{worldScene::WorldScene, mainmenu::MainMenu};
 use crate::Renderer::worldRenderer::BLOCK_TEXTURE_RESOLUTION;
 
@@ -60,8 +60,8 @@ impl SceneManager{
         }
     }
 
-    pub fn Update(&mut self, _timeStep: f32){
-        //self.CurrentScene.Update(timeStep);
+    pub fn Update(&mut self, timeStep: f32){
+        self.CurrentScene.Update(timeStep);
     }
 
     pub fn Render(&mut self, target: &mut glium::Frame){

@@ -2,12 +2,13 @@ use std::collections::HashMap;
 use crate::Renderer::worldRenderer::Vertex;
 use super::{block::{Block, BlockRegistry}, State};
 use nalgebra as na;
+use rand::Rng;
 
 //TODO GET THE MATH WORKING OUT BETTER
 //TODO HAVE Z REPRESENT THE HEIGHT. IN THE ACUTAL GAME WORLD, JUST CALL THE y COORDINATE Z and BE DONE WITH IT
 pub const CHUNK_BOUNDS_X: u32 = 8;
-pub const CHUNK_BOUNDS_Y: u32 = 8;
-pub const CHUNK_BOUNDS_Z: u32 = 20;
+pub const CHUNK_BOUNDS_Y: u32 = 20;
+pub const CHUNK_BOUNDS_Z: u32 = 8;
 pub const TOTAL_CHUNK_SIZE: u32 = CHUNK_BOUNDS_X * CHUNK_BOUNDS_Y * CHUNK_BOUNDS_Z;
 
 #[derive(Clone)]
@@ -16,11 +17,11 @@ pub struct Chunk{
     pub Mesh: Vec<Vertex>,
     pub DynamicState: HashMap<u32, HashMap<String, State>>,
     pub StaticState: HashMap<u32, HashMap<String, State>>,
-    pub Position: (u32, u32)
+    pub Position: (i32, i32)
 }
 
 impl Chunk{
-    pub fn New(chunkPos: (u32, u32)) -> Self {
+    pub fn New(chunkPos: (i32, i32)) -> Self {
         Self {
             Blocks: Vec::with_capacity(TOTAL_CHUNK_SIZE as usize),
             //approcimation of surface area
@@ -31,14 +32,21 @@ impl Chunk{
         }
     }
 
-    pub fn OfHeight(heightLevel: u32, chunkPos: (u32, u32)) -> Self {
+    pub fn OfHeight(heightLevel: u32, chunkPos: (i32, i32)) -> Self {
         let mut blocks = Vec::with_capacity(TOTAL_CHUNK_SIZE as usize);
-        for _ in 0..TOTAL_CHUNK_SIZE {
-            blocks.push(Block { ID: 0 } );
+        let offset = CHUNK_BOUNDS_X * (heightLevel) * CHUNK_BOUNDS_Z;
+        for i in 0..TOTAL_CHUNK_SIZE {
+            if i < offset {
+                blocks.push(Block { ID: 2 } );
+            }
+            else {
+               blocks.push(Block { ID: 0 } );
+            }
         }
         
-        let offset = CHUNK_BOUNDS_X * heightLevel * CHUNK_BOUNDS_Y;
-        blocks.iter_mut().skip(offset as usize).for_each(|b| *b = Block { ID : 2 });
+      
+       // blocks.iter_mut().skip(offset as usize).for_each(|b| *b = Block { ID : 2 });
+       //blocks.iter_mut().
 
         Self {
             Blocks: blocks,
@@ -91,98 +99,143 @@ impl Chunk{
     }
 
     pub fn GenerateBlocks(&mut self){
-
+        let mut rng = rand ::thread_rng();
+        let heightLevel = rng.gen_range(3..10);
+        let offset = CHUNK_BOUNDS_X * (heightLevel) * CHUNK_BOUNDS_Z;
+        for i in 0..TOTAL_CHUNK_SIZE {
+            if i < offset {
+                self.Blocks.push(Block { ID: 2 } );
+            }
+            else {
+               self.Blocks.push(Block { ID: 0 } );
+            }
+        }
     }
 
-    pub fn GenerateMesh(&mut self, blockRegistry: &BlockRegistry){
+   
 
-        let directions = [na::Vector3::new(1i32, 0i32, 0i32), na::Vector3::new(-1i32, 0i32, 0i32), 
-                                                                   na::Vector3::new(0i32, 1i32, 0i32), na::Vector3::new(0i32, -1i32, 0i32),
-                                                                   na::Vector3::new(0i32, 0i32, 1i32), na::Vector3::new(0i32, 0i32, -1i32)];
-        //TODO contain logic for drawing faces on chunk boundraries
-        //TODO if the chunk on the bounds is unloaded, don't draw the faces. Else, query that other chunk for a present block
-        let airID = blockRegistry.NameToID("Air");
+}
 
-        for x in 0..CHUNK_BOUNDS_X {
-            for y in 0..CHUNK_BOUNDS_Y {
-                for z in 0..CHUNK_BOUNDS_Z {
+pub fn GenerateMesh(chunks: &mut Vec<Chunk>, idx: usize, adjacentChunks: &[Option<usize>; 4], blockRegistry: &BlockRegistry, enableAdjacencyCulling: bool){
+    let directions = [na::Vector3::new(1i32, 0i32, 0i32), na::Vector3::new(-1i32, 0i32, 0i32), 
+                                                               na::Vector3::new(0i32, 1i32, 0i32), na::Vector3::new(0i32, -1i32, 0i32),
+                                                               na::Vector3::new(0i32, 0i32, 1i32), na::Vector3::new(0i32, 0i32, -1i32)];
 
-                    let mut i: u8 = 0;
-                    let currIDX = To1DVec(na::Vector3::new(x as i32, y as i32, z as i32));
-                    let currBlock = &self.Blocks[currIDX as usize];
-                    if currBlock.ID == airID {
+    println!("Chunks!! {:?}", adjacentChunks);                                                   
+    //Loop over each axis of the chunk
+    for x in 0..CHUNK_BOUNDS_X {
+        for y in 0..CHUNK_BOUNDS_Y {
+            for z in 0..CHUNK_BOUNDS_Z {
+
+                let mut faceID: u8 = 0;
+                
+                //push the mutable reference out of scope after this. That's why this is in a scope
+                let currBlock = chunks[idx].Blocks[To1DVec(na::Vector3::new(x as i32, y as i32, z as i32)) as usize].clone();
+
+                //If the current block is air, then there is nothing to draw. Continue...
+                if currBlock.ID == 0 {
+                    continue;
+                }
+                //Each block has 6 faces in 6 different directions. Loop over each direction to build each face
+                for direc in directions {
+                    //The 3D coordinate of a block in the direction of the current vector in this loop
+                    let new3D = na::Vector3::new(x as i32, y as i32, z as i32) + direc;
+                    //check for out of bounds on each axis
+                    let outX = new3D.x < 0 || new3D.x >= CHUNK_BOUNDS_X as i32;
+                    let outY = new3D.y < 0 || new3D.y >= CHUNK_BOUNDS_Y as i32;
+                    let outZ = new3D.z < 0 || new3D.z >= CHUNK_BOUNDS_Z as i32;
+
+                    //grab the appropiate block based on these variables
+                    let mut adjacentBlock: Block = Block::Air();
+                    if outX {
+                        //the x index we use to sample from the adjacent chunk
+                        if new3D.x < 0 {
+                            let x = CHUNK_BOUNDS_X - 1;
+                            if let Some(val) = adjacentChunks[0] {
+                                    adjacentBlock = chunks[val].Blocks[To1D((x, new3D.y as u32, new3D.z as u32)) as usize].clone();
+                            }
+                            else if enableAdjacencyCulling {faceID += 1; continue}
+                        } else {
+                            let x = 0;
+                            if let Some(val) = adjacentChunks[1] {
+                                 adjacentBlock = chunks[val].Blocks[To1D((x, new3D.y as u32, new3D.z as u32)) as usize].clone();
+                                
+                            }
+                            else if enableAdjacencyCulling {faceID += 1; continue}
+                        }
+
+                    }
+                    else if outZ {
+                        //the y index we use to sample from the adjacent chunk
+                        if new3D.z < 0 {
+                            let z = CHUNK_BOUNDS_Z - 1;
+                            if let Some(val) = adjacentChunks[2] {
+                                 adjacentBlock = chunks[val].Blocks[To1D((new3D.x as u32, new3D.y as u32, z)) as usize].clone();
+                            }
+                            else if enableAdjacencyCulling {faceID += 1; continue}
+                        } else {
+                            let z = 0;
+                            if let Some(val) = adjacentChunks[3] {
+                                  adjacentBlock = chunks[val].Blocks[To1D((new3D.x as u32, new3D.y as u32, z)) as usize].clone();
+                            }
+                            else if enableAdjacencyCulling {faceID += 1; continue}
+                        }
+                    }
+                    else if !outY { //Means y axis is not out of bounds
+                       
+                        adjacentBlock = chunks[idx].Blocks[To1DVec(new3D) as usize].clone();
+                       // println!("Here!!!! {}", adjacentBlock.ID);
+                        
+                    }
+
+                    if !outY && adjacentBlock.ID != 0 {
+                        faceID += 1;
                         continue;
                     }
-                    for direc in directions {
-                        
-                        let new3D = na::Vector3::new(x as i32, y as i32, z as i32) + direc;
 
-              
+                    //println!("Made it out!!! {:?}", new3D);
 
-                        if new3D.x >= 0 && new3D.x < CHUNK_BOUNDS_X as i32 && new3D.y >= 0 && new3D.y < CHUNK_BOUNDS_Y as i32 &&  new3D.z >= 0 && new3D.z < CHUNK_BOUNDS_Z as i32 {
+                    let offset = na::Vector3::new(0.5f32, 0.5f32, 0.5f32) + 0.5f32 * na::Vector3::new(direc.x as f32, direc.y as f32, direc.z as f32);
+                    let intOffset = na::Vector3::new(offset.x as i32, offset.y as i32, offset.z as i32);
+                    let axisA = na::Vector3::new(direc.y, direc.z, direc.x);
+                    let axisB = axisA.cross(&direc);
 
-                            let idx = To1DVec(new3D);
- 
-                            let block = &self.Blocks[idx as usize];
-                            if block.ID != airID { i += 1; continue;}
-                        }
-                        //TODO Else if it is is over bounds (only on the x and y) then check an adjacent chunk in the direction
-                        //TODO use the out of bounds direction (e.g. out of bounds on <1,0,0>) to index into the chunk array
-                        //TODO sample the block at that other chunk. If other chunk is None, continue
-                        //TODO for sampling, z is the same. If out of bounds postive (<1,0,0>) thats the start of a new range from 0..CHUNK_BOUNDS_X
-                        //TODO so for that example, newX = 0. If negative, newX = CHUNK_BOUNDS_X - 1. Y is the same as the current y
-
-                     
-
-                        let offset = na::Vector3::new(0.5f32, 0.5f32, 0.5f32) + 0.5f32 * na::Vector3::new(direc.x as f32, direc.y as f32, direc.z as f32);
-                        let intOffset = na::Vector3::new(offset.x as i32, offset.y as i32, offset.z as i32);
-                        let axisA = na::Vector3::new(direc.y, direc.z, direc.x);
-                        let axisB = axisA.cross(&direc);
-                        
-                        println!("Block at {}, {}, {}", x, y, z);
-                        let off = [0, 1];
-                        for a in 0..2 {
-                            for b in 0..2 {
-                                let pos = axisA.abs() * off[a] + axisB.abs() * off[b] + na::Vector3::new(x as i32, y as i32, z as i32) + intOffset;
-                               // println!("POS!! {:?} offset direc {:?} axis A {:?} axis B {:?}", pos, direc, axisA, axisB);
-                                let mut texID = 0;
-                                if let Some(data) = &blockRegistry.GetAttributesOf(&currBlock).TextureData {
-                                    texID = data.TextureID + data.Offsets[i as usize];
-                                   // println!("TEX ID AND OFFSET {}, {}", texID, data.Offsets[i as usize]);
-                                }
-
-                                let mut id = (a * 2 + b) as u32;
-                                if direc.x == 1 || direc.x == -1 {
-                                    id = (b * 2 + a) as u32;
-                                }
-
-                            //     self.Mesh.push(Vertex { pos: [pos.x as f32, pos.y as f32, pos.z as f32],
-                            //     texID: texID, 
-                            // quadID: id});
-                            let dat = ( pos.x  | pos.y << 4 | pos.z << 8 |  (texID as i32) << 16 | (id as i32) << 24 | i as i32  >> 26 ) as u32;
-                             println!("Pos {}, {} Real Pos {}, {} :::::: texID {}, real texID {}, quadID {}, real quadID {}", dat & 0xF, dat >> 4 & 0xF, pos.x, pos.y, dat >> 16 & 0xFF, texID, dat >> 24 & 0x3, id);
-                                self.Mesh.push(Vertex { Data: dat } );
-                                //println!("Pos from bits {}, {}", self.Mesh[self.Mesh.len() - 1].Data & 0b1111, self.Mesh[self.Mesh.len() - 1].Data >> 4 & 0b1111)
-                                //TODO Build the vertex data
-                                //TODO provide the texture ID using the face index, position data using 1D chunk cords, and face index for lighting
-                            }
-                        }
+                    let currChunk = &mut chunks[idx];   
                     
-                        i += 1;
-                   }
+                    let off = [0, 1];
+                    for a in 0..2 {
+                        for b in 0..2 {
+                            let pos = axisA.abs() * off[a] + axisB.abs() * off[b] + na::Vector3::new(x as i32, y as i32, z as i32) + intOffset;
+            
+                            let mut texID = 0;
+                            //TODO textureData should not be an optional. Either its real or the null texture
+                            if let Some(data) = &blockRegistry.GetAttributesOf(&currBlock).TextureData {
+                                texID = data.TextureID + data.Offsets[faceID as usize];
+                            }
+    
 
-                }
-
+                            let mut id = (a * 2 + b) as u32;
+                            if direc.x == 1 || direc.x == -1 {
+                                id = (b * 2 + a) as u32;
+                            }
+                            let dat = ( pos.x  | pos.z << 4 | pos.y << 8 |  (texID as i32) << 16 | (id as i32) << 24 | faceID as i32  >> 26 ) as u32;
+                            currChunk.Mesh.push(Vertex { Data: dat } );
+                        }
+                    }
                 
+                    faceID += 1;
+               }
+
             }
 
-          
-            //look in all 6 directions, only building faces if an air block is present
+            
         }
-    
-        
+
+      
+        //look in all 6 directions, only building faces if an air block is present
     }
 
+    
 }
 
 fn To3D(idx: u32) -> (u32, u32, u32){
@@ -190,7 +243,11 @@ fn To3D(idx: u32) -> (u32, u32, u32){
 }
 
 fn To1D(cord: (u32, u32, u32)) -> u32{
-    cord.0 + CHUNK_BOUNDS_X * (cord.1 + cord.2 * CHUNK_BOUNDS_Y)
+    cord.0 + CHUNK_BOUNDS_X * (cord.2 + cord.1 * CHUNK_BOUNDS_Z)
+}
+
+fn To1DUsize(cord: (usize, usize, usize)) -> usize{
+    cord.0 + CHUNK_BOUNDS_X as usize * (cord.2 + cord.1 * CHUNK_BOUNDS_Z as usize)
 }
 
 fn To3DVec(idx: u32) -> na::Vector3<u32>{
@@ -198,7 +255,7 @@ fn To3DVec(idx: u32) -> na::Vector3<u32>{
 }
 
 fn To1DVec(cord: na::Vector3<i32>) -> i32{
-    cord.x + CHUNK_BOUNDS_X as i32 * (cord.y + cord.z * CHUNK_BOUNDS_Y as i32)
+    cord.x + CHUNK_BOUNDS_X as i32 * (cord.z + cord.y * CHUNK_BOUNDS_Z as i32)
 }
 
 fn ToVec<T>(cord: (T, T, T)) -> na::Vector3<T>{

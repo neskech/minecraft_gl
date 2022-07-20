@@ -4,7 +4,6 @@ use glium::Surface;
 use crate::Scene::camera::Camera;
 use crate::Util::atlas::TextureAtlas;
 use crate::Util::resource::ResourceManager;
-use crate::World::item::ItemRegistry;
 
 const BLOCK_TEXTURE_RESOLUTION: u32 = 16;
 
