@@ -52,9 +52,9 @@ impl TextureAtlas{
 
         let finalImage = decoded.unwrap();
         let channels = if finalImage.color().has_alpha(){
-                                 gl::RGBA 
+                                 4
                             } else { 
-                                 gl::RGB 
+                                 3
                             };
         
         let cellHeight = (finalImage.height() as f32 / rows as f32) as u32;
@@ -75,9 +75,9 @@ impl TextureAtlas{
     pub fn FromImage(image: DynamicImage, rows: u32, cols: u32, textureResolution: u32, display: &glium::Display) -> Self{
         //Assume that the texture passed already has its texture parameters set
         let channels = if image.color().has_alpha(){
-                            gl::RGBA 
+                            4
                     } else { 
-                            gl::RGB 
+                            3 
                     };
 
         Self {
@@ -117,9 +117,9 @@ impl CubeMapAtlas{
 
         let finalImage = decoded.unwrap();
         let channels = if finalImage.color().has_alpha(){
-                                 gl::RGBA 
+                                 4
                             } else { 
-                                 gl::RGB 
+                                 3 
                             };
 
 

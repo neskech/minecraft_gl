@@ -1,0 +1,18 @@
+{
+    "Enabled": true,
+    
+    "Name": "Sand",
+    "ID": 5,
+    "Textures": [
+        "sand.jpeg",
+        "sand.jpeg",
+        "sand.jpeg",
+        "sand.jpeg",
+        "sand.jpeg",
+        "sand.jpeg"
+    ],
+
+    "Toughness": 1.0,
+    "Friction": 0.0
+
+}

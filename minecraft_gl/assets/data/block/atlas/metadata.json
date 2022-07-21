@@ -1,5 +1,5 @@
 {
-"Items": ["Gravel","Air","Dirt","Wood","Grass"],
+"Items": ["Dirt","Stone","Sand","Air","Wood","Gravel","Grass"],
 "Rows": 3,
 "Cols": 3,
 "Texture Resolution": 64

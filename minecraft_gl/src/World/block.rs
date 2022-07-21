@@ -1,5 +1,5 @@
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct Block{
     pub ID: u8
 }
@@ -351,9 +351,18 @@ impl BlockRegistry{
 
             //check if the items in the atlas are different than our current collection of items
             let items = json.get("Items").unwrap().as_array().unwrap();
-            for item in items {
-                let str = item.as_str().unwrap();
-                if ! self.StringToID.contains_key(str) {
+            let strItems: Vec<&str> = items.into_iter().map(|x| x.as_str().unwrap()).collect();
+            for string in self.StringToID.keys() {
+                
+                let mut found = false;
+                for string2 in &strItems {
+                    if string2 == string {
+                        found = true;
+                        break;
+                    }
+                }
+                
+                if ! found {
                     return Ok(false);
                 }
 
@@ -390,14 +399,16 @@ impl BlockRegistry{
         let mut img = image::RgbaImage::new(textureResolution * dims, textureResolution * dims);
 
         let mut runningTextureCount = 0;
-        for pair in self.BlocksAttributes.iter() {
-            if *pair.0 == 0 {
+        let mut keys: Vec<&u8> = self.BlocksAttributes.keys().collect();
+        keys.sort();
+        for id in keys {
+            if *id == 0 {
                 //skip air, it will have no texture
                 continue;
             }
 
             //If there is texture data...
-            if let Some(texData) = &pair.1.TextureData {
+            if let Some(texData) = &self.BlocksAttributes[id].TextureData {
 
                 let mut set: HashSet<&str> = HashSet::new(); //&str to prevent heap allocation
                 for i in 0..6 {
@@ -413,7 +424,7 @@ impl BlockRegistry{
                         let mut texture = match resource::GetImageOrNull(pathBuf.as_path().as_os_str().to_str().unwrap()) {
                             Ok(tex) => tex,
                             Err(tex) => {
-                                eprintln!("Image of path {} is invalid! Using null texture for block {} of id {}", pathBuf.as_os_str().to_str().unwrap(), pair.1.Name, pair.0);
+                                eprintln!("Image of path {} is invalid! Using null texture for block {} of id {}", pathBuf.as_os_str().to_str().unwrap(), self.BlocksAttributes[id].Name, id);
                                 tex
                             }
                         };

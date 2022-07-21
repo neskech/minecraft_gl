@@ -374,9 +374,18 @@ impl ItemRegistry{
             }
 
             let items = json.get("Items").unwrap().as_array().unwrap();
-            for item in items {
-                let str = item.as_str().unwrap();
-                if ! self.StringToID.contains_key(str) {
+            let strItems: Vec<&str> = items.into_iter().map(|x| x.as_str().unwrap()).collect();
+            for string in self.StringToID.keys() {
+                
+                let mut found = false;
+                for string2 in &strItems {
+                    if string2 == string {
+                        found = true;
+                        break;
+                    }
+                }
+                
+                if ! found {
                     return Ok(false);
                 }
 
@@ -411,9 +420,12 @@ impl ItemRegistry{
         let mut img = image::RgbaImage::new(textureResolution * dims, textureResolution * dims);
         
         let dir = String::from("./minecraft_gl/assets/data/item/img/");
-        for idx in 0..self.NumRegisteredItems {
+        let mut keys: Vec<&u8> = self.ItemAttributes.keys().collect();
+        keys.sort();
+        for id in keys{
+             let idx = *id as u32;
              //If a texture doesn't exist, use the null texture     
-             let path = if let Some(tex) = &self.ItemAttributes[&(idx as u8)].Texture {
+             let path = if let Some(tex) = &self.ItemAttributes[id].Texture {
                          let mut d = dir.clone();
                          d.push_str(tex);
                          d
@@ -424,7 +436,7 @@ impl ItemRegistry{
 
              //paste the texture onto the atlas
             let mut texture = resource::GetImageFromPath(&path)
-            .map_err(|e| format!("Error! Could not read image texture for item '{}' of id '{}'. The error:\n{}", self.ItemAttributes[&(idx as u8)].Name, idx, e.to_string()))?;
+            .map_err(|e| format!("Error! Could not read image texture for item '{}' of id '{}'. The error:\n{}", self.ItemAttributes[id].Name, idx, e.to_string()))?;
             texture = image::DynamicImage::ImageRgba8(image::imageops::resize(&mut texture, textureResolution, textureResolution, image::imageops::FilterType::Nearest));
             let coords = ((idx % dims) * textureResolution, (idx / dims) * textureResolution);
             image::imageops::overlay(&mut img, &mut texture, coords.0, coords.1);

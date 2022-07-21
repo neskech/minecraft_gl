@@ -1,13 +1,12 @@
 use std::collections::HashMap;
 use crate::Renderer::worldRenderer::Vertex;
-use super::{block::{Block, BlockRegistry}, State};
+use super::{block::{Block, BlockRegistry}, State, biomeGenerator::{Biome, BiomeGenerator}};
 use nalgebra as na;
-use rand::Rng;
 
 //TODO GET THE MATH WORKING OUT BETTER
 //TODO HAVE Z REPRESENT THE HEIGHT. IN THE ACUTAL GAME WORLD, JUST CALL THE y COORDINATE Z and BE DONE WITH IT
 pub const CHUNK_BOUNDS_X: u32 = 8;
-pub const CHUNK_BOUNDS_Y: u32 = 20;
+pub const CHUNK_BOUNDS_Y: u32 = 25;
 pub const CHUNK_BOUNDS_Z: u32 = 8;
 pub const TOTAL_CHUNK_SIZE: u32 = CHUNK_BOUNDS_X * CHUNK_BOUNDS_Y * CHUNK_BOUNDS_Z;
 
@@ -17,18 +16,24 @@ pub struct Chunk{
     pub Mesh: Vec<Vertex>,
     pub DynamicState: HashMap<u32, HashMap<String, State>>,
     pub StaticState: HashMap<u32, HashMap<String, State>>,
-    pub Position: (i32, i32)
+    pub Position: (i32, i32),
+
+    pub Biome: Biome,
+    pub BiomeValue: f32,
 }
 
 impl Chunk{
-    pub fn New(chunkPos: (i32, i32)) -> Self {
+    pub fn New(chunkPos: (i32, i32), biomeValue: f32) -> Self {
         Self {
             Blocks: Vec::with_capacity(TOTAL_CHUNK_SIZE as usize),
             //approcimation of surface area
             Mesh: Vec::with_capacity(f32::powf(TOTAL_CHUNK_SIZE as f32, 2f32 / 3f32) as usize * 6), 
             DynamicState: HashMap::new(),
             StaticState: HashMap::new(),
-            Position: chunkPos 
+            Position: chunkPos,
+
+            Biome: Biome::None, 
+            BiomeValue: biomeValue
         }
     }
 
@@ -43,17 +48,16 @@ impl Chunk{
                blocks.push(Block { ID: 0 } );
             }
         }
-        
-      
-       // blocks.iter_mut().skip(offset as usize).for_each(|b| *b = Block { ID : 2 });
-       //blocks.iter_mut().
 
         Self {
             Blocks: blocks,
             Mesh: Vec::new(), //can reserve?
             DynamicState: HashMap::new(),
             StaticState: HashMap::new(),
-            Position: chunkPos 
+            Position: chunkPos,
+
+            Biome: Biome::None, 
+            BiomeValue: -1f32
         }
     }
 
@@ -98,16 +102,42 @@ impl Chunk{
         self.Mesh.clear();
     }
 
-    pub fn GenerateBlocks(&mut self){
-        let mut rng = rand ::thread_rng();
-        let heightLevel = rng.gen_range(3..10);
-        let offset = CHUNK_BOUNDS_X * (heightLevel) * CHUNK_BOUNDS_Z;
-        for i in 0..TOTAL_CHUNK_SIZE {
-            if i < offset {
-                self.Blocks.push(Block { ID: 2 } );
-            }
-            else {
-               self.Blocks.push(Block { ID: 0 } );
+    pub fn GenerateBlocks(&mut self, generator: &Box<dyn BiomeGenerator>){
+        // let mut rng = rand::thread_rng();
+        // let heightLevel = rand::Rng::gen_range(&mut rng, 3..=3) + 2;
+        // let offset = CHUNK_BOUNDS_X * (heightLevel) * CHUNK_BOUNDS_Z;
+        // for i in 0..TOTAL_CHUNK_SIZE {
+        //     if i < offset {
+        //         self.Blocks.push(Block { ID: 2 } );
+        //     }
+        //     else {
+        //        self.Blocks.push(Block { ID: 0 } );
+        //     }
+        // }
+
+         for i in 0..TOTAL_CHUNK_SIZE {
+               self.Blocks.push(Block::Air());
+        }
+        // self.Blocks.push(Block { ID: 2 } );
+
+        let heightMap = generator.HeightMap(self.Position.0, self.Position.1);
+        println!("Height mAp {:?}", heightMap);
+        for x in 0..CHUNK_BOUNDS_X {
+            for y in 0..CHUNK_BOUNDS_Y {
+                for z in 0..CHUNK_BOUNDS_Z {
+                    let idx = To1D((x, y, z));
+                    let heightMapIdx = x + z * CHUNK_BOUNDS_X;
+
+                    if y > heightMap[heightMapIdx as usize] {
+                       // self.Blocks[idx as usize] = Block::Air();
+                        continue;
+                    }
+                   // self.Blocks[idx as usize] = Block { ID: 2 };
+
+                    self.Blocks[idx as usize] = ( generator.Sample(x as f64 + CHUNK_BOUNDS_X as f64 * self.Position.0 as f64,
+                                                                   y as f64,
+                                                                 z as f64 + CHUNK_BOUNDS_Z as f64 * self.Position.1 as f64) );
+                }
             }
         }
     }
@@ -218,8 +248,9 @@ pub fn GenerateMesh(chunks: &mut Vec<Chunk>, idx: usize, adjacentChunks: &[Optio
                             if direc.x == 1 || direc.x == -1 {
                                 id = (b * 2 + a) as u32;
                             }
-                            let dat = ( pos.x  | pos.z << 4 | pos.y << 8 |  (texID as i32) << 16 | (id as i32) << 24 | faceID as i32  >> 26 ) as u32;
+                            let dat = ( pos.x  | pos.z << 4 | pos.y << 8 |  (texID as i32) << 16 | (id as i32) << 24 | (faceID as i32) << 26 ) as u32;
                             currChunk.Mesh.push(Vertex { Data: dat } );
+                           // println!("FACE ID {} and bits {:08b} and real {}", dat >> 24 & 0x7, dat >> 24 & 0x7, faceID);
                         }
                     }
                 

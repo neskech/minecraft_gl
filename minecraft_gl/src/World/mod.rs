@@ -4,8 +4,11 @@ pub mod blockBehavior;
 pub mod item;
 pub mod itemBehavior;
 pub mod chunk;
+mod biomeGenerator;
 pub mod world;
-use self::{item::{ItemRegistry, ItemStack, ItemID}, block::{BlockRegistry, Block}, crafting::CraftingRegistry};
+use std::{io::BufReader, collections::HashMap};
+
+use self::{item::{ItemRegistry, ItemStack, ItemID}, block::{BlockRegistry, Block}, crafting::CraftingRegistry, biomeGenerator::{BiomeGenerator, Biome, GenerationData, HeightModifier, ForestGenerator}};
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -176,4 +179,175 @@ pub fn ReadAttributes(blockRegistry: &mut BlockRegistry, itemRegistry: &mut Item
         }
     }
     Ok(())
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+pub fn ReadBiomeGenerators(blockRegistry: &BlockRegistry) -> Result<HashMap<Biome, Box<dyn BiomeGenerator>>, Box<dyn std::error::Error>> {
+    //TODO implement the capacity for item and block registries
+    let path = std::path::Path::new("./minecraft_gl/assets/data/biome/");
+    let dir = std::fs::read_dir(path)
+    .map_err(|e| format!("Error! Could not find ./minecraft_gl/assets/data/biome/ directory! The error:\n{}", e.to_string()))?;
+    
+    let mut generators: HashMap<Biome, Box<dyn BiomeGenerator>> = HashMap::with_capacity(dir.count());
+
+    for file in std::fs::read_dir(path).unwrap() {
+        let path = file
+        .map_err(|e| format!("Error! Could not retrieve file in ../../assets/data/block/json/ directory! The error:\n{}", e.to_string()))?.path();
+
+        let file = std::fs::File::open(path)
+        .map_err(|e| GenericError::NewBoxed(format!("Error! Could not open file of path in ../../assets/data/block/json/ directory! The error:\n{}", e.to_string())))?;
+
+        let json: serde_json::Value = serde_json::from_reader(BufReader::new(file))?;
+        
+        let mut genData = GenerationData {
+            Blocks: Vec::new(),
+            Ores: Vec::new(),
+            HeightLevel: 0u32,
+            SeaLevel: 0u32,
+            CaveModifier: HeightModifier::default(),
+            CaveCutoff: 0f32,
+            OreCutoff: 0f32,
+        };
+
+        let name = json["Name"].as_str().unwrap();
+
+        if let Some(val) = json.get("Cave") {
+            if let Some(c) = val.get("Noise Cutoff") {
+                genData.CaveCutoff = c.as_f64().unwrap() as f32;
+            } else {
+                return Err(GenericError::NewBoxed(
+                    format!("The {} biome json has no property 'Noise Cuftoff' inside of 'Cave'. Fix the json file!", name)));
+            }
+            genData.CaveModifier = ReadHeightModifier(val, name, "Cave")?;
+        }  else {
+            return Err(GenericError::NewBoxed(
+                format!("The {} biome json has no property 'cave'. Fix the json file!", name)));
+        }
+
+        if let Some(val) = json.get("Height Level") {
+            genData.HeightLevel = val.as_u64().unwrap() as u32;
+        }  else {
+            return Err(GenericError::NewBoxed(
+                format!("The {} biome json has no property 'Height Level'. Fix the json file!", name)));
+        }
+
+        if let Some(val) = json.get("Sea Level") {
+            genData.SeaLevel = val.as_u64().unwrap() as u32;
+        }  else {
+            return Err(GenericError::NewBoxed(
+                format!("The {} biome json has no property 'Sea Level'. Fix the json file!", name)));
+        }
+
+        //Read the block data
+        if let Some(val) = json.get("Blocks") {
+            genData.Blocks = ReadBlockList(val, name, "Blocks", blockRegistry)?;
+            println!("Gen data have the block data now hehe :3 {:?}", genData.Blocks);
+        }  else {
+            return Err(GenericError::NewBoxed(
+                format!("The {} biome json has no property 'Blocks'. Fix the json file!", name)));
+        }
+
+        //Read the ore data
+        if let Some(val) = json.get("Ores") {
+            if let Some(v) = val.get("Noise Cutoff") {
+                genData.OreCutoff = v.as_f64().unwrap() as f32;
+            } else {
+                return Err(GenericError::NewBoxed(
+                    format!("The {} biome json has no property 'Noise Cuftoff' inside of 'Ores'. Fix the json file!", name)));
+            }
+
+            if let Some(v) = val.get("Blocks") {
+                 genData.Ores = ReadBlockList(v, name, "Ore Blocks", blockRegistry)?;
+            } else {
+                return Err(GenericError::NewBoxed(
+                    format!("The {} biome json has no property 'Blocks' inside of 'Ores'. Fix the json file!", name)));
+            }
+        }  else {
+            return Err(GenericError::NewBoxed(
+                format!("The {} biome json has no property 'Blocks'. Fix the json file!", name)));
+        }
+
+        println!("I DID ITTTTTTTTTTTT WITH THE DATA {:?}", genData.Blocks);
+        match name {
+            "Forest" => {
+                generators.insert(Biome::Forest, Box::new(ForestGenerator::New(genData)));
+            },
+            _ => {
+                return Err(GenericError::NewBoxed(
+                    format!("The {} biome is not yet supported!", name)));
+            }
+        }
+
+    }
+    /*
+        Returning a hashmap instead of a vector of biomes. Why?
+        Could have used the biome enum to index into the vector, but that wouldn't
+        work if I wanted to disable certain biomes.
+    */
+    Ok(generators)
+}
+
+fn ReadHeightModifier(json: &serde_json::Value, biomeName: &str, propertyName: &str) -> Result<HeightModifier, GenericError> {
+    let mut modif = HeightModifier::default();
+
+    if let Some(val) = json.get("Min Height") {
+        modif.MinHeight = val.as_f64().unwrap() as f32;
+    } else {
+        return Err(GenericError::New(
+            format!("The {} object has no 'Min Height' property. Error occursed in {} biome json file", propertyName, biomeName)));
+    }
+
+    if let Some(val) = json.get("Max Height") {
+        modif.MaxHeight = val.as_f64().unwrap() as f32;
+    } else {
+        return Err(GenericError::New(
+            format!("The {} object has no 'Max Height' property. Error occursed in {} biome json file", propertyName, biomeName)));
+    }
+
+    if let Some(val) = json.get("Decay") {
+        modif.Decay = val.as_bool().unwrap();
+    } 
+
+    if let Some(val) = json.get("Constant") {
+        modif.Constant = val.as_bool().unwrap();
+        if modif.Decay && modif.Constant {
+            return Err(GenericError::New(
+                format!("The {} object cannot be both constant and decaying. Error occursed in {} biome json file", propertyName, biomeName)));
+        }
+    } 
+
+    if let Some(val) = json.get("Speed") {
+        modif.Speed = val.as_f64().unwrap() as f32;
+        if modif.Constant {
+            return Err(GenericError::New(
+                format!("The {} object cannot be constant and have a defined speed. Error occursed in {} biome json file", propertyName, biomeName)));
+        }
+    } 
+
+    Ok(modif)
+}
+
+fn ReadBlockList(json: &serde_json::Value, biomeName: &str, propertyName: &str, blockRegistry: &BlockRegistry) -> Result<Vec<(Block, HeightModifier)>, GenericError>{
+    let arr = json.as_array().unwrap();
+    let mut vec: Vec<(Block, HeightModifier)> = Vec::with_capacity(arr.len());
+
+    for val in arr {
+        println!("VALUES\n\n{}", val.to_string());
+        if let Some(v) = val.get("Name") {
+            let id = blockRegistry.NameToID(v.as_str().unwrap());
+            println!("ABout to write push value my little kitten :3");
+            vec.push((Block {ID: id}, ReadHeightModifier(val, biomeName, propertyName)?));
+        }
+        else {
+            return Err(GenericError::New(format!("
+            Block object inside of the '{}' object must have the property 
+            'Name'. Error occured in {} biome json file", propertyName, biomeName)));
+        }
+    }
+    println!("Heres the data my little kitten :3 {:?}", vec);
+    Ok(vec)
 }

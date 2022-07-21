@@ -1,15 +1,19 @@
-use std::collections::HashSet;
+use std::collections::{HashSet, HashMap};
 
-use crate::Scene::camera::Camera;
+use noise::{Seedable, NoiseFn};
+use rand::Rng;
 
-use super::{block::BlockRegistry, chunk::{Chunk, CHUNK_BOUNDS_X, CHUNK_BOUNDS_Y, CHUNK_BOUNDS_Z, GenerateMesh}, item::ItemRegistry, crafting::CraftingRegistry};
+use crate::{Scene::camera::Camera, World::biomeGenerator::Biome};
+
+use super::{block::BlockRegistry, chunk::{Chunk, CHUNK_BOUNDS_X, CHUNK_BOUNDS_Z, GenerateMesh}, item::ItemRegistry, crafting::CraftingRegistry, biomeGenerator::{BiomeGenerator, NoiseParameters}, ReadBiomeGenerators};
 
 
 const DEFAULT_RENDER_DISTANCE: usize = 2;
 const MAX_CHUNK_GENERATION_PER_FRAME: usize = 3;
 const MAX_CHUNK_REMESH_PER_FRAME: usize = 3;
-
 const MAX_RENDER_DISTANCE: usize = 10;
+
+const CHUNK_BIOME_DISTANCE_THRESHOLD: f32 = 0.2f32;
 
 //TODO May be an issue where a chunk is added to the pipeline multiple times. Say if the user moved to fast, and as a chunk was in the
 //TODO remesh list it got added to the regeneration list. An issue?
@@ -30,18 +34,40 @@ pub struct World{
     ItemRegistry: ItemRegistry,
     CraftingRegistry: CraftingRegistry,
 
+    BiomeGenerators: HashMap<Biome, Box<dyn BiomeGenerator>>,
+    BiomeNoise: NoiseParameters,
+
 }
 
 impl World{
     pub fn New(craftingRegistry: CraftingRegistry, blockRegistry: BlockRegistry, itemRegistry: ItemRegistry) -> Self{
         let mut chunks: Vec<Chunk> = Vec::new();
         chunks.reserve(DEFAULT_RENDER_DISTANCE * DEFAULT_RENDER_DISTANCE);
-        chunks.push(Chunk::OfHeight(10, (0, 0)));
-        //chunks[0].GenerateMesh(&blockRegistry);
+
+        let mut rng = rand::thread_rng();
+        let noise =  NoiseParameters {
+            Octaves: 6,
+            Seed: rng.gen_range(0..10000),
+            Frequency: 1f64,
+            Lacunarity: std::f64::consts::PI * 2.0 / 3.0,
+            Persistance: 0.5f64,
+        };
+        
+        let mut w = noise::Fbm::new();
+        w = w.set_seed(noise.Seed);
+        noise.ApplyToFBM(&mut w);
+        chunks.push(Chunk::New((0,0), w.get([0f64, 0f64]) as f32));
 
         let renderList = HashSet::new();
         let mut regen = Vec::new();
         regen.push(((DEFAULT_RENDER_DISTANCE * 2 + 1) * (DEFAULT_RENDER_DISTANCE * 2 + 1)) / 2);
+
+        let map = match ReadBiomeGenerators(&blockRegistry) {
+            Ok(val) => val,
+            Err(msg) => {
+                panic!("Error! World construction failed due to failure to read biome generators. The error:\n{}", msg.to_string())
+            }
+        };
 
         let mut s = Self{
             Chunks: chunks,
@@ -58,6 +84,9 @@ impl World{
             BlockRegistry: blockRegistry,
             ItemRegistry: itemRegistry,
             CraftingRegistry: craftingRegistry,
+
+            BiomeGenerators: map,
+            BiomeNoise: noise,
         };
 
         s.RenderDistanceUpdateFunc(DEFAULT_RENDER_DISTANCE as u32);
@@ -105,7 +134,10 @@ impl World{
             println!("Chunk idx {} and pos {:?}", i, chunk.Position);
             i += 1;
         }
-        
+
+        let mut w = noise::Fbm::new();
+        w = w.set_seed(self.BiomeNoise.Seed);
+        self.BiomeNoise.ApplyToFBM(&mut w);
         //TODO Make sure to update the chunk positions as well
         for i in iterator.into_iter(){
             let currIdx: usize;
@@ -160,6 +192,8 @@ impl World{
                 //TODO have chunk generateBlocks() call Clear() for you
                 self.Chunks[currIdx].Clear();
                 self.Chunks[currIdx].Position = (self.Chunks[currIdx].Position.0 + direction.0, self.Chunks[currIdx].Position.1 + direction.1);
+                self.Chunks[currIdx].BiomeValue = w.get([self.Chunks[currIdx].Position.0 as f64, self.Chunks[currIdx].Position.1 as f64]) as f32;
+                self.Chunks[currIdx].Biome = Biome::None;
                 self.RegenerationList.push(currIdx);
             }
             let temp = self.Chunks[nextIdx].clone();
@@ -191,8 +225,44 @@ impl World{
             }
 
             let index = self.RegenerationList[idx];
+
+            let row: i32 = index as i32 / (self.RenderDistance as i32 * 2 + 1);
+            let col: i32 = index as i32 % (self.RenderDistance as i32 * 2 + 1);
+
+            let chunkList = [
+                if col - 1 == -1 {None} else {Some((row * (self.RenderDistance as i32 * 2 + 1) + col - 1) as usize)},//Left
+                if col + 1 == self.RenderDistance as i32 * 2 + 1 {None} else {Some((row * (self.RenderDistance as i32 * 2 + 1) + col + 1) as usize)}, //Right
+                if row + 1 == self.RenderDistance as i32 * 2 + 1 {None} else {Some(((row + 1) * (self.RenderDistance as i32 * 2 + 1) + col) as usize)}, //Right
+                if row - 1 == -1 as i32 {None} else {Some(((row - 1) * (self.RenderDistance as i32 * 2 + 1) + col) as usize)}, //Right
+            ];
+
+            let mut minDifference = f32::MAX;
+            let mut minBiome: Biome = Biome::None;
+            for val in chunkList {
+                if let Some(v) = val {
+                    if self.Chunks[v].Biome == Biome::None {continue;}
+                    let diff = f32::abs(self.Chunks[v].BiomeValue - self.Chunks[index].BiomeValue);
+                    if diff < minDifference {
+                        minDifference = diff;
+                        minBiome = self.Chunks[v].Biome.clone();
+                    }
+                }
+            }
+
+            //check if the minimum distance is < threshold
+            if minDifference <= CHUNK_BIOME_DISTANCE_THRESHOLD {
+                print!("OOpsie dooppsie woopsy!!!");
+                self.Chunks[index].Biome = minBiome;
+            }
+            else {
+                print!("Else oppsie!!!");
+                self.Chunks[index].Biome = Biome::Random();
+            }
+
+            let genBiome = self.Chunks[index].Biome.clone();
             println!("Generating blocks for {}", index);
-            self.Chunks[index].GenerateBlocks();
+            println!("Biom attr {:?} and the hashmap", genBiome);
+            self.Chunks[index].GenerateBlocks(&self.BiomeGenerators[&genBiome]);
             self.RemeshList.push(index);
             self.RegenerationList.remove(idx);
             count += 1;
@@ -223,7 +293,7 @@ impl World{
                 if row - 1 == -1 as i32 {None} else {Some(((row - 1) * (self.RenderDistance as i32 * 2 + 1) + col) as usize)}, //Right
             ];
             println!("row {} col {}", row, col);
-            GenerateMesh(&mut self.Chunks, index, &chunkList, &self.BlockRegistry, false);
+            GenerateMesh(&mut self.Chunks, index, &chunkList, &self.BlockRegistry, true);
             self.CandidateList.push(index);
             self.RemeshList.remove(idx);
             count += 1;
@@ -260,11 +330,14 @@ impl World{
         }
 
         let oldRD = self.RenderDistance;
-
         let sign: i32 = if self.RenderDistance as u32 > renderDistance {-1} else {1};
+        let mut w = noise::Fbm::new();
+        w = w.set_seed(self.BiomeNoise.Seed);
+        self.BiomeNoise.ApplyToFBM(&mut w);
+
         while self.RenderDistance as u32 != renderDistance {
             println!("Going at it again!!");
-            self.UpdateRenderDistance((self.RenderDistance as i32 + 1 * sign) as u32);
+            self.UpdateRenderDistance((self.RenderDistance as i32 + 1 * sign) as u32, &w);
             println!("Render dist {} chunks size {}", self.RenderDistance, self.Chunks.len());
         }
 
@@ -289,7 +362,7 @@ impl World{
         }
     }
 
-    fn UpdateRenderDistance(&mut self, renderDistance: u32){
+    fn UpdateRenderDistance(&mut self, renderDistance: u32, noiseGenerator: &noise::Fbm){
     
 
         if renderDistance < self.RenderDistance as u32{
@@ -342,7 +415,7 @@ impl World{
                     //Change <row, col> -> <x, y> where x = col, y = row. 
                     //In <row,col> going up is negative. Although, in window space up is negative also so no need to change it
                     let insertion = (rowCol.0 * (renderDistance * 2 + 1) as i32 + rowCol.1) as usize;
-                    set.push((insertion, Chunk::New((newPos.1, -newPos.0))));
+                    set.push((insertion, Chunk::New((newPos.1, -newPos.0), noiseGenerator.get([newPos.1 as f64, -newPos.0 as f64]) as f32)));
                 },
                 1 => { //right side
                     //as i increases, row must increase
@@ -350,7 +423,7 @@ impl World{
                     let newPos = (rowCol.0 - arrayPos.0 + centerPos.0, rowCol.1 - arrayPos.1 + centerPos.1);
                     println!("1 RowCol {:?} idx {} newPos {:?} insertion index {}", rowCol, i, newPos, (rowCol.0 * (renderDistance * 2 + 1) as i32 + rowCol.1) as usize);
                     let insertion = (rowCol.0 * (renderDistance * 2 + 1) as i32 + rowCol.1) as usize;
-                    set.push((insertion, Chunk::New((newPos.1, -newPos.0))));
+                    set.push((insertion, Chunk::New((newPos.1, -newPos.0), noiseGenerator.get([newPos.1 as f64, -newPos.0 as f64]) as f32)));
                 },
                 2 => { //bottom side
                     //As i increases, column must decrease
@@ -358,7 +431,7 @@ impl World{
                     let newPos = (rowCol.0 - arrayPos.0 + centerPos.0, rowCol.1 - arrayPos.1 + centerPos.1);
                     println!("2 RowCol {:?} idx {} newPos {:?} insertion index {}", rowCol, i, newPos, (rowCol.0 * (renderDistance * 2 + 1)as i32 + rowCol.1) as usize);
                     let insertion = (rowCol.0 * (renderDistance * 2 + 1) as i32 + rowCol.1) as usize;
-                    set.push((insertion, Chunk::New((newPos.1, -newPos.0))));
+                    set.push((insertion, Chunk::New((newPos.1, -newPos.0), noiseGenerator.get([newPos.1 as f64, -newPos.0 as f64]) as f32)));
                 },
                 3 => { //left side
                     //As i increases, row must decrease
@@ -366,7 +439,7 @@ impl World{
                     let newPos = (rowCol.0 - arrayPos.0 + centerPos.0, rowCol.1 - arrayPos.1 + centerPos.1);
                     println!("3 RowCol {:?} idx {} newPos {:?} insertion index {}", rowCol, i, newPos, (rowCol.0 * (renderDistance * 2 + 1)as i32 + rowCol.1) as usize);
                     let insertion = (rowCol.0 * (renderDistance * 2 + 1) as i32 + rowCol.1) as usize;
-                    set.push((insertion, Chunk::New((newPos.1, -newPos.0))));
+                    set.push((insertion, Chunk::New((newPos.1, -newPos.0), noiseGenerator.get([newPos.1 as f64, -newPos.0 as f64]) as f32)));
                 },
                 _ => {} //not possible
             }

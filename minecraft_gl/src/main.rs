@@ -11,11 +11,13 @@
 #![feature(const_type_id)]
 
 
-pub extern crate gl;
 #[macro_use]
 pub extern crate glium;
 pub extern crate image;
 pub extern crate nalgebra;
+pub extern crate noise;
+#[macro_use]
+extern crate lazy_static;
 
 mod Core;
 mod Event;

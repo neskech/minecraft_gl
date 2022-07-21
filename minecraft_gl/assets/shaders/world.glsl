@@ -53,11 +53,21 @@ uniform sampler2D atlas;
 in vec2 fuvs;
 in float faceID;
 
+const float values[6] = float[6](
+   0.2, 0.2, 1.0, 0.3, 0.2, 0.2
+);
+
+
+const vec3 normals[6] = vec3[6](
+    vec3(1, 0, 0), vec3(-1, 0, 0), //Right, Left
+    vec3(0, 1, 0), vec3(0, -1, 0), //Up, Down
+    vec3(0, 0, 1), vec3(0, 0, -1) //Forward, Backward
+
+);
+
 out vec4 Color;
 
 void main(){
-
-
-      Color = texture(atlas, fuvs);
+      Color = texture(atlas, fuvs) * values[int(faceID)];
       //Color = vec4(1.0, 0.0, 1.0, 1.0);
 }

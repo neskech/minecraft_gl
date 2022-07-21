@@ -1,0 +1,18 @@
+{
+    "Enabled": true,
+    
+    "Name": "Stone",
+    "ID": 6,
+    "Textures": [
+        "stone.jpeg",
+        "stone.jpeg",
+        "stone.jpeg",
+        "stone.jpeg",
+        "stone.jpeg",
+        "stone.jpeg"
+    ],
+
+    "Toughness": 1.0,
+    "Friction": 0.0
+
+}
