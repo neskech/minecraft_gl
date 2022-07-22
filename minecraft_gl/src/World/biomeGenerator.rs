@@ -1,12 +1,11 @@
 
-use noise::{Seedable, NoiseFn};
+use bracket_noise::prelude::{FastNoise, NoiseType};
 use rand::Rng;
-use super::{chunk::{CHUNK_BOUNDS_X, CHUNK_BOUNDS_Z}, block::Block};
+use super::{chunk::{CHUNK_BOUNDS_X, CHUNK_BOUNDS_Z, CHUNK_BOUNDS_Y, To1D}, block::Block};
 
 
 pub trait BiomeGenerator {
-    fn Sample(&self, x: f64, y: f64, z: f64) -> Block;
-    fn HeightMap(&self, chunkX: i32, chunkY: i32) -> [u32; (CHUNK_BOUNDS_X * CHUNK_BOUNDS_Z) as usize];
+    fn Generate(&mut self, blocks: &mut Vec<Block>, chunkX: i32, chunkZ: i32);
 }
 
 #[derive(Eq, Hash, PartialEq, Clone, Debug)]
@@ -67,57 +66,47 @@ impl HeightModifier {
     pub fn SampleLinear(&self, height: f32) -> f32{
         if self.Constant { return 1f32; }
         let sign = if self.Decay {-1f32} else {1f32};
-        sign * 1f32 + f32::min(1f32, height / ((self.MaxHeight - self.MinHeight) * self.Speed)) + (1 * self.Decay as u8) as f32
+        sign * 1f32 * f32::min(1f32, (height - self.MinHeight) / ((self.MaxHeight - self.MinHeight) * self.Speed)) + (1 * self.Decay as u8) as f32
     }
 }
 
 pub struct NoiseParameters {
-    pub Octaves: usize,
-    pub Seed: u32,
-    pub Frequency: f64,
-    pub Persistance: f64,
-    pub Lacunarity: f64,
+    pub Octaves: i32,
+    pub Seed: u64,
+    pub Frequency: f32,
+    pub Persistance: f32,
+    pub Lacunarity: f32,
 }
 
 impl NoiseParameters {
     pub fn None() -> Self {
         Self {
             Octaves: 0,
-            Seed: 0u32,
-            Frequency: 0f64,
-            Persistance: 0f64,
-            Lacunarity: 0f64,
+            Seed: 0u64,
+            Frequency: 0f32,
+            Persistance: 0f32,
+            Lacunarity: 0f32,
         }
     }
 
-    pub fn ApplyToFBM(&self, fbm: &mut noise::Fbm){
-        fbm.octaves = self.Octaves;
-        fbm.frequency = self.Frequency;
-        fbm.lacunarity = self.Lacunarity;
-        fbm.persistence = self.Persistance;
-    }
-
-    pub fn ApplyToRidged(&self, fbm: &mut noise::RidgedMulti){
-        fbm.octaves = self.Octaves;
-        fbm.frequency = self.Frequency;
-        fbm.lacunarity = self.Lacunarity;
-        fbm.persistence = self.Persistance;
-    }
-
-    pub fn ApplyToBasic(&self, fbm: &mut noise::BasicMulti){
-        fbm.octaves = self.Octaves;
-        fbm.frequency = self.Frequency;
-        fbm.lacunarity = self.Lacunarity;
-        fbm.persistence = self.Persistance;
+    pub fn Apply(&self, noise: &mut FastNoise){
+        noise.set_frequency(self.Frequency);
+        noise.set_fractal_octaves(self.Octaves);
+        noise.set_fractal_lacunarity(self.Lacunarity);
+        noise.set_seed(self.Seed);
     }
 }
 
 #[derive(Debug)]
 pub struct GenerationData{
-    pub Blocks: Vec<(Block, HeightModifier)>,
+    pub Crust: Vec<(Block, HeightModifier)>,
+    pub Mantle: Option<Block>,
+    pub Core: Block,
     pub Ores: Vec<(Block, HeightModifier)>,
+    pub MantleRange: (u32, u32),
 
     pub HeightLevel: u32,
+    pub SurfaceAmplitude: u32,
     pub SeaLevel: u32,
 
     pub CaveModifier: HeightModifier,
@@ -127,6 +116,7 @@ pub struct GenerationData{
 }
 
 pub struct ForestGenerator {
+    Noise: FastNoise,
     HeightMapNoise: NoiseParameters,
     SelectionNoise: NoiseParameters,
     CaveNoise: NoiseParameters,
@@ -141,37 +131,41 @@ impl ForestGenerator {
         let height = NoiseParameters{
             Octaves: 6,
             Seed: rng.gen_range(0..10000),
-            Frequency: 0.08f64,
-            Lacunarity: std::f64::consts::PI * 2.0 / 3.0,
-            Persistance: 0.5f64,
+            Frequency: 0.008f32,
+            Lacunarity: (std::f64::consts::PI * 2.0 / 3.0) as f32,
+            Persistance: 0.5f32,
             
         };
 
         let selection = NoiseParameters{
             Octaves: 6,
             Seed: rng.gen_range(0..10000),
-            Frequency: 1f64,
-            Lacunarity: std::f64::consts::PI * 2.0 / 3.0,
-            Persistance: 0.5f64,
+            Frequency: 0.08f32,
+            Lacunarity: (std::f64::consts::PI * 2.0 / 3.0) as f32,
+            Persistance: 0.5f32,
         };
 
         let cave = NoiseParameters{
             Octaves: 6,
             Seed: rng.gen_range(0..10000),
-            Frequency: 1f64,
-            Lacunarity: std::f64::consts::PI * 2.0 / 3.0,
-            Persistance: 0.5f64,
+            Frequency: 0.08f32,
+            Lacunarity: (std::f64::consts::PI * 2.0 / 3.0) as f32,
+            Persistance: 0.5f32,
         };
 
         let ore = NoiseParameters{
             Octaves: 6,
             Seed: rng.gen_range(0..10000),
-            Frequency: 1f64,
-            Lacunarity: std::f64::consts::PI * 2.0 / 3.0,
-            Persistance: 0.5f64,
+            Frequency: 0.08f32,
+            Lacunarity: (std::f64::consts::PI * 2.0 / 3.0) as f32,
+            Persistance: 0.5f32,
         };
 
+        let mut noise = FastNoise::new();
+        noise.set_noise_type(NoiseType::Simplex);
+
         Self {
+            Noise: noise,
             HeightMapNoise: height,
             SelectionNoise: selection,
             CaveNoise: cave,
@@ -182,70 +176,64 @@ impl ForestGenerator {
 }
 
 impl BiomeGenerator for ForestGenerator {
-    fn Sample(&self, x: f64, y: f64, z: f64) -> Block{
-        //TODO benchmark creating a new noise. If bad, make static noise objects whom's parameters can be changed
+    fn Generate(&mut self, blocks: &mut Vec<Block>, chunkX: i32, chunkZ: i32) {
 
-        // use std::time::Instant;
-        // let now = Instant::now();
+        let mut heightMap =  [0; (CHUNK_BOUNDS_X * CHUNK_BOUNDS_Z) as usize];
+        let mut crust = [Block::Air(); (CHUNK_BOUNDS_X * CHUNK_BOUNDS_Z) as usize];
 
-        let mut w = noise::Fbm::new();
-
-        // let elapsed = now.elapsed();
-        // println!("Elapsed: {:.2?}", elapsed);
-
-        //cave...
-        w = w.set_seed(self.CaveNoise.Seed);
-        self.CaveNoise.ApplyToFBM(&mut w);
-
-        use std::time::Instant;
-        let now = Instant::now();
-        let caveValue = self.GenData.CaveModifier.SampleLinear(y as f32) * (w.get([x, z, y]) as f32 + 1f32) / 2f32;
-
-        let elapsed = now.elapsed();
-        println!("Elapsed: {:.2?}", elapsed);
-
-        if caveValue >= self.GenData.CaveCutoff {
-            return Block::Air();
-        }
-
-        //ores...
-        w = w.set_seed(self.OreNoise.Seed);
-        self.OreNoise.ApplyToFBM(&mut w);
-        let oreValue =  (w.get([x, z, y]) as f32 + 1f32) / 2f32;
-
-        if oreValue >= self.GenData.OreCutoff {
-            let normalized = (oreValue - self.GenData.OreCutoff) / (1f32 - self.GenData.OreCutoff);
-            if let Some(block) = GetBlockType(&self.GenData.Ores, normalized, y as f32) {
-                return block;
-            }
-        }
-        
-        //Normal blocks...
-        w = w.set_seed(self.SelectionNoise.Seed);
-        self.OreNoise.ApplyToFBM(&mut w);
-        let blockValue =  (w.get([x, z, y]) as f32 + 1f32) / 2f32;
-
-        GetBlockType(&self.GenData.Blocks, blockValue, y as f32).unwrap()
-
-    }   
-    
-    fn HeightMap(&self, chunkX: i32, chunkZ: i32) -> [u32; (CHUNK_BOUNDS_X * CHUNK_BOUNDS_Z) as usize] {
-        let mut w = noise::Fbm::new();
-        w = w.set_seed(self.HeightMapNoise.Seed);
-        self.HeightMapNoise.ApplyToFBM(&mut w);
-
-       // println!("Height level {}", self.GenData.HeightLevel);
-        let mut arr = [0; (CHUNK_BOUNDS_X * CHUNK_BOUNDS_Z) as usize];
         for x in 0..CHUNK_BOUNDS_X {
             for z in 0..CHUNK_BOUNDS_Z {
-                let noise = w.get([(x as i32 + chunkX * CHUNK_BOUNDS_X as i32) as f64, (z as i32 + chunkZ * CHUNK_BOUNDS_Z as i32) as f64]) as f32;
-                let normalized = (noise + 1f32) / 2f32;
-                arr[(z * CHUNK_BOUNDS_X + x) as usize] = (self.GenData.HeightLevel as f32 * normalized) as u32;
+                self.HeightMapNoise.Apply(&mut self.Noise);
+                let heightNoisenoise = self.Noise.get_noise((x as i32 + chunkX * CHUNK_BOUNDS_X as i32) as f32, (z as i32 + chunkZ * CHUNK_BOUNDS_Z as i32) as f32);
+                let heightNoiseNormalized = (heightNoisenoise + 1f32) / 2f32;
+                let height = (self.GenData.HeightLevel as f32 + self.GenData.SurfaceAmplitude as f32 * heightNoiseNormalized) as u32;
+                heightMap[(z * CHUNK_BOUNDS_X + x) as usize] = height;
+
+                self.SelectionNoise.Apply(&mut self.Noise);
+                let crustNoise = self.Noise.get_noise3d(
+                    (x as i32 + chunkX * CHUNK_BOUNDS_X as i32) as f32, 
+                    (z as i32 + chunkZ * CHUNK_BOUNDS_Z as i32) as f32,
+                    height as f32
+                );
+                let crustNoiseNormalized = (crustNoise + 1f32) / 2f32;
+                crust[(z * CHUNK_BOUNDS_X + x) as usize] = GetBlockType(&self.GenData.Crust, crustNoiseNormalized, height as f32).unwrap();
+
             }
 
         }
-         arr
+
+        let mut rng = rand::thread_rng();
+        for x in 0..CHUNK_BOUNDS_X {
+            for z in 0..CHUNK_BOUNDS_Z {
+                let mapIdx  = (x + z * CHUNK_BOUNDS_X) as usize;
+                let height = heightMap[mapIdx];
+                let crustBlock = crust[mapIdx];
+                let mantleLength = rng.gen_range(self.GenData.MantleRange.0..self.GenData.MantleRange.1);
+
+                for y in 0..CHUNK_BOUNDS_Y {
+                    let idx = To1D((x, y, z)) as usize;
+
+                    match y {
+                        // _ if y > height && y <= SeaLevel => block = water,
+                        _ if y > height => continue,
+                        _ if y == height => blocks[idx] = crustBlock,
+                        _ if y >= height - mantleLength => {
+                            if let Some(block_) = self.GenData.Mantle {
+                                blocks[idx] = block_;
+                            } else {
+                                blocks[idx] = crustBlock;
+                            }
+                        },
+                        _ => blocks[idx] = self.GenData.Core
+                    }; 
+                    
+                }
+            }
+        }
     }
+  
+
+ 
 }
 
 // struct MountainGenerator {
@@ -332,8 +320,8 @@ fn GetBlockType(blockData: &Vec<(Block, HeightModifier)>, noiseValue: f32,  heig
         idx += 1;
     }
 
-    if baseRanges.len() == 0 {return Some(Block::Air())}
-   // println!("How could it be 0 daddy hehehe :3 {:?} {}", blockData, height);
+    if baseRanges.len() == 0 {panic!("No height ranges match the height of {}!", height)}
+    //println!("How could it be 0 daddy hehehe :3 {:?} \n\n{:?} {}", baseRanges, blockData, height);
 
     let len = baseRanges.len() as f32;
     for val in &mut baseRanges {

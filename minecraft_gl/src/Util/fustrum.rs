@@ -20,7 +20,8 @@ impl Plane {
 
         let r = extents.dot(&self.Normal.abs());
         let dist = self.DistanceTo(chunkPos);
-        f32::abs(dist) <= r
+        //f32::abs(dist) <= r
+        -r <= dist
     }
 }
 

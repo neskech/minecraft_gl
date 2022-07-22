@@ -11,7 +11,7 @@ use glium::glutin::dpi::PhysicalPosition;
 use glium::glutin::dpi::PhysicalSize;
 use glium::glutin::event::{ElementState, KeyboardInput, MouseScrollDelta, VirtualKeyCode};
 use glium::glutin::event_loop::EventLoop;
-use glium::glutin::platform::macos::WindowBuilderExtMacOS;
+//use glium::glutin::platform::macos::WindowBuilderExtMacOS;
 use glium::glutin::window::Icon;
 use glium::glutin;
 use queues::*;
@@ -50,8 +50,8 @@ impl Application{
             height: unsafe { WINDOW_SIZE.1 },
         })
         .with_window_icon(Some(icon))
-        .with_resizable(true)
-        .with_movable_by_window_background(true);
+        .with_resizable(true);
+        //.with_movable_by_window_background(true);
 
         //Construct the context
         let cb = glutin::ContextBuilder::new()

@@ -136,7 +136,7 @@ impl Camera{
                 }
                 _ => {}
             }
-            println!("Position {:?}", self.Position);
+            //println!("Position {:?}", self.Position);
         }
     }
 

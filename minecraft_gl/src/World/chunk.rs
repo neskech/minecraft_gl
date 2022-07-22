@@ -2,11 +2,12 @@ use std::collections::HashMap;
 use crate::Renderer::worldRenderer::Vertex;
 use super::{block::{Block, BlockRegistry}, State, biomeGenerator::{Biome, BiomeGenerator}};
 use nalgebra as na;
+use rand::Rng;
 
 //TODO GET THE MATH WORKING OUT BETTER
 //TODO HAVE Z REPRESENT THE HEIGHT. IN THE ACUTAL GAME WORLD, JUST CALL THE y COORDINATE Z and BE DONE WITH IT
 pub const CHUNK_BOUNDS_X: u32 = 8;
-pub const CHUNK_BOUNDS_Y: u32 = 25;
+pub const CHUNK_BOUNDS_Y: u32 = 30;
 pub const CHUNK_BOUNDS_Z: u32 = 8;
 pub const TOTAL_CHUNK_SIZE: u32 = CHUNK_BOUNDS_X * CHUNK_BOUNDS_Y * CHUNK_BOUNDS_Z;
 
@@ -102,44 +103,12 @@ impl Chunk{
         self.Mesh.clear();
     }
 
-    pub fn GenerateBlocks(&mut self, generator: &Box<dyn BiomeGenerator>){
-        // let mut rng = rand::thread_rng();
-        // let heightLevel = rand::Rng::gen_range(&mut rng, 3..=3) + 2;
-        // let offset = CHUNK_BOUNDS_X * (heightLevel) * CHUNK_BOUNDS_Z;
-        // for i in 0..TOTAL_CHUNK_SIZE {
-        //     if i < offset {
-        //         self.Blocks.push(Block { ID: 2 } );
-        //     }
-        //     else {
-        //        self.Blocks.push(Block { ID: 0 } );
-        //     }
-        // }
-
-         for i in 0..TOTAL_CHUNK_SIZE {
-               self.Blocks.push(Block::Air());
-        }
-        // self.Blocks.push(Block { ID: 2 } );
-
-        let heightMap = generator.HeightMap(self.Position.0, self.Position.1);
-        println!("Height mAp {:?}", heightMap);
-        for x in 0..CHUNK_BOUNDS_X {
-            for y in 0..CHUNK_BOUNDS_Y {
-                for z in 0..CHUNK_BOUNDS_Z {
-                    let idx = To1D((x, y, z));
-                    let heightMapIdx = x + z * CHUNK_BOUNDS_X;
-
-                    if y > heightMap[heightMapIdx as usize] {
-                       // self.Blocks[idx as usize] = Block::Air();
-                        continue;
-                    }
-                   // self.Blocks[idx as usize] = Block { ID: 2 };
-
-                    self.Blocks[idx as usize] = ( generator.Sample(x as f64 + CHUNK_BOUNDS_X as f64 * self.Position.0 as f64,
-                                                                   y as f64,
-                                                                 z as f64 + CHUNK_BOUNDS_Z as f64 * self.Position.1 as f64) );
-                }
-            }
-        }
+    pub fn GenerateBlocks(&mut self, generator: &mut Box<dyn BiomeGenerator>){
+        
+        //TODO maybe change surface ampltidue in json file to max height and when making heightmap do
+        //TODO Surface level + (max_height - surface level) * noise_normalized
+        self.Blocks.resize(TOTAL_CHUNK_SIZE as usize, Block::Air());
+        generator.Generate(&mut self.Blocks, self.Position.0, self.Position.1);
     }
 
    
@@ -151,7 +120,7 @@ pub fn GenerateMesh(chunks: &mut Vec<Chunk>, idx: usize, adjacentChunks: &[Optio
                                                                na::Vector3::new(0i32, 1i32, 0i32), na::Vector3::new(0i32, -1i32, 0i32),
                                                                na::Vector3::new(0i32, 0i32, 1i32), na::Vector3::new(0i32, 0i32, -1i32)];
 
-    println!("Chunks!! {:?}", adjacentChunks);                                                   
+    //println!("Chunks!! {:?}", adjacentChunks);                                                   
     //Loop over each axis of the chunk
     for x in 0..CHUNK_BOUNDS_X {
         for y in 0..CHUNK_BOUNDS_Y {
@@ -269,11 +238,11 @@ pub fn GenerateMesh(chunks: &mut Vec<Chunk>, idx: usize, adjacentChunks: &[Optio
     
 }
 
-fn To3D(idx: u32) -> (u32, u32, u32){
+pub fn To3D(idx: u32) -> (u32, u32, u32){
     (idx % CHUNK_BOUNDS_X, idx / (CHUNK_BOUNDS_X * CHUNK_BOUNDS_Z), idx % (CHUNK_BOUNDS_X * CHUNK_BOUNDS_Z) / CHUNK_BOUNDS_X)
 }
 
-fn To1D(cord: (u32, u32, u32)) -> u32{
+pub fn To1D(cord: (u32, u32, u32)) -> u32{
     cord.0 + CHUNK_BOUNDS_X * (cord.2 + cord.1 * CHUNK_BOUNDS_Z)
 }
 

@@ -2,38 +2,39 @@
     "Name": "Forest",
 
     "Cave": {
-        "Noise Cutoff": 0.6,
+        "Noise Cutoff": 0.50,
         "Min Height": 5,
         "Max Height": 15,
         "Speed": 1.0
     },
 
-    "Height Level": 15,
+    "Height Level": 10,
+    "Surface Amplitude": 15,
     "Sea Level": 2,
 
-    "Blocks": [
+    "Crust": [
         {
-            "Name": "Dirt",
-            "Min Height": 1,
-            "Max Height": 10,
-            "Constant": true
+            "Name": "Grass",
+            "Min Height": 10,
+            "Max Height": 30,
+            "Decay": true,
+            "speed": 0.8
         },
 
         {
             "Name": "Sand",
-            "Min Height": 1,
-            "Max Height": 7,
+            "Min Height": 10,
+            "Max Height": 12,
             "Decay": true,
             "Speed": 0.4
-        },
-
-        {
-            "Name": "Stone",
-            "Min Height": 1,
-            "Max Height": 10,
-            "Speed": 0.2
         }
+
     ],
+
+    "Mantle": "Dirt",
+    "Mantle Min Length": 3,
+    "Mantle Max Length": 4,
+    "Core": "Stone",
 
     "Ores": {
         "Noise Cutoff": 0.5,

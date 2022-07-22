@@ -1,16 +1,16 @@
 use std::collections::{HashSet, HashMap};
 
-use noise::{Seedable, NoiseFn};
+use bracket_noise::prelude::FastNoise;
 use rand::Rng;
 
 use crate::{Scene::camera::Camera, World::biomeGenerator::Biome};
 
-use super::{block::BlockRegistry, chunk::{Chunk, CHUNK_BOUNDS_X, CHUNK_BOUNDS_Z, GenerateMesh}, item::ItemRegistry, crafting::CraftingRegistry, biomeGenerator::{BiomeGenerator, NoiseParameters}, ReadBiomeGenerators};
+use super::{block::BlockRegistry, chunk::{Chunk, CHUNK_BOUNDS_X, CHUNK_BOUNDS_Z, GenerateMesh, CHUNK_BOUNDS_Y}, item::ItemRegistry, crafting::CraftingRegistry, biomeGenerator::{BiomeGenerator, NoiseParameters}, ReadBiomeGenerators};
 
 
-const DEFAULT_RENDER_DISTANCE: usize = 2;
-const MAX_CHUNK_GENERATION_PER_FRAME: usize = 3;
-const MAX_CHUNK_REMESH_PER_FRAME: usize = 3;
+const DEFAULT_RENDER_DISTANCE: usize = 3;
+const MAX_CHUNK_GENERATION_PER_FRAME: usize = 1;
+const MAX_CHUNK_REMESH_PER_FRAME: usize = 1;
 const MAX_RENDER_DISTANCE: usize = 10;
 
 const CHUNK_BIOME_DISTANCE_THRESHOLD: f32 = 0.2f32;
@@ -36,6 +36,7 @@ pub struct World{
 
     BiomeGenerators: HashMap<Biome, Box<dyn BiomeGenerator>>,
     BiomeNoise: NoiseParameters,
+    BiomeNoiseGenerator: FastNoise,
 
 }
 
@@ -48,15 +49,14 @@ impl World{
         let noise =  NoiseParameters {
             Octaves: 6,
             Seed: rng.gen_range(0..10000),
-            Frequency: 1f64,
-            Lacunarity: std::f64::consts::PI * 2.0 / 3.0,
-            Persistance: 0.5f64,
+            Frequency: 0.08f32,
+            Lacunarity: (std::f64::consts::PI * 2.0 / 3.0) as f32,
+            Persistance: 0.5f32,
         };
         
-        let mut w = noise::Fbm::new();
-        w = w.set_seed(noise.Seed);
-        noise.ApplyToFBM(&mut w);
-        chunks.push(Chunk::New((0,0), w.get([0f64, 0f64]) as f32));
+        let mut noiseGen = FastNoise::new();
+        noise.Apply(&mut noiseGen);
+        chunks.push(Chunk::New((0,0), noiseGen.get_noise(0f32, 0f32)));
 
         let renderList = HashSet::new();
         let mut regen = Vec::new();
@@ -87,6 +87,7 @@ impl World{
 
             BiomeGenerators: map,
             BiomeNoise: noise,
+            BiomeNoiseGenerator: noiseGen,
         };
 
         s.RenderDistanceUpdateFunc(DEFAULT_RENDER_DISTANCE as u32);
@@ -96,6 +97,7 @@ impl World{
             i += 1;
         }
         s.RegenerationList.sort();
+        println!("regen list {:?}", s.RegenerationList);
    
         s
     }
@@ -104,7 +106,22 @@ impl World{
         let prevChunkPos = ToChunkPos(self.TargetPosition);
         let currChunkPos = ToChunkPos(targetPos);
         if prevChunkPos != currChunkPos{
-            self.SwapChunks((currChunkPos.0 - prevChunkPos.0, currChunkPos.1 - prevChunkPos.1));
+            let direction = (currChunkPos.0 - prevChunkPos.0, currChunkPos.1 - prevChunkPos.1);
+
+            use std::time::Instant;
+            let now = Instant::now();
+
+            if direction.0 != 0 && direction.1 != 0 {
+                println!("DOUBLE SWAP BABBYYYYYYYYYYYYYYYYYYYYY
+                \nBABABAAY ITS A DOULBE SWAPPPY SWAP TIME BABBBYYYYYYYY");
+                 self.SwapChunks((direction.0, 0));
+                 self.SwapChunks((0, direction.1));
+            } else {
+                self.SwapChunks(direction);
+            }
+            let elapsed = now.elapsed();
+
+            println!("Elapsed: {:.2?} for swapping", elapsed);
         }
         self.TargetPosition = targetPos;
         self.RegenerationUpdate();
@@ -130,14 +147,11 @@ impl World{
 
         println!("SWAP TIME BABY!! {:?} chunks {}", direction, self.Chunks.len());
         let mut i = 0;
-        for chunk in &self.Chunks {
-            println!("Chunk idx {} and pos {:?}", i, chunk.Position);
-            i += 1;
-        }
+        // for chunk in &self.Chunks {
+        //     println!("Chunk idx {} and pos {:?}", i, chunk.Position);
+        //     i += 1;
+        // }
 
-        let mut w = noise::Fbm::new();
-        w = w.set_seed(self.BiomeNoise.Seed);
-        self.BiomeNoise.ApplyToFBM(&mut w);
         //TODO Make sure to update the chunk positions as well
         for i in iterator.into_iter(){
             let currIdx: usize;
@@ -177,22 +191,33 @@ impl World{
             };
 
             //TODO Send the chunks adjacent to the deletion chunks to be remeshed due to adjacent chunk cull facing
-            println!("idx {} with curr idx {}", i, currIdx);
+           // println!("idx {} with curr idx {}", i, currIdx);
 
             if skip {
                 continue;
             }
 
             if deletionChunk {
-                println!("Deletion chunk at {}", i);
+                //println!("Deletion chunk at {}", i);
                 hold = self.Chunks[currIdx].clone();
+
+                //see if currIDX was already queued up. If it was, it hasn't been generated yet and we just put that empty chunk into hold
+                //Hold will equal the chunk at nextIDX, so change currIDX to next IDX
+                for a in 0..self.RegenerationList.len(){
+                    if self.RegenerationList[a] == currIdx {
+                        println!("I FOUND ITT!!!!!!!!\n!!!!!!!!!!!!\n!!!!!!! {:?}", self.RegenerationList);
+                        //TODO next ID could also be added into the array multiple times (say 3 quick swaps) so check for that (wasted computation)
+                        self.RegenerationList[a] = nextIdx;
+                       // break;
+                    }
+                 }
                 //TODO see if this copies it
                 //TODO We want to see if these are shallow copies and not full copies, test it
                 //TODO by printing the addresses
                 //TODO have chunk generateBlocks() call Clear() for you
                 self.Chunks[currIdx].Clear();
                 self.Chunks[currIdx].Position = (self.Chunks[currIdx].Position.0 + direction.0, self.Chunks[currIdx].Position.1 + direction.1);
-                self.Chunks[currIdx].BiomeValue = w.get([self.Chunks[currIdx].Position.0 as f64, self.Chunks[currIdx].Position.1 as f64]) as f32;
+                self.Chunks[currIdx].BiomeValue = self.BiomeNoiseGenerator.get_noise(self.Chunks[currIdx].Position.0 as f32, self.Chunks[currIdx].Position.1 as f32) as f32;
                 self.Chunks[currIdx].Biome = Biome::None;
                 self.RegenerationList.push(currIdx);
             }
@@ -207,10 +232,10 @@ impl World{
 
         println!("AFTER SWAP BABY!!!1");
         i = 0;
-        for chunk in &self.Chunks {
-            println!("Chunk idx {} and pos {:?}", i, chunk.Position);
-            i += 1;
-        }
+        // for chunk in &self.Chunks {
+        //     println!("Chunk idx {} and pos {:?}", i, chunk.Position);
+        //     i += 1;
+        // }
     }
 
     pub fn RegenerationUpdate(&mut self){
@@ -251,18 +276,22 @@ impl World{
 
             //check if the minimum distance is < threshold
             if minDifference <= CHUNK_BIOME_DISTANCE_THRESHOLD {
-                print!("OOpsie dooppsie woopsy!!!");
+                //print!("OOpsie dooppsie woopsy!!!");
                 self.Chunks[index].Biome = minBiome;
             }
             else {
-                print!("Else oppsie!!!");
+               // print!("Else oppsie!!!");
                 self.Chunks[index].Biome = Biome::Random();
             }
 
             let genBiome = self.Chunks[index].Biome.clone();
-            println!("Generating blocks for {}", index);
-            println!("Biom attr {:?} and the hashmap", genBiome);
-            self.Chunks[index].GenerateBlocks(&self.BiomeGenerators[&genBiome]);
+           // println!("Generating blocks for {}", index);
+           // println!("Biom attr {:?} and the hashmap", genBiome);
+            use std::time::Instant;
+            let now = Instant::now();
+            self.Chunks[index].GenerateBlocks( self.BiomeGenerators.get_mut(&genBiome).unwrap());
+            let elapsed = now.elapsed();
+            println!("Elapsed: {:.2?} for regenerating", elapsed);
             self.RemeshList.push(index);
             self.RegenerationList.remove(idx);
             count += 1;
@@ -292,7 +321,7 @@ impl World{
                 if row + 1 == self.RenderDistance as i32 * 2 + 1 {None} else {Some(((row + 1) * (self.RenderDistance as i32 * 2 + 1) + col) as usize)}, //Right
                 if row - 1 == -1 as i32 {None} else {Some(((row - 1) * (self.RenderDistance as i32 * 2 + 1) + col) as usize)}, //Right
             ];
-            println!("row {} col {}", row, col);
+            //println!("row {} col {} regen size {}", row, col, self.RegenerationList.len());
             GenerateMesh(&mut self.Chunks, index, &chunkList, &self.BlockRegistry, true);
             self.CandidateList.push(index);
             self.RemeshList.remove(idx);
@@ -305,11 +334,13 @@ impl World{
         for idx in (0..self.CandidateList.len()).rev() {
 
             let index = self.CandidateList[idx];
+            let size = (self.RenderDistance * 2 + 1) as u32;
             let center = nalgebra::Vector3::new(
-                ((index as u32 % CHUNK_BOUNDS_X) * CHUNK_BOUNDS_X) as f32 + CHUNK_BOUNDS_X as f32 / 2f32,
-                ((index as u32 % CHUNK_BOUNDS_X) * CHUNK_BOUNDS_X) as f32 + CHUNK_BOUNDS_X as f32 / 2f32,
-                CHUNK_BOUNDS_Z as f32 / 2f32
+                (self.Chunks[index].Position.0 * CHUNK_BOUNDS_X as i32) as f32 + CHUNK_BOUNDS_X as f32 / 2f32,
+                CHUNK_BOUNDS_Y as f32 / 2f32,
+                (self.Chunks[index].Position.1 * CHUNK_BOUNDS_Z as i32) as f32 + CHUNK_BOUNDS_Z as f32 / 2f32,
             );
+
             if camera.Fustrum.CheckChunk(&center) || true{
                 self.RenderList.insert(index);
             }
@@ -331,13 +362,10 @@ impl World{
 
         let oldRD = self.RenderDistance;
         let sign: i32 = if self.RenderDistance as u32 > renderDistance {-1} else {1};
-        let mut w = noise::Fbm::new();
-        w = w.set_seed(self.BiomeNoise.Seed);
-        self.BiomeNoise.ApplyToFBM(&mut w);
 
         while self.RenderDistance as u32 != renderDistance {
             println!("Going at it again!!");
-            self.UpdateRenderDistance((self.RenderDistance as i32 + 1 * sign) as u32, &w);
+            self.UpdateRenderDistance((self.RenderDistance as i32 + 1 * sign) as u32);
             println!("Render dist {} chunks size {}", self.RenderDistance, self.Chunks.len());
         }
 
@@ -362,7 +390,7 @@ impl World{
         }
     }
 
-    fn UpdateRenderDistance(&mut self, renderDistance: u32, noiseGenerator: &noise::Fbm){
+    fn UpdateRenderDistance(&mut self, renderDistance: u32){
     
 
         if renderDistance < self.RenderDistance as u32{
@@ -415,7 +443,7 @@ impl World{
                     //Change <row, col> -> <x, y> where x = col, y = row. 
                     //In <row,col> going up is negative. Although, in window space up is negative also so no need to change it
                     let insertion = (rowCol.0 * (renderDistance * 2 + 1) as i32 + rowCol.1) as usize;
-                    set.push((insertion, Chunk::New((newPos.1, -newPos.0), noiseGenerator.get([newPos.1 as f64, -newPos.0 as f64]) as f32)));
+                    set.push((insertion, Chunk::New((newPos.1, -newPos.0), self.BiomeNoiseGenerator.get_noise(newPos.1 as f32, -newPos.0 as f32))));
                 },
                 1 => { //right side
                     //as i increases, row must increase
@@ -423,7 +451,7 @@ impl World{
                     let newPos = (rowCol.0 - arrayPos.0 + centerPos.0, rowCol.1 - arrayPos.1 + centerPos.1);
                     println!("1 RowCol {:?} idx {} newPos {:?} insertion index {}", rowCol, i, newPos, (rowCol.0 * (renderDistance * 2 + 1) as i32 + rowCol.1) as usize);
                     let insertion = (rowCol.0 * (renderDistance * 2 + 1) as i32 + rowCol.1) as usize;
-                    set.push((insertion, Chunk::New((newPos.1, -newPos.0), noiseGenerator.get([newPos.1 as f64, -newPos.0 as f64]) as f32)));
+                    set.push((insertion, Chunk::New((newPos.1, -newPos.0), self.BiomeNoiseGenerator.get_noise(newPos.1 as f32, -newPos.0 as f32))));
                 },
                 2 => { //bottom side
                     //As i increases, column must decrease
@@ -431,7 +459,7 @@ impl World{
                     let newPos = (rowCol.0 - arrayPos.0 + centerPos.0, rowCol.1 - arrayPos.1 + centerPos.1);
                     println!("2 RowCol {:?} idx {} newPos {:?} insertion index {}", rowCol, i, newPos, (rowCol.0 * (renderDistance * 2 + 1)as i32 + rowCol.1) as usize);
                     let insertion = (rowCol.0 * (renderDistance * 2 + 1) as i32 + rowCol.1) as usize;
-                    set.push((insertion, Chunk::New((newPos.1, -newPos.0), noiseGenerator.get([newPos.1 as f64, -newPos.0 as f64]) as f32)));
+                    set.push((insertion, Chunk::New((newPos.1, -newPos.0), self.BiomeNoiseGenerator.get_noise(newPos.1 as f32, -newPos.0 as f32))));
                 },
                 3 => { //left side
                     //As i increases, row must decrease
@@ -439,7 +467,7 @@ impl World{
                     let newPos = (rowCol.0 - arrayPos.0 + centerPos.0, rowCol.1 - arrayPos.1 + centerPos.1);
                     println!("3 RowCol {:?} idx {} newPos {:?} insertion index {}", rowCol, i, newPos, (rowCol.0 * (renderDistance * 2 + 1)as i32 + rowCol.1) as usize);
                     let insertion = (rowCol.0 * (renderDistance * 2 + 1) as i32 + rowCol.1) as usize;
-                    set.push((insertion, Chunk::New((newPos.1, -newPos.0), noiseGenerator.get([newPos.1 as f64, -newPos.0 as f64]) as f32)));
+                    set.push((insertion, Chunk::New((newPos.1, -newPos.0), self.BiomeNoiseGenerator.get_noise(newPos.1 as f32, -newPos.0 as f32))));
                 },
                 _ => {} //not possible
             }

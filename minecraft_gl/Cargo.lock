@@ -151,14 +151,6 @@ dependencies = [
  "weezl",
 ]
 
-[[package]]
-name = "gl"
-version = "0.6.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1c73b90c285f02059b34a6c66bc645ba5faa18c0e3ab332e0725654fc71db441"
-dependencies = [
- "gl_generator",
-]
 
 [[package]]
 name = "gl_generator"
@@ -171,26 +163,8 @@ dependencies = [
  "xml-rs",
 ]
 
-[[package]]
-name = "glfw"
-version = "0.45.0"
-source = "git+https://github.com/bjz/glfw-rs.git#3e7598e1ba7ffcf8377cd7ce5c9220b47ce5681d"
-dependencies = [
- "bitflags",
- "glfw-sys",
- "objc",
- "raw-window-handle",
- "winapi",
-]
 
-[[package]]
-name = "glfw-sys"
-version = "4.0.0+3.3.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5abed6d39a50226676aab893d6b4ad154da7e93fcdfed90d7696758a1b477ed1"
-dependencies = [
- "cmake",
-]
+
 
 [[package]]
 name = "hermit-abi"
@@ -287,8 +261,6 @@ dependencies = [
 name = "minecraft_gl"
 version = "0.1.0"
 dependencies = [
- "gl",
- "glfw",
  "image",
  "lazy_static",
  "proc_macro",

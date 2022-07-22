@@ -204,9 +204,13 @@ pub fn ReadBiomeGenerators(blockRegistry: &BlockRegistry) -> Result<HashMap<Biom
         let json: serde_json::Value = serde_json::from_reader(BufReader::new(file))?;
         
         let mut genData = GenerationData {
-            Blocks: Vec::new(),
+            Crust: Vec::new(),
+            Mantle: None,
+            Core: Block::Air(),
             Ores: Vec::new(),
+            MantleRange: (0u32, 0u32),
             HeightLevel: 0u32,
+            SurfaceAmplitude: 0u32,
             SeaLevel: 0u32,
             CaveModifier: HeightModifier::default(),
             CaveCutoff: 0f32,
@@ -235,6 +239,13 @@ pub fn ReadBiomeGenerators(blockRegistry: &BlockRegistry) -> Result<HashMap<Biom
                 format!("The {} biome json has no property 'Height Level'. Fix the json file!", name)));
         }
 
+        if let Some(val) = json.get("Surface Amplitude") {
+            genData.SurfaceAmplitude = val.as_u64().unwrap() as u32;
+        }  else {
+            return Err(GenericError::NewBoxed(
+                format!("The {} biome json has no property 'Surface Amplitude'. Fix the json file!", name)));
+        }
+
         if let Some(val) = json.get("Sea Level") {
             genData.SeaLevel = val.as_u64().unwrap() as u32;
         }  else {
@@ -243,14 +254,37 @@ pub fn ReadBiomeGenerators(blockRegistry: &BlockRegistry) -> Result<HashMap<Biom
         }
 
         //Read the block data
-        if let Some(val) = json.get("Blocks") {
-            genData.Blocks = ReadBlockList(val, name, "Blocks", blockRegistry)?;
-            println!("Gen data have the block data now hehe :3 {:?}", genData.Blocks);
+        if let Some(val) = json.get("Crust") {
+            genData.Crust = ReadBlockList(val, name, "Blocks", blockRegistry)?;
         }  else {
             return Err(GenericError::NewBoxed(
                 format!("The {} biome json has no property 'Blocks'. Fix the json file!", name)));
         }
 
+        if let Some(val) = json.get("Mantle") {
+            genData.Mantle = Some(Block { ID: blockRegistry.NameToID(val.as_str().unwrap()) });
+        }
+
+        if let Some(val) = json.get("Mantle Min Length") {
+            genData.MantleRange.0 = val.as_u64().unwrap() as u32;
+        }  else {
+            return Err(GenericError::NewBoxed(
+                format!("The {} biome json has no property 'Mantle Min Length'. Fix the json file!", name)));
+        }
+
+        if let Some(val) = json.get("Mantle Max Length") {
+            genData.MantleRange.1 = val.as_u64().unwrap() as u32;
+        }  else {
+            return Err(GenericError::NewBoxed(
+                format!("The {} biome json has no property 'Mantle Max Length'. Fix the json file!", name)));
+        }
+
+        if let Some(val) = json.get("Core") {
+            genData.Core = Block { ID: blockRegistry.NameToID(val.as_str().unwrap()) };
+        }  else {
+            return Err(GenericError::NewBoxed(
+                format!("The {} biome json has no property 'Core'. Fix the json file!", name)));
+        }
         //Read the ore data
         if let Some(val) = json.get("Ores") {
             if let Some(v) = val.get("Noise Cutoff") {
@@ -271,7 +305,7 @@ pub fn ReadBiomeGenerators(blockRegistry: &BlockRegistry) -> Result<HashMap<Biom
                 format!("The {} biome json has no property 'Blocks'. Fix the json file!", name)));
         }
 
-        println!("I DID ITTTTTTTTTTTT WITH THE DATA {:?}", genData.Blocks);
+
         match name {
             "Forest" => {
                 generators.insert(Biome::Forest, Box::new(ForestGenerator::New(genData)));
