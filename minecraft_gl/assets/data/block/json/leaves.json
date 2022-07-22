@@ -1,0 +1,18 @@
+{
+    "Enabled": true,
+    
+    "Name": "Leaves",
+    "ID": 8,
+    "Textures": [
+        "leaves.png",
+        "leaves.png",
+        "leaves.png",
+        "leaves.png",
+        "leaves.png",
+        "leaves.png"
+    ],
+
+    "Toughness": 1.0,
+    "Friction": 0.0
+
+}

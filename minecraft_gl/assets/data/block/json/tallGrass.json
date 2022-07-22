@@ -1,0 +1,9 @@
+{
+    "Enabled": true,
+    
+    "Name": "tallGrass",
+    "ID": 10,
+    
+    "Decor": true,
+    "Texture": "tallGrass.png"
+}

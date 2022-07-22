@@ -9,14 +9,14 @@
     },
 
     "Height Level": 10,
-    "Surface Amplitude": 15,
-    "Sea Level": 2,
+    "Surface Amplitude": 40,
+    "Sea Level": 1,
 
     "Crust": [
         {
             "Name": "Grass",
             "Min Height": 10,
-            "Max Height": 30,
+            "Max Height": 50,
             "Decay": true,
             "speed": 0.8
         },
@@ -24,7 +24,7 @@
         {
             "Name": "Sand",
             "Min Height": 10,
-            "Max Height": 12,
+            "Max Height": 15,
             "Decay": true,
             "Speed": 0.4
         }

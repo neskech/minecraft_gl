@@ -19,7 +19,7 @@ use std::error::Error;
 use std::io::{BufReader, Write};
 use std::collections::{HashMap, HashSet};
 use std::fs::{self, File};
-use std::path::{PathBuf, Path};
+use std::path::{PathBuf, Path, self};
 use crate::Util::atlas::TextureAtlas;
 use super::{State, GenericError};
 use super::item::{Item, ItemID, ItemStack};
@@ -31,7 +31,13 @@ use serde_json::Value;
 use serde_json;
 
 #[derive(Clone)]
-pub struct TextureData{
+pub enum TextureData{
+    SixSided(TextureSix),
+    Decoration(TextureSingle)
+}
+
+#[derive(Clone)]
+pub struct TextureSix{
     //might possibly need the texture paths to debug later on
     pub Textures: [String; 6],
     /*
@@ -49,6 +55,12 @@ pub struct TextureData{
 }
 
 #[derive(Clone)]
+pub struct TextureSingle{
+    pub Texture: String,
+    pub TextureID: u32
+}
+
+#[derive(Clone)]
 pub struct BlockAttribute{
     pub Name: String,
     //Think of this as the 'hitpoints' of a block. This informs how hard the block is to mine
@@ -63,6 +75,8 @@ pub struct BlockAttribute{
     pub TextureData: Option<TextureData>,
     //Custom attributes are for more lossly defined attributes. Not every attribute can be covered by this struct
     pub CustomAttributes: HashMap<String, State>,
+    //Whether or not the block is decoration (tall grass, flowers, etc)
+    pub Decor: bool,
 }
 
 impl Default for BlockAttribute{
@@ -74,7 +88,8 @@ impl Default for BlockAttribute{
             DropItem: None, 
             EffectiveTool: None,
             TextureData: None,
-            CustomAttributes: HashMap::new()
+            CustomAttributes: HashMap::new(),
+            Decor: false,
         }
     }
 }
@@ -204,6 +219,32 @@ impl BlockRegistry{
             blockAttribs.Name = String::from(name); //add the name
 
             /*
+                A 'Decor' block is a decoration block such as tall grass or a flower
+                These blocks are limited and won't have the same attributes as other more extensive blocks
+            */
+            if let Some(val) = json.get("Decor") { //TODO just pass this through the rest, don't continue
+                if val.as_bool().unwrap() {
+                    blockAttribs.Decor = true;
+                    //get the texture
+                    if let Some(tex) = json.get("Texture") {
+                        blockAttribs.TextureData = Some(TextureData::Decoration(TextureSingle {
+                            Texture: tex.as_str().unwrap().to_owned(),
+                            TextureID: textureCount
+                        }));
+                    } else {
+                        return Err(GenericError::NewBoxed(format!("Error in block registry creation! Texture attribute for decoration block {} of id {} does not exist.", name, id)));
+                    }
+
+                    self.BlocksAttributes.insert(id, blockAttribs);
+                    self.BlockBehaviors.insert(id, BlockBehavior::default());
+                    textureCount += 1;
+                    blockCount += 1;
+
+                    continue;
+                }
+            }
+
+            /*
                 Gather the custom attributes. These are varying attributes that are two specific to put in
                 as individual data members for the block attribute struct. As such, a hashmap is used to grab
                 these highly specialized values. The idea is for the user to grab these attributes via their 
@@ -279,7 +320,7 @@ impl BlockRegistry{
                  //Construct an empty texData object to be written into
                  let paths = textures.as_array().unwrap();  
                  let texs = [String::new(), String::new(), String::new(), String::new(), String::new(), String::new()];
-                 let mut texData = TextureData { Textures: texs, TextureID: textureCount, Offsets: [0; 6] };
+                 let mut texData = TextureSix { Textures: texs, TextureID: textureCount, Offsets: [0; 6] };
 
                  /*
                     This pioece of code determines the offset for each texture
@@ -305,7 +346,7 @@ impl BlockRegistry{
                     texData.Offsets[i] = map[&texData.Textures[i].as_str()];
                  }
                  textureCount += cumul + 1;
-                 blockAttribs.TextureData = Some(texData);
+                 blockAttribs.TextureData = Some(TextureData::SixSided(texData));
             }
             else {
                 //for the null texture, leave texture data field as None()
@@ -408,7 +449,7 @@ impl BlockRegistry{
             }
 
             //If there is texture data...
-            if let Some(texData) = &self.BlocksAttributes[id].TextureData {
+            if let Some(TextureData::SixSided(texData)) = &self.BlocksAttributes[id].TextureData {
 
                 let mut set: HashSet<&str> = HashSet::new(); //&str to prevent heap allocation
                 for i in 0..6 {
@@ -436,6 +477,18 @@ impl BlockRegistry{
                         runningTextureCount += 1;
                     }
                 }
+            }
+            else if let Some(TextureData::Decoration(texData)) = &self.BlocksAttributes[id].TextureData {
+                println!("HERE!!!!");
+                let mut pathBuf = PathBuf::new();
+                pathBuf.push("./minecraft_gl/assets/data/block/img/");
+                pathBuf.push(texData.Texture.as_str());
+
+                let mut texture = resource::GetImageFromPath(pathBuf.as_os_str().to_str().unwrap())?;
+                texture = image::DynamicImage::ImageRgba8(image::imageops::resize(&mut texture, textureResolution, textureResolution, image::imageops::FilterType::Nearest));
+                let coords = ((runningTextureCount % dims) * textureResolution, (runningTextureCount / dims) * textureResolution);
+                image::imageops::overlay(&mut img, &texture, coords.0, coords.1);
+                runningTextureCount += 1;
             }
             else {
                 //Else add the null texture...

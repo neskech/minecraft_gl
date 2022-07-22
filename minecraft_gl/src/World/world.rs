@@ -3,14 +3,14 @@ use std::collections::{HashSet, HashMap};
 use bracket_noise::prelude::FastNoise;
 use rand::Rng;
 
-use crate::{Scene::camera::Camera, World::biomeGenerator::Biome};
+use crate::{Scene::camera::Camera, World::biomeGenerator::Biome, Util::fustrum::{AABB, FustrumCullAABB}};
 
 use super::{block::BlockRegistry, chunk::{Chunk, CHUNK_BOUNDS_X, CHUNK_BOUNDS_Z, GenerateMesh, CHUNK_BOUNDS_Y}, item::ItemRegistry, crafting::CraftingRegistry, biomeGenerator::{BiomeGenerator, NoiseParameters}, ReadBiomeGenerators};
 
 
 const DEFAULT_RENDER_DISTANCE: usize = 3;
-const MAX_CHUNK_GENERATION_PER_FRAME: usize = 1;
-const MAX_CHUNK_REMESH_PER_FRAME: usize = 1;
+const MAX_CHUNK_GENERATION_PER_FRAME: usize = 2;
+const MAX_CHUNK_REMESH_PER_FRAME: usize = 2;
 const MAX_RENDER_DISTANCE: usize = 10;
 
 const CHUNK_BIOME_DISTANCE_THRESHOLD: f32 = 0.2f32;
@@ -29,6 +29,8 @@ pub struct World{
     CandidateList: Vec<usize>,
     pub RenderList: HashSet<usize>,
     FinishedRegneration: bool,
+    FinishedRemeshing: bool,
+    CumulativeSwap: (i32, i32),
 
     BlockRegistry: BlockRegistry,
     ItemRegistry: ItemRegistry,
@@ -80,6 +82,8 @@ impl World{
             CandidateList: Vec::new(),
             RenderList: renderList,
             FinishedRegneration: false,
+            FinishedRemeshing: false,
+            CumulativeSwap: (0i32, 0i32),
 
             BlockRegistry: blockRegistry,
             ItemRegistry: itemRegistry,
@@ -103,25 +107,33 @@ impl World{
     }
 
     pub fn Update(&mut self, targetPos: (f32, f32), camera: &Camera){
+        if self.CumulativeSwap.0 != 0 || self.CumulativeSwap.1 != 0 {
+            self.SwapChunks(self.CumulativeSwap);
+            self.CumulativeSwap = (0, 0);
+        }
+
         let prevChunkPos = ToChunkPos(self.TargetPosition);
         let currChunkPos = ToChunkPos(targetPos);
         if prevChunkPos != currChunkPos{
             let direction = (currChunkPos.0 - prevChunkPos.0, currChunkPos.1 - prevChunkPos.1);
 
-            use std::time::Instant;
-            let now = Instant::now();
-
-            if direction.0 != 0 && direction.1 != 0 {
-                println!("DOUBLE SWAP BABBYYYYYYYYYYYYYYYYYYYYY
-                \nBABABAAY ITS A DOULBE SWAPPPY SWAP TIME BABBBYYYYYYYY");
-                 self.SwapChunks((direction.0, 0));
-                 self.SwapChunks((0, direction.1));
-            } else {
-                self.SwapChunks(direction);
+            if !self.FinishedRegneration || !self.FinishedRemeshing {
+                self.CumulativeSwap.0 += direction.0;
+                self.CumulativeSwap.1 += direction.1;
             }
-            let elapsed = now.elapsed();
+            else {
 
-            println!("Elapsed: {:.2?} for swapping", elapsed);
+                if direction.0 != 0 && direction.1 != 0 {
+                    // println!("DOUBLE SWAP BABBYYYYYYYYYYYYYYYYYYYYY
+                    // \nBABABAAY ITS A DOULBE SWAPPPY SWAP TIME BABBBYYYYYYYY");
+                    self.SwapChunks((direction.0, 0));
+                    self.SwapChunks((0, direction.1));
+                } else {
+                    self.SwapChunks(direction);
+                }
+ 
+            }
+   
         }
         self.TargetPosition = targetPos;
         self.RegenerationUpdate();
@@ -129,8 +141,9 @@ impl World{
         self.CandidateUpdate(camera);
     }
 
-    pub fn SwapChunks(&mut self, direction: (i32, i32)){
+    pub fn SwapChunks(&mut self, direc: (i32, i32)){
         //TODO is inclusive correct?
+        let direction = (if direc.0 != 0 {direc.0 / i32::abs(direc.0)} else {0}, if direc.1 != 0 {direc.1 / i32::abs(direc.1)} else {0});
         let iterator: Vec<usize> = if direction.0 < 0 || direction.1 > 0 {(0..self.Chunks.len()).collect()} else {(0..self.Chunks.len()).rev().collect()};
         let sign = if direction.0 < 0 || direction.1 > 0 {1i32} else {-1i32};
 
@@ -146,7 +159,7 @@ impl World{
         ].clone();
 
         println!("SWAP TIME BABY!! {:?} chunks {}", direction, self.Chunks.len());
-        let mut i = 0;
+        //let mut i = 0;
         // for chunk in &self.Chunks {
         //     println!("Chunk idx {} and pos {:?}", i, chunk.Position);
         //     i += 1;
@@ -198,40 +211,42 @@ impl World{
             }
 
             if deletionChunk {
-                //println!("Deletion chunk at {}", i);
+                println!("Deletion chunk at {}", i);
                 hold = self.Chunks[currIdx].clone();
 
                 //see if currIDX was already queued up. If it was, it hasn't been generated yet and we just put that empty chunk into hold
                 //Hold will equal the chunk at nextIDX, so change currIDX to next IDX
-                for a in 0..self.RegenerationList.len(){
-                    if self.RegenerationList[a] == currIdx {
-                        println!("I FOUND ITT!!!!!!!!\n!!!!!!!!!!!!\n!!!!!!! {:?}", self.RegenerationList);
-                        //TODO next ID could also be added into the array multiple times (say 3 quick swaps) so check for that (wasted computation)
-                        self.RegenerationList[a] = nextIdx;
-                       // break;
-                    }
-                 }
+                // for a in 0..self.RegenerationList.len(){
+                //     if self.RegenerationList[a] == currIdx {
+                //         println!("I FOUND ITT!!!!!!!!\n!!!!!!!!!!!!\n!!!!!!! {:?}", self.RegenerationList);
+                //         //TODO next ID could also be added into the array multiple times (say 3 quick swaps) so check for that (wasted computation)
+                //         self.RegenerationList[a] = nextIdx;
+                //        // break;
+                //     }
+                //  }
                 //TODO see if this copies it
                 //TODO We want to see if these are shallow copies and not full copies, test it
                 //TODO by printing the addresses
                 //TODO have chunk generateBlocks() call Clear() for you
                 self.Chunks[currIdx].Clear();
-                self.Chunks[currIdx].Position = (self.Chunks[currIdx].Position.0 + direction.0, self.Chunks[currIdx].Position.1 + direction.1);
+                self.Chunks[currIdx].Position = (self.Chunks[currIdx].Position.0 + direc.0, self.Chunks[currIdx].Position.1 + direc.1);
                 self.Chunks[currIdx].BiomeValue = self.BiomeNoiseGenerator.get_noise(self.Chunks[currIdx].Position.0 as f32, self.Chunks[currIdx].Position.1 as f32) as f32;
                 self.Chunks[currIdx].Biome = Biome::None;
                 self.RegenerationList.push(currIdx);
             }
             let temp = self.Chunks[nextIdx].clone();
             self.Chunks[nextIdx] = hold; 
-            self.Chunks[nextIdx].Position = (temp.Position.0 + direction.0, temp.Position.1 + direction.1);
+            self.Chunks[nextIdx].Position = (temp.Position.0 + direc.0, temp.Position.1 + direc.1);
             if deletionChunk {
+                println!("Changing index {}", nextIdx);
+                //self.Chunks[nextIdx].ClearMesh(); 
                 self.RemeshList.push(nextIdx);
             }
             hold = temp;
         }
 
         println!("AFTER SWAP BABY!!!1");
-        i = 0;
+        //i = 0;
         // for chunk in &self.Chunks {
         //     println!("Chunk idx {} and pos {:?}", i, chunk.Position);
         //     i += 1;
@@ -301,7 +316,10 @@ impl World{
     //TODO only remesh after all chunks are done regenerating their blocks
     //TODO so that the face culling fully works
     pub fn RemeshUpdate(&mut self){
+        self.FinishedRemeshing = true; //will remain true if the vec is empty
         if self.RemeshList.len() == 0 || !self.FinishedRegneration {return;} //only remesh chunks when generation is finished
+        self.FinishedRemeshing = false;
+
         let mut count = 0;
         for idx in (0..self.RemeshList.len()).rev() {
             if count >= MAX_CHUNK_REMESH_PER_FRAME {
@@ -340,8 +358,16 @@ impl World{
                 CHUNK_BOUNDS_Y as f32 / 2f32,
                 (self.Chunks[index].Position.1 * CHUNK_BOUNDS_Z as i32) as f32 + CHUNK_BOUNDS_Z as f32 / 2f32,
             );
-
-            if camera.Fustrum.CheckChunk(&center) || true{
+            // let aabb = AABB {
+            //     Min: nalgebra::Vector3::new((self.Chunks[index].Position.0 * CHUNK_BOUNDS_X as i32) as f32,
+            //     0f32,
+            //     (self.Chunks[index].Position.1 * CHUNK_BOUNDS_Z as i32) as f32),
+            //     Max: nalgebra::Vector3::new((self.Chunks[index].Position.0 * CHUNK_BOUNDS_X as i32) as f32 + CHUNK_BOUNDS_X as f32,
+            //     CHUNK_BOUNDS_Y as f32,
+            //     (self.Chunks[index].Position.1 * CHUNK_BOUNDS_Z as i32) as f32 + CHUNK_BOUNDS_Z as f32),
+            // };
+            // let VP = camera.GetProjectionMatrixVectorized() * camera.GetViewMatrixVectorized();
+            if true || camera.Fustrum.CheckChunk(&center){
                 self.RenderList.insert(index);
             }
             else {

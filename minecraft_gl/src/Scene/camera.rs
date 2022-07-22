@@ -28,7 +28,7 @@ pub struct Camera{
 impl Camera{
     pub fn New() -> Self {
         Self {
-            Position: na::Vector3::new(0f32, 0f32, 0f32),
+            Position: na::Vector3::new(0f32, 50f32, 0f32),
             CameraRight: na::Vector3::new(0f32, 1f32, 0f32),
             CameraUp: na::Vector3::new(0f32, 0f32, 1f32),
             Pitch: 0f32,
@@ -138,20 +138,23 @@ impl Camera{
             }
             //println!("Position {:?}", self.Position);
         }
+        self.UpdateFustrum();
     }
 
     fn UpdateFustrum(&mut self){
-        let halfVSide = self.Fustrum.ZFar * f32::tan(self.Fustrum.Fov * 0.532);
-        let halfHSide = unsafe { halfVSide * WINDOW_SIZE.0 as f32 / WINDOW_SIZE.1 as f32 };
+        let halfVSide = self.Fustrum.ZFar * f32::tan(self.Fustrum.Fov * 0.5f32);
+        let halfHSide = unsafe { halfVSide * (WINDOW_SIZE.0 as f32 / WINDOW_SIZE.1 as f32) };
         let frontMultFar = self.Fustrum.ZFar * self.Direction;
 
-        self.Fustrum.Near = Plane { Normal: self.Direction, Distance: self.Position + self.Fustrum.ZNear * self.Direction };
-        self.Fustrum.Far = Plane { Normal: -self.Direction, Distance: self.Position + frontMultFar };
+        self.Fustrum.Near = Plane::New(self.Direction, self.Position + self.Fustrum.ZNear * self.Direction);
+        self.Fustrum.Far = Plane::New( -self.Direction, self.Position + frontMultFar);
 
-        self.Fustrum.Left = Plane { Normal: self.CameraUp.cross(&(frontMultFar + self.CameraRight * halfHSide)), Distance: self.Position };
-        self.Fustrum.Right = Plane { Normal: (frontMultFar - self.CameraRight * halfHSide).cross(&self.CameraUp), Distance: self.Position };
+        self.Fustrum.Left = Plane::New(self.CameraUp.cross(&(frontMultFar + self.CameraRight * halfHSide)),self.Position);
+        self.Fustrum.Right = Plane::New((frontMultFar - self.CameraRight * halfHSide).cross(&self.CameraUp), self.Position);
 
-        self.Fustrum.Top = Plane { Normal: self.CameraRight.cross(&(frontMultFar - self.CameraUp * halfVSide)), Distance: self.Position  };
-        self.Fustrum.Bottom = Plane { Normal: (frontMultFar + self.CameraUp * halfVSide).cross(&self.CameraRight), Distance: self.Position  };
+        self.Fustrum.Top = Plane::New(self.CameraRight.cross(&(frontMultFar - self.CameraUp * halfVSide)), self.Position);
+        self.Fustrum.Bottom = Plane::New((frontMultFar + self.CameraUp * halfVSide).cross(&self.CameraRight), self.Position);
+
+  
     }
 }

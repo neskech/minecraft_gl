@@ -10,7 +10,6 @@
 #![feature(cstr_from_bytes_until_nul)]
 #![feature(const_type_id)]
 
-use std::ops::Deref;
 
 
 
@@ -51,11 +50,9 @@ impl<'a> Test<'a> {
 
 fn main() {
     std::env::set_var("RUST_BACKTRACE", "1");
-    // let app = Core::application::Application::New();
-    // app.Run();
-    let mut t = Wrapper { 0: Test::New() };
-    t.0.AddChunk();
-    t.0.AddRef();
+    let app = Core::application::Application::New();
+    app.Run();
+
 
    
 }

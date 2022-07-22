@@ -1,0 +1,18 @@
+{
+    "Enabled": true,
+    
+    "Name": "Water",
+    "ID": 7,
+    "Textures": [
+        "water.jpeg",
+        "water.jpeg",
+        "water.jpeg",
+        "water.jpeg",
+        "water.jpeg",
+        "water.jpeg"
+    ],
+
+    "Toughness": 1.0,
+    "Friction": 0.0
+
+}

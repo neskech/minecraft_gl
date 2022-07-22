@@ -23,8 +23,8 @@ void main(){
     // X (4), Y(4) ,   Z(8)   , TexId(8) , QuadId(2),  FaceId(3)
     // 0000 | 0000 | 00000000 | 00000000 | 00 | 000
 
-    float x = float(Data & 0xFu) + chunk_pos.x * 8.0;
-    float z = float( (Data >> 4u) & 0xFu ) + chunk_pos.y * 8.0;
+    float x = float(Data & 0xFu) + chunk_pos.x * 15.0;
+    float z = float( (Data >> 4u) & 0xFu ) + chunk_pos.y * 15.0;
     float y = float( (Data >> 8u) & 0xFFu );
 
     uint texID = (Data >> 16u) & 0xFFu; //8 bits
@@ -68,6 +68,8 @@ const vec3 normals[6] = vec3[6](
 out vec4 Color;
 
 void main(){
-      Color = texture(atlas, fuvs) * values[int(faceID)];
+      vec4 val = texture(atlas, fuvs);
+      float mult = values[int(faceID)];
+      Color = vec4(val.x * mult, val.y * mult, val.z * mult, val.w);
       //Color = vec4(1.0, 0.0, 1.0, 1.0);
 }

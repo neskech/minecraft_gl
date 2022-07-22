@@ -1,6 +1,6 @@
 
 use bracket_noise::prelude::{FastNoise, NoiseType};
-use rand::Rng;
+use rand::{Rng, prelude::ThreadRng};
 use super::{chunk::{CHUNK_BOUNDS_X, CHUNK_BOUNDS_Z, CHUNK_BOUNDS_Y, To1D}, block::Block};
 
 
@@ -131,9 +131,9 @@ impl ForestGenerator {
         let height = NoiseParameters{
             Octaves: 6,
             Seed: rng.gen_range(0..10000),
-            Frequency: 0.008f32,
+            Frequency: 0.006f32,
             Lacunarity: (std::f64::consts::PI * 2.0 / 3.0) as f32,
-            Persistance: 0.5f32,
+            Persistance: 0.6f32,
             
         };
 
@@ -162,7 +162,7 @@ impl ForestGenerator {
         };
 
         let mut noise = FastNoise::new();
-        noise.set_noise_type(NoiseType::Simplex);
+        noise.set_noise_type(NoiseType::SimplexFractal);
 
         Self {
             Noise: noise,
@@ -172,6 +172,50 @@ impl ForestGenerator {
             OreNoise: ore,
             GenData: genData,
         }
+    }
+}
+
+impl ForestGenerator {
+    pub fn Decorate(&self, pos: (u32, u32, u32), blocks: &mut Vec<Block>, rng: &mut ThreadRng){
+        if rng.gen_ratio(1, 100) {
+            self.GenerateTree(pos, blocks, rng);
+        } else if rng.gen_ratio(1, 100) {
+            let idx = To1D((pos.0, pos.1 + 1, pos.2)) as usize;
+            blocks[idx] = Block { ID: 9 };
+        } else if rng.gen_ratio(1, 15) {
+            let idx = To1D((pos.0, pos.1 + 1, pos.2)) as usize;
+            blocks[idx] = Block { ID: 10 };
+        }
+    }
+    pub fn GenerateTree(&self, pos: (u32, u32, u32), blocks: &mut Vec<Block>, rng: &mut ThreadRng){
+         
+        let trunkLength = rng.gen_range(3..6);
+        let leaveDims: (i32, i32, i32) = (5, 3, 5);
+        if leaveDims.1 as u32 + 1 + pos.1 >= CHUNK_BOUNDS_Y {
+            return;
+        }
+
+        for i in 0..trunkLength{
+            let idx = To1D((pos.0, pos.1 + i + 1, pos.2)) as usize;
+            blocks[idx] = Block { ID: 3 };
+        }
+
+        for x in -leaveDims.0/2..=leaveDims.0/2 {
+            for y in 0..leaveDims.1 {
+                for z in -leaveDims.2/2..=leaveDims.2/2 {
+                    if (x + pos.0 as i32) < 0 || (x + pos.0 as i32) >= CHUNK_BOUNDS_X as i32 || 
+                       (z + pos.2 as i32) < 0 || (z + pos.2 as i32) >= CHUNK_BOUNDS_Z as i32 
+                    || y == leaveDims.1 - 1 && (x == -leaveDims.0/2 || x == leaveDims.0/2 || z == -leaveDims.2/2 || z == leaveDims.2/2) 
+                    || y == leaveDims.1 - 2 && (x == -leaveDims.0/2 || x == leaveDims.0/2 && (z == -leaveDims.2/2 || z == leaveDims.2/2)){
+                           continue;
+                    }
+                    let idx = To1D(((pos.0 as i32 + x) as u32 , (pos.1 as i32 + y + 1) as u32 + trunkLength, (pos.2 as i32 + z) as u32)) as usize;
+                    blocks[idx] = Block { ID: 8 };
+                }
+            }
+        }
+        let idx = To1D((pos.0, pos.1 + trunkLength + leaveDims.1 as u32 + 1, pos.2)) as usize;
+        blocks[idx] = Block { ID: 8 };
     }
 }
 
@@ -214,9 +258,12 @@ impl BiomeGenerator for ForestGenerator {
                     let idx = To1D((x, y, z)) as usize;
 
                     match y {
-                        // _ if y > height && y <= SeaLevel => block = water,
+                         _ if y > height && y <= self.GenData.SeaLevel =>  blocks[idx] = Block { ID: 7 },
                         _ if y > height => continue,
-                        _ if y == height => blocks[idx] = crustBlock,
+                        _ if y == height => {
+                            blocks[idx] = crustBlock;
+                            self.Decorate((x, y, z), blocks, &mut rng);
+                          },
                         _ if y >= height - mantleLength => {
                             if let Some(block_) = self.GenData.Mantle {
                                 blocks[idx] = block_;

@@ -1,14 +1,13 @@
 use std::collections::HashMap;
 use crate::Renderer::worldRenderer::Vertex;
-use super::{block::{Block, BlockRegistry}, State, biomeGenerator::{Biome, BiomeGenerator}};
+use super::{block::{Block, BlockRegistry, TextureData}, State, biomeGenerator::{Biome, BiomeGenerator}};
 use nalgebra as na;
-use rand::Rng;
 
 //TODO GET THE MATH WORKING OUT BETTER
 //TODO HAVE Z REPRESENT THE HEIGHT. IN THE ACUTAL GAME WORLD, JUST CALL THE y COORDINATE Z and BE DONE WITH IT
-pub const CHUNK_BOUNDS_X: u32 = 8;
-pub const CHUNK_BOUNDS_Y: u32 = 30;
-pub const CHUNK_BOUNDS_Z: u32 = 8;
+pub const CHUNK_BOUNDS_X: u32 = 15;
+pub const CHUNK_BOUNDS_Y: u32 = 60;
+pub const CHUNK_BOUNDS_Z: u32 = 15;
 pub const TOTAL_CHUNK_SIZE: u32 = CHUNK_BOUNDS_X * CHUNK_BOUNDS_Y * CHUNK_BOUNDS_Z;
 
 #[derive(Clone)]
@@ -103,6 +102,10 @@ impl Chunk{
         self.Mesh.clear();
     }
 
+    pub fn ClearMesh(&mut self){
+        self.Mesh.clear();
+    }
+
     pub fn GenerateBlocks(&mut self, generator: &mut Box<dyn BiomeGenerator>){
         
         //TODO maybe change surface ampltidue in json file to max height and when making heightmap do
@@ -119,7 +122,7 @@ pub fn GenerateMesh(chunks: &mut Vec<Chunk>, idx: usize, adjacentChunks: &[Optio
     let directions = [na::Vector3::new(1i32, 0i32, 0i32), na::Vector3::new(-1i32, 0i32, 0i32), 
                                                                na::Vector3::new(0i32, 1i32, 0i32), na::Vector3::new(0i32, -1i32, 0i32),
                                                                na::Vector3::new(0i32, 0i32, 1i32), na::Vector3::new(0i32, 0i32, -1i32)];
-
+    let mut temp: Vec<Vertex> = Vec::new();
     //println!("Chunks!! {:?}", adjacentChunks);                                                   
     //Loop over each axis of the chunk
     for x in 0..CHUNK_BOUNDS_X {
@@ -183,23 +186,46 @@ pub fn GenerateMesh(chunks: &mut Vec<Chunk>, idx: usize, adjacentChunks: &[Optio
                     else if !outY { //Means y axis is not out of bounds
                        
                         adjacentBlock = chunks[idx].Blocks[To1DVec(new3D) as usize].clone();
-                       // println!("Here!!!! {}", adjacentBlock.ID);
                         
                     }
 
-                    if !outY && adjacentBlock.ID != 0 {
+                    if !outY && adjacentBlock.ID != 0 && !blockRegistry.GetAttributesOf(&adjacentBlock).Decor{
                         faceID += 1;
                         continue;
                     }
 
-                    //println!("Made it out!!! {:?}", new3D);
+                    //Check if it is a decor block
+                    let currChunk = &mut chunks[idx];
+                    if blockRegistry.GetAttributesOf(&currBlock).Decor && y < CHUNK_BOUNDS_Y - 1 && x < CHUNK_BOUNDS_X - 1 && z < CHUNK_BOUNDS_Z - 1{ //TODO bounds check
+
+                        let mut texID = 0;
+                        if let Some(TextureData::Decoration(data)) = &blockRegistry.GetAttributesOf(&currBlock).TextureData {
+                                texID = data.TextureID;
+                        }
+
+                        //Curr, +1 y, +1 y +1 x +1 z, +1x +1 z
+                        let offsets = [(0, 0, 0), (1, 0, 1), (0, 1, 0), (1, 1, 1)]; //TL, TR, BL, BR
+                        for i in 0..4 {
+                            let newPos = (x + offsets[i].0, y + offsets[i].1, z + offsets[i].2);
+                            let data =  newPos.0  | newPos.2 << 4 | newPos.1 << 8 |  texID << 16 | (i as u32) << 24 | (faceID as u32) << 26;
+                            temp.push(Vertex { Data: data } );
+                        }
+
+                        let offsets = [(0, 0, 1), (1, 0, 0), (0, 1, 1), (1, 1, 0),]; //TL, TR, BL, BR
+                        for i in 0..4 {
+                            let newPos = (x  + offsets[i].0, y  + offsets[i].1, z  + offsets[i].2);
+                            let data =  (newPos.0 | newPos.2 << 4 | newPos.1 << 8 |  texID << 16 | (i as u32) << 24 | (0 as u32) << 26) as u32;
+                            temp.push(Vertex { Data: data } );
+                        }
+                        continue;
+                    }
+
 
                     let offset = na::Vector3::new(0.5f32, 0.5f32, 0.5f32) + 0.5f32 * na::Vector3::new(direc.x as f32, direc.y as f32, direc.z as f32);
                     let intOffset = na::Vector3::new(offset.x as i32, offset.y as i32, offset.z as i32);
                     let axisA = na::Vector3::new(direc.y, direc.z, direc.x);
                     let axisB = axisA.cross(&direc);
-
-                    let currChunk = &mut chunks[idx];   
+ 
                     
                     let off = [0, 1];
                     for a in 0..2 {
@@ -208,7 +234,7 @@ pub fn GenerateMesh(chunks: &mut Vec<Chunk>, idx: usize, adjacentChunks: &[Optio
             
                             let mut texID = 0;
                             //TODO textureData should not be an optional. Either its real or the null texture
-                            if let Some(data) = &blockRegistry.GetAttributesOf(&currBlock).TextureData {
+                            if let Some(TextureData::SixSided(data)) = &blockRegistry.GetAttributesOf(&currBlock).TextureData {
                                 texID = data.TextureID + data.Offsets[faceID as usize];
                             }
     
@@ -231,13 +257,13 @@ pub fn GenerateMesh(chunks: &mut Vec<Chunk>, idx: usize, adjacentChunks: &[Optio
             
         }
 
-      
+        }
         //look in all 6 directions, only building faces if an air block is present
+        for item in &temp {
+            chunks[idx].Mesh.push(*item);
+        }
+
     }
-
-    
-}
-
 pub fn To3D(idx: u32) -> (u32, u32, u32){
     (idx % CHUNK_BOUNDS_X, idx / (CHUNK_BOUNDS_X * CHUNK_BOUNDS_Z), idx % (CHUNK_BOUNDS_X * CHUNK_BOUNDS_Z) / CHUNK_BOUNDS_X)
 }

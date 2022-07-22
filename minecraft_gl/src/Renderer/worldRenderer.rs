@@ -1,7 +1,7 @@
 
 use std::collections::HashSet;
 use std::rc::Rc;
-use glium::Surface;
+use glium::{Surface, Blend, BlendingFunction, LinearBlendingFactor};
 use glium::uniforms::{MinifySamplerFilter, MagnifySamplerFilter};
 use image::GenericImageView;
 use crate::Scene::camera::Camera;
@@ -105,14 +105,16 @@ impl WorldRenderer{
         //     }
             unsafe { mapping.copy_from(chunk.Mesh.as_ptr(), chunk.Mesh.len()); }
             let slice = self.IndexBuffer.slice(0 .. chunk.Mesh.len() / 4 * 6).unwrap();
-
+     
             let params = glium::DrawParameters {
                 depth: glium::Depth {
                     test: glium::draw_parameters::DepthTest::IfLess,
                     write: true,
                     .. Default::default()
                 },
-                backface_culling: glium::BackfaceCullingMode::CullingDisabled,
+                blend: glium::draw_parameters::Blend::alpha_blending(),
+                //blend: Blend { color: BlendingFunction::Subtraction { source: (), destination: LinearBlendingFactor::OneMinusSourceAlph }, alpha: LinearBlendingFactor::OneMinusSourceAlpha, ..Default::default() },
+                //backface_culling: glium::BackfaceCullingMode::CullClockwise,
 
                 .. Default::default()
             };

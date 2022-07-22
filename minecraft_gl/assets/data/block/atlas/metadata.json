@@ -1,6 +1,6 @@
 {
-"Items": ["Air","Wood","Sand","Stone","Dirt","Gravel","Grass"],
-"Rows": 3,
-"Cols": 3,
+"Items": ["Air","Stone","Wood","Sand","Gravel","Water","Leaves","Dirt","tallGrass","Grass","Flower"],
+"Rows": 4,
+"Cols": 4,
 "Texture Resolution": 64
 }

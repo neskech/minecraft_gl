@@ -1,0 +1,9 @@
+{
+    "Enabled": true,
+    
+    "Name": "Flower",
+    "ID": 9,
+    
+    "Decor": true,
+    "Texture": "flower.png"
+}
