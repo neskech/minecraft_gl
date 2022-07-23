@@ -8,8 +8,8 @@ use image::io::Reader as ImageReader;
 
 
 pub struct ResourceManager{
-    Shaders: HashMap<&'static str, Rc<glium::Program>>,
-    Textures: HashMap<&'static str, Rc<glium::texture::SrgbTexture2d>>,
+    Shaders: HashMap<&'static str, Rc<wgpu::ShaderModule>>,
+    Textures: HashMap<&'static str, Rc<wgpu::Texture>>,
 }
 
 impl ResourceManager{
@@ -21,20 +21,26 @@ impl ResourceManager{
     }
 
 
-    pub fn GetShader(&mut self, path: &'static str, display: &glium::Display) -> Rc<glium::Program> {
+    pub fn GetShader(&mut self, path: &'static str, device: &wgpu::Device) -> Result<Rc<wgpu::ShaderModule>, String> {
         if self.Shaders.contains_key(path) {
-            return Rc::clone(&self.Shaders[path]);
+            return Ok(Rc::clone(&self.Shaders[path]));
         }
-        self.Shaders.insert(path, Rc::new(GetShaderFromPath(path, display).unwrap()));
-        Rc::clone(&self.Shaders[path])
+        let shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
+            label: Some("Shader"),
+            source: wgpu::ShaderSource::Wgsl(std::fs::read_to_string(path).
+                map_err(|e| format!("Error! Resource manager could not read shader of path {}. The error:\n{}", path, e.to_string()))?.into()),
+        });
+        self.Shaders.insert(path, Rc::new(shader));
+        Ok(Rc::clone(&self.Shaders[path]))
     }
 
-    pub fn GetTexture(&mut self, path: &'static str, display: &glium::Display) -> Rc<glium::texture::SrgbTexture2d> {
+    pub fn GetTexture(&mut self, path: &'static str, mipMapLevels: u32, device: &wgpu::Device, queue: &wgpu::Queue) -> Result<Rc<wgpu::Texture>, String> {
         if self.Textures.contains_key(path) {
-            return Rc::clone(&self.Textures[path]);
+            return Ok(Rc::clone(&self.Textures[path]));
         }
-        self.Textures.insert(path, Rc::new(GetTextureFromPath(path, display).unwrap()));
-        Rc::clone(&self.Textures[path])
+        self.Textures.insert(path, Rc::new(GetTextureFromPath(path, mipMapLevels, device, queue).
+        map_err(|e| format!("Error! Resource manager could not read texture of path {}. The error:\n{}", path, e.to_string()))?));
+        Ok(Rc::clone(&self.Textures[path]))
     }
 }
 
@@ -63,59 +69,60 @@ pub fn GetImageOrNull(path: &str) -> Result<DynamicImage, DynamicImage> {
     Err(GetImageFromPath("./minecraft_gl/assets/data/block/img/nullTexture.png").unwrap())
 }
 
-pub fn GetShaderFromPath(path: &str, display: &glium::Display) -> Result<glium::Program, String>{
-    let file = std::fs::File::open(path)
-    .map_err(|_| format!("Could not open file of path {} in 'GetShaderFromPath' function", path))?;
-
-    let fileLines = std::io::BufReader::new(file).lines();
-
-    let mut vertex = String::from("");
-    let mut fragment = String::from("");
-
-    let mut shaderID = 0;
-    for line in fileLines {
-        let content = line.unwrap();
-
-        if content.contains("#type vertex"){
-            shaderID = 0;
-            continue;
-        }
-        else if content.contains("#type fragment"){
-            shaderID = 1;
-            continue;
-        }
-        
-        if shaderID == 0 {
-            vertex = format!("{}\n{}", vertex, content);
-        }
-        else {
-            fragment = format!("{}\n{}", fragment, content);
-        }
-    }
-
-    glium::Program::from_source(display, &vertex, &fragment, None)
-    .map_err(|e| format!("Shader program creation failed. The error:\n{}", e.to_string()))
-    
-}
-
-pub fn GetTextureFromPath(path: &str, display: &glium::Display) -> Result<glium::texture::SrgbTexture2d, String> {
+pub fn GetTextureFromPath(path: &str, mipMapLevels: u32, device: &wgpu::Device, queue: &wgpu::Queue) -> Result<wgpu::Texture, String> {
     let img = ImageReader::open(path)
     .map_err(|e| format!("Error! Could not read image from path of: {}. The error:\n{}", path, e.to_string()))?;
 
     let decoded = img.decode()
     .map_err(|e| format!("Error! Could not decode image from path of: {}. The error:\n{}", path, e.to_string()))?;
 
-    let dims = decoded.dimensions();
-    let raw = glium::texture::RawImage2d::from_raw_rgba_reversed(&decoded.as_bytes(), dims);
-
-    glium::texture::SrgbTexture2d::new(display, raw)
-    .map_err(|e| format!("Error! Could not create texture from image of path {}. The error:\n{}", path, e.to_string()))
+    Ok(GetTextureFromImage(&decoded, mipMapLevels, device, queue))
 }  
 
-pub fn GetTextureFromImage(image: &DynamicImage, display: &glium::Display) -> Result<glium::texture::SrgbTexture2d, String>{
+pub fn GetTextureFromImage(image: &DynamicImage, mipMapLevels: u32, device: &wgpu::Device, queue: &wgpu::Queue) -> wgpu::Texture{
     let dims = image.dimensions();
-    let raw = glium::texture::RawImage2d::from_raw_rgba_reversed(&image.as_bytes(), dims);
-    glium::texture::SrgbTexture2d::new(display, raw)
-    .map_err(|e| format!("Error! Could not create texture from the given image. The error:\n{}", e.to_string()))
+   
+    let texture_size = wgpu::Extent3d {
+        width: dims.0,
+        height: dims.1,
+        depth_or_array_layers: 1,
+    };
 
+    let diffuse_texture = device.create_texture(
+        &wgpu::TextureDescriptor {
+            // All textures are stored as 3D, we represent our 2D texture
+            // by setting depth to 1.
+            size: texture_size,
+            mip_level_count: mipMapLevels, // We'll talk about this a little later
+            sample_count: 1,
+            dimension: wgpu::TextureDimension::D2,
+            // Most images are stored using sRGB so we need to reflect that here.
+            format: wgpu::TextureFormat::Rgba8UnormSrgb,
+            // TEXTURE_BINDING tells wgpu that we want to use this texture in shaders
+            // COPY_DST means that we want to copy data to this texture
+            usage: wgpu::TextureUsages::TEXTURE_BINDING | wgpu::TextureUsages::COPY_DST,
+            label: None,
+        }
+    );
+
+    queue.write_texture(
+        // Tells wgpu where to copy the pixel data
+        wgpu::ImageCopyTexture {
+            texture: &diffuse_texture,
+            mip_level: 0,
+            origin: wgpu::Origin3d::ZERO,
+            aspect: wgpu::TextureAspect::All,
+        },
+        // The actual pixel data
+        &image.as_bytes(),
+        // The layout of the texture
+        wgpu::ImageDataLayout {
+            offset: 0,
+            bytes_per_row: std::num::NonZeroU32::new(4 * dims.0),
+            rows_per_image: std::num::NonZeroU32::new(dims.1),
+        },
+        texture_size,
+    );
+
+    diffuse_texture
 }

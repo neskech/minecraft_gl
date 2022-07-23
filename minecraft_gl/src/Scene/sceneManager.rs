@@ -9,7 +9,7 @@ pub enum SceneState{
 }
 pub trait Scene{
     fn Update(&mut self, timeStep: f32);
-    fn Render(&mut self, renderer: &mut Renderer, target: &mut glium::Frame);
+    fn Render(&mut self, renderer: &mut Renderer, pass: &mut wgpu::RenderPass, queue: &wgpu::Queue);
     fn OnEvent(&mut self, event: &Event);
 
     fn AsAny(&self) -> &dyn std::any::Any;
@@ -24,7 +24,7 @@ pub struct SceneManager{
 }
 
 impl SceneManager{
-    pub fn New(display: &glium::Display) -> Self {
+    pub fn New(device: &wgpu::Device, queue: &wgpu::Queue, config: &wgpu::SurfaceConfiguration) -> Self {
 
         let mut craftingR = CraftingRegistry::New();
         let mut itemR = ItemRegistry::New(); 
@@ -37,14 +37,14 @@ impl SceneManager{
             _ => {}
         };
 
-        let blockAtlas = match blockR.GenerateAtlas(BLOCK_TEXTURE_RESOLUTION, display) {
+        let blockAtlas = match blockR.GenerateAtlas(BLOCK_TEXTURE_RESOLUTION, 4, device, queue) {
             Ok(val) => val,
             Err(msg) => {
                   panic!("Error! World renderer creation failed due to block atlas creation. The error:\n{}.", msg);
             }
         };
 
-        let itemAtlas = match itemR.GenerateAtlas(BLOCK_TEXTURE_RESOLUTION, display) {
+        let itemAtlas = match itemR.GenerateAtlas(BLOCK_TEXTURE_RESOLUTION, 4, device, queue) {
             Ok(val) => val,
             Err(msg) => {
                 panic!("Error! Sprite renderer creation failed due to item atlas creation. The error:\n{}.", msg);
@@ -56,7 +56,7 @@ impl SceneManager{
             CurrentSceneState: SceneState::WorldScene,
             //TODO create the atlases here and dont worry about passing the registrys down to the renderer
             //TODO also prevent the mainMenu from having the registries, I dont care
-            Renderer: Renderer::New(blockAtlas, itemAtlas, display),
+            Renderer: Renderer::New(blockAtlas, itemAtlas, device, queue, config),
         }
     }
 
@@ -64,8 +64,8 @@ impl SceneManager{
         self.CurrentScene.Update(timeStep);
     }
 
-    pub fn Render(&mut self, target: &mut glium::Frame){
-        self.CurrentScene.Render(&mut self.Renderer, target);
+    pub fn Render(&mut self, pass: &mut wgpu::RenderPass, queue: &wgpu::Queue){
+        self.CurrentScene.Render(&mut self.Renderer, pass, queue);
     }
 
     pub fn OnEvent(&mut self, event: &Event){

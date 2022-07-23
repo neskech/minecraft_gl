@@ -36,7 +36,7 @@ impl Scene for MainMenu{
         
     }
 
-    fn Render(&mut self, _renderer: &mut crate::Renderer::renderer::Renderer, _target: &mut glium::Frame) {
+    fn Render(&mut self, _renderer: &mut crate::Renderer::renderer::Renderer, pass: &mut wgpu::RenderPass, queue: &wgpu::Queue) {
         
     }
 

@@ -40,8 +40,8 @@ impl Scene for WorldScene{
         self.World.Update((self.Camera.Position.x, self.Camera.Position.z), &self.Camera)
     }
 
-    fn Render(&mut self, renderer: &mut crate::Renderer::renderer::Renderer, target: &mut glium::Frame) {
-        renderer.Render(&self.World.Chunks, &self.World.RenderList, &self.Camera, target);
+    fn Render(&mut self, renderer: &mut crate::Renderer::renderer::Renderer, pass: &mut wgpu::RenderPass, queue: &wgpu::Queue) {
+        renderer.Render(&self.World.Chunks, &self.World.RenderList, &self.Camera, pass, queue);
     }
 
     fn OnEvent(&mut self, event: &Event) {

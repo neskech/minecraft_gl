@@ -1,7 +1,3 @@
-use glium::glutin::event::{ModifiersState, MouseButton, VirtualKeyCode};
-
-
-
 
 #[derive(Clone)]
 pub enum Event{
@@ -25,13 +21,13 @@ pub struct MouseMovedEvent{
 
 #[derive(Clone)]
 pub struct MouseButtonPressedEvent{
-    pub MouseButton: MouseButton,
-    pub Mods: ModifiersState,
+    pub MouseButton: winit::event::MouseButton,
+    pub Mods: winit::event::ModifiersState,
 }
 
 #[derive(Clone)]
 pub struct MouseButtonReleasedEvent{
-    pub MouseButton: MouseButton,
+    pub MouseButton: winit::event::MouseButton,
 }
 
 #[derive(Clone)]
@@ -42,13 +38,13 @@ pub struct MouseScrollEvent{
 
 #[derive(Clone)]
 pub struct KeyPressedEvent{
-    pub Key: VirtualKeyCode,
-    pub Mods: ModifiersState,
+    pub Key: winit::event::VirtualKeyCode,
+    pub Mods: winit::event::ModifiersState,
 }
 
 #[derive(Clone)]
 pub struct KeyReleasedEvent{
-    pub Key: VirtualKeyCode,
+    pub Key: winit::event::VirtualKeyCode,
 }
 
 #[derive(Clone)]
