@@ -1,4 +1,5 @@
 
+use glium::glutin::event::VirtualKeyCode;
 use crate::{Core::application::WINDOW_SIZE, Util::fustrum::{Fustrum, Plane}};
 use nalgebra as na;
 
@@ -88,17 +89,6 @@ impl Camera{
         ]
     }
 
-    pub fn GetViewProjection(&self) -> [[f32; 4]; 4]{
-        let mat = self.GetProjectionMatrixVectorized() * self.GetViewMatrixVectorized();
-        [
-            [mat[0], mat[1], mat[2], mat[3]],
-            [mat[4], mat[5], mat[6], mat[7]],
-            [mat[8], mat[9], mat[10], mat[11]],
-            [mat[12], mat[13], mat[14], mat[15]],
-
-        ]
-    }
-
     pub fn OnEvent(&mut self, event: &Event){
         if let Event::MouseMoved(MouseMovedEvent{X: x, Y: y}) = event {
             let dMouse = (*x as f32 - self.PreviousCursorPos.0, *y as f32 - self.PreviousCursorPos.1);
@@ -130,18 +120,18 @@ impl Camera{
           //  println!("Direction {:?}, camRight {:?}, camUp {:?}", self.Direction, self.CameraRight, self.CameraUp);
         }
         else if let Event::KeyPressed(KeyPressedEvent { Key, ..}) = event {
-            let speed = 0.3f32;
+            let speed = 0.9f32;
             match *Key {
-                winit::event::VirtualKeyCode::S => {
+                VirtualKeyCode::S => {
                     self.Position += self.Direction * speed;
                 },
-                winit::event::VirtualKeyCode::W => {
+                VirtualKeyCode::W => {
                     self.Position -= self.Direction * speed;
                 },
-                winit::event::VirtualKeyCode::D => {
+                VirtualKeyCode::D => {
                     self.Position -= self.Direction.cross(&self.CameraUp).normalize() * speed;
                 },
-                winit::event::VirtualKeyCode::A => {
+                VirtualKeyCode::A => {
                     self.Position += self.Direction.cross(&self.CameraUp).normalize() * speed;
                 }
                 _ => {}

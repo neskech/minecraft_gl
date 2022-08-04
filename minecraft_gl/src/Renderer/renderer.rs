@@ -8,6 +8,7 @@ use crate::World::chunk::Chunk;
 use super::worldRenderer::WorldRenderer;
 use super::spriteRenderer::SpriteRenderer;
 
+
 pub struct Renderer{
     ResourceManager: ResourceManager,
     WorldRenderer: WorldRenderer,
@@ -15,12 +16,12 @@ pub struct Renderer{
 }
 
 impl Renderer{
-    pub fn New(blockAtlas: TextureAtlas, itemAtlas: TextureAtlas, device: &wgpu::Device, queue: &wgpu::Queue, config: &wgpu::SurfaceConfiguration) -> Self {
+    pub fn New(blockAtlas: TextureAtlas, itemAtlas: TextureAtlas, display: &glium::Display) -> Self {
         let mut resourceManager = ResourceManager::New();
 
-        let worldRenderer = WorldRenderer::New(&mut resourceManager, blockAtlas, device, queue, config);
+        let worldRenderer = WorldRenderer::New(&mut resourceManager, blockAtlas, display);
 
-        let spriteRenderer = SpriteRenderer::New(&mut resourceManager, itemAtlas, device, queue, config);
+        let spriteRenderer = SpriteRenderer::New(&mut resourceManager, itemAtlas, display);
 
         let mut s = Self {
             ResourceManager: resourceManager,
@@ -37,9 +38,9 @@ impl Renderer{
        // self.SpriteRenderer.Init();
     }
 
-    pub fn Render(&mut self, chunks: &Vec<Chunk>, renderList: &HashSet<usize>, camera: &Camera, pass: &mut wgpu::RenderPass, queue: &wgpu::Queue){
-        self.WorldRenderer.Render(chunks, renderList, camera, pass, queue);
-        self.SpriteRenderer.Render(camera, pass);
+    pub fn Render(&mut self, chunks: &Vec<Chunk>, renderList: &HashSet<usize>, camera: &Camera, target: &mut glium::Frame){
+        self.WorldRenderer.Render(chunks, renderList, camera, target);
+        self.SpriteRenderer.Render(camera, target);
     }
 
     pub fn OnEvent(&mut self, _event: &Event){

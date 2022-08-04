@@ -4,10 +4,10 @@ use image::io::Reader as ImageReader;
 
 use super::resource::GetTextureFromImage;
 
-//TODO do these need to store the image too ?
+
 
 pub struct TextureAtlas{
-    pub Texture: wgpu::Texture,
+    pub Texture: glium::texture::SrgbTexture2d,
     pub Image: DynamicImage,
     pub Rows: u32,
     pub Columns: u32,
@@ -17,7 +17,7 @@ pub struct TextureAtlas{
 }
 
 pub struct CubeMapAtlas{
-    pub Texture: wgpu::Texture,
+    pub Texture: glium::texture::SrgbTexture2d,
     pub Image: DynamicImage,
     pub Rows: u32,
     pub Columns: u32,
@@ -38,7 +38,7 @@ pub enum CubeMapFace{
 
 
 impl TextureAtlas{
-    pub fn New(path: &str, rows: u32, cols: u32, mipMapLevels: u32, device: &wgpu::Device, queue: &wgpu::Queue) -> Result<TextureAtlas, String>{
+    pub fn New(path: &str, rows: u32, cols: u32, display: &glium::Display) -> Result<TextureAtlas, String>{
         //Assume that the texture passed already has its texture parameters set
         let img = ImageReader::open(path);
         if let Err(_) = img {
@@ -61,7 +61,8 @@ impl TextureAtlas{
         let cellWidth = (finalImage.width() as f32 / cols as f32) as u32;
        
         Ok(Self {
-            Texture: GetTextureFromImage(&finalImage, mipMapLevels, device, queue),
+            Texture: GetTextureFromImage(&finalImage, display)
+            .expect("Error! Could not create texture from image in 'New' function for 'TextureAtlas'"),
             Image: finalImage,
             Rows: rows,
             Columns: cols,
@@ -71,7 +72,7 @@ impl TextureAtlas{
         })
     }
 
-    pub fn FromImage(image: DynamicImage, rows: u32, cols: u32, textureResolution: u32, mipMapLevels: u32, device: &wgpu::Device, queue: &wgpu::Queue) -> Self{
+    pub fn FromImage(image: DynamicImage, rows: u32, cols: u32, textureResolution: u32, display: &glium::Display) -> Self{
         //Assume that the texture passed already has its texture parameters set
         let channels = if image.color().has_alpha(){
                             4
@@ -80,7 +81,8 @@ impl TextureAtlas{
                     };
 
         Self {
-            Texture: GetTextureFromImage(&image, mipMapLevels, device, queue),
+            Texture: GetTextureFromImage(&image, display)
+            .expect("Error! Could not create texture from image in 'FromImage' function for 'TextureAtlas'"),
             Image: image,
             Rows: rows,
             Columns: cols,
@@ -101,7 +103,7 @@ impl TextureAtlas{
 
 
 impl CubeMapAtlas{
-    pub fn New(path: &str, rows: u32, cols: u32, mipMapLevels: u32, device: &wgpu::Device, queue: &wgpu::Queue) -> Result<CubeMapAtlas, String>{
+    pub fn New(path: &str, rows: u32, cols: u32, display: &glium::Display) -> Result<CubeMapAtlas, String>{
 
         let img = ImageReader::open(path);
         if let Err(_) = img {
@@ -124,7 +126,8 @@ impl CubeMapAtlas{
         let cellHeight = (finalImage.height() as f32 / rows as f32) as u32;
         let cellWidth = (finalImage.width() as f32 / cols as f32) as u32;                 
         Ok(Self {
-            Texture: GetTextureFromImage(&finalImage, mipMapLevels, device, queue),
+            Texture: GetTextureFromImage(&finalImage, display)
+            .expect("Error! Could not create texture from image in 'New' function for 'CubeMapAtlas'"),
             Image: finalImage,
             Rows: rows,
             Columns: cols,

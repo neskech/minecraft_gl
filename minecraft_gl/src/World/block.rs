@@ -27,7 +27,7 @@ use super::blockBehavior::{BlockBehavior, BlockBindingFunction};
 use crate::Event::event::Event;
 use super::super::Util::resource;
 use image;
-use serde_json::{Value, de};
+use serde_json::Value;
 use serde_json;
 
 #[derive(Clone)]
@@ -413,7 +413,7 @@ impl BlockRegistry{
         Ok(false)
     }
 
-    pub fn GenerateAtlas(&self, textureResolution: u32, mipMapLevels: u32, device: &wgpu::Device, queue: &wgpu::Queue) -> Result<TextureAtlas, String> {
+    pub fn GenerateAtlas(&self, textureResolution: u32, display: &glium::Display) -> Result<TextureAtlas, String> {
         //TODO Create a loading bar when creating a new texture atlas
         //TODO Make a loading bar thing in resource which takes a percentage and prints a bar for you and some metadata
         //attemp to make a square image out of the atlas...
@@ -433,7 +433,7 @@ impl BlockRegistry{
             let rows = json.get("Rows").unwrap().as_u64().unwrap() as u32;
             let cols = json.get("Cols").unwrap().as_u64().unwrap() as u32;
 
-            return Ok(TextureAtlas::FromImage(res, rows, cols, textureResolution, mipMapLevels, device, queue))
+            return Ok(TextureAtlas::FromImage(res, rows, cols, textureResolution, display))
         }
 
         //the master texture atlas image. We will paste texture - sub images onto this
@@ -517,7 +517,7 @@ impl BlockRegistry{
         let finalStr = format!("{{\n\"Items\": {},\n\"Rows\": {},\n\"Cols\": {},\n\"Texture Resolution\": {}\n}}", serialized, dims, dims, textureResolution);
         file.write_all(finalStr.as_bytes()).expect("Could not write to block atlas metadata file!");
 
-        Ok(TextureAtlas::FromImage(image, dims, dims, textureResolution, mipMapLevels, device, queue))
+        Ok(TextureAtlas::FromImage(image, dims, dims, textureResolution, display))
     }
 
     pub fn OnLeftClickWithName(&self, blockName: &str, hit: Item) {

@@ -10,9 +10,13 @@
 #![feature(cstr_from_bytes_until_nul)]
 #![feature(const_type_id)]
 
-use Core::application::Application;
 
-pub extern crate winit;
+
+
+#[macro_use]
+pub extern crate glium;
+pub extern crate image;
+pub extern crate nalgebra;
 
 mod Core;
 mod Event;
@@ -46,12 +50,16 @@ impl<'a> Test<'a> {
 
 fn main() {
     std::env::set_var("RUST_BACKTRACE", "1");
-    Application::Run();
+    let app = Core::application::Application::New();
+    app.Run();
+
+    let mut a = 10;
+    let aa: *mut i32 = &mut a;
+    let bb: *mut i32 = &mut a;
 
 
    
 }
-
 
 
 

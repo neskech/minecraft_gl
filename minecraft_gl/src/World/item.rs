@@ -395,7 +395,7 @@ impl ItemRegistry{
         Ok(false)
     }
 
-    pub fn GenerateAtlas(&self, textureResolution: u32, mipMapLevels: u32, device: &wgpu::Device, queue: &wgpu::Queue) -> Result<TextureAtlas, String> {
+    pub fn GenerateAtlas(&self, textureResolution: u32, display: &glium::Display) -> Result<TextureAtlas, String> {
          //attemp to make a square image out of the atlas...
         let dims = f32::ceil(f32::sqrt(self.NumRegisteredTextures as f32)) as u32;
 
@@ -413,7 +413,7 @@ impl ItemRegistry{
             let rows = json.get("Rows").unwrap().as_u64().unwrap() as u32;
             let cols = json.get("Cols").unwrap().as_u64().unwrap() as u32;
 
-            return Ok(TextureAtlas::FromImage(res, rows, cols, textureResolution, mipMapLevels, device, queue))
+            return Ok(TextureAtlas::FromImage(res, rows, cols, textureResolution, display))
         }
 
         //the master texture atlas image. We will paste texture - sub images onto this
@@ -458,7 +458,7 @@ impl ItemRegistry{
         let finalStr = format!("{{\n\"Items\": {},\n\"Rows\": {},\n\"Cols\": {},\n\"Texture Resolution\": {}\n}}", serialized, dims, dims, textureResolution);
         file.write_all(finalStr.as_bytes()).expect("Could not write to item atlas metadata file!");
          
-         Ok(TextureAtlas::FromImage(image::DynamicImage::ImageRgba8(img), dims, dims, textureResolution, mipMapLevels, device, queue))
+         Ok(TextureAtlas::FromImage(image::DynamicImage::ImageRgba8(img), dims, dims, textureResolution, display))
     }
 
     pub fn OnLeftClickWithName(&self, itemName: &str) {

@@ -8,8 +8,6 @@ uniform mat4 view;
 
 uniform vec2 chunk_pos;
 uniform float atlas_cols;
-uniform vec2 sprite_dimensions;
-uniform vec2 texSize;
 
 out vec2 fuvs;
 out float faceID;
@@ -33,9 +31,10 @@ void main(){
 
     float row = floor(float(texID) / atlas_cols);
     float col = float(texID % uint(atlas_cols));
+    float dims = 1.0 / atlas_cols;
 
-    vec2 top_left_uv = vec2(col * sprite_dimensions.x, row * sprite_dimensions.y);
-    top_left_uv = (top_left_uv + offsets[quadID] * sprite_dimensions) / texSize;
+    vec2 top_left_uv = vec2(col * dims, row * dims);
+    top_left_uv += offsets[quadID] * dims;
     top_left_uv.y = 1.0 - top_left_uv.y;
     fuvs = top_left_uv;
 

@@ -9,8 +9,8 @@ use super::{block::BlockRegistry, chunk::{Chunk, CHUNK_BOUNDS_X, CHUNK_BOUNDS_Z,
 
 
 const DEFAULT_RENDER_DISTANCE: usize = 3;
-const MAX_CHUNK_GENERATION_PER_FRAME: usize = 2;
-const MAX_CHUNK_REMESH_PER_FRAME: usize = 2;
+const MAX_CHUNK_GENERATION_PER_FRAME: usize = 1;
+const MAX_CHUNK_REMESH_PER_FRAME: usize = 1;
 const MAX_RENDER_DISTANCE: usize = 10;
 
 const CHUNK_BIOME_DISTANCE_THRESHOLD: f32 = 0.2f32;
@@ -30,7 +30,6 @@ pub struct World{
     pub RenderList: HashSet<usize>,
     FinishedRegneration: bool,
     FinishedRemeshing: bool,
-    CumulativeSwap: (i32, i32),
 
     BlockRegistry: BlockRegistry,
     ItemRegistry: ItemRegistry,
@@ -83,7 +82,6 @@ impl World{
             RenderList: renderList,
             FinishedRegneration: false,
             FinishedRemeshing: false,
-            CumulativeSwap: (0i32, 0i32),
 
             BlockRegistry: blockRegistry,
             ItemRegistry: itemRegistry,
@@ -107,32 +105,23 @@ impl World{
     }
 
     pub fn Update(&mut self, targetPos: (f32, f32), camera: &Camera){
-        if self.CumulativeSwap.0 != 0 || self.CumulativeSwap.1 != 0 {
-            self.SwapChunks(self.CumulativeSwap);
-            self.CumulativeSwap = (0, 0);
-        }
 
         let prevChunkPos = ToChunkPos(self.TargetPosition);
         let currChunkPos = ToChunkPos(targetPos);
         if prevChunkPos != currChunkPos{
             let direction = (currChunkPos.0 - prevChunkPos.0, currChunkPos.1 - prevChunkPos.1);
-
-            if !self.FinishedRegneration || !self.FinishedRemeshing {
-                self.CumulativeSwap.0 += direction.0;
-                self.CumulativeSwap.1 += direction.1;
+            
+            if direction.0 != 0 && direction.1 != 0 {
+                // println!("DOUBLE SWAP BABBYYYYYYYYYYYYYYYYYYYYY
+                // \nBABABAAY ITS A DOULBE SWAPPPY SWAP TIME BABBBYYYYYYYY");
+                self.SwapChunks((direction.0, 0));
+                self.SwapChunks((0, direction.1));
+            } else {
+                self.SwapChunks(direction);
             }
-            else {
 
-                if direction.0 != 0 && direction.1 != 0 {
-                    // println!("DOUBLE SWAP BABBYYYYYYYYYYYYYYYYYYYYY
-                    // \nBABABAAY ITS A DOULBE SWAPPPY SWAP TIME BABBBYYYYYYYY");
-                    self.SwapChunks((direction.0, 0));
-                    self.SwapChunks((0, direction.1));
-                } else {
-                    self.SwapChunks(direction);
-                }
  
-            }
+            
    
         }
         self.TargetPosition = targetPos;
@@ -148,7 +137,7 @@ impl World{
         let sign = if direction.0 < 0 || direction.1 > 0 {1i32} else {-1i32};
 
         let size: usize = self.RenderDistance * 2 + 1;
-        let i = if direction.0 < 0 || direction.1 < 0 {self.Chunks.len() - 1} else {0};
+        let i = if direction.0 < 0 || direction.1 > 0 {self.Chunks.len() - 1} else {0};
         let mut hold: Chunk = self.Chunks[
             if direction.0 == 0 {
                i % size * size+ i / size
@@ -172,7 +161,7 @@ impl World{
             //y direction
             if direction.0 == 0 {
                 currIdx = i % size * size + i / size;
-                nextIdx = (i as i32 + 1 * sign) as usize % size * size as usize + (i as i32 + 1 * sign) as usize / size;
+                nextIdx = (i as i32 + 1 * sign) as usize % size * size + (i as i32 + 1 * sign) as usize / size;
             }
             //x direction
             else {
@@ -184,46 +173,48 @@ impl World{
             let deletionChunk = if direction.0 == 0 {
                 //y direction
                 //if y < 0 and row == last row or if y > 0 and row == first row
-                direction.1 > 0 && i % size == 0 || direction.1 < 0 && i % size == size - 1
+                direction.1 > 0 && currIdx / size == 0 || direction.1 < 0 && currIdx / size == size - 1
             }
             else {
                 //x direction
                 //if x < 0 and col == last col or if x > 0 and col == first col
-                direction.0 > 0 && i % size == size - 1 || direction.0 < 0 && i % size == 0
+                direction.0 > 0 && currIdx % size == size - 1 || direction.0 < 0 && currIdx % size == 0
             };
 
             let skip = if direction.0 == 0 {
                 //y direction
                 //if y < 0 and row == last row or if y > 0 and row == first row
-                direction.1 > 0 && i % size == size - 1 || direction.1 < 0 && i % size == 0
+                direction.1 > 0 && currIdx / size == size - 1 || direction.1 < 0 && currIdx / size == 0
             }
             else {
                 //x direction
                 //if x < 0 and col == last col or if x > 0 and col == first col
-                direction.0 > 0 && i % size == 0 || direction.0 < 0 && i % size == size - 1
+                direction.0 > 0 && currIdx % size == 0 || direction.0 < 0 && currIdx % size == size - 1
             };
 
             //TODO Send the chunks adjacent to the deletion chunks to be remeshed due to adjacent chunk cull facing
-           // println!("idx {} with curr idx {}", i, currIdx);
+            println!("idx {} with curr idx {}", i, currIdx);
 
             if skip {
+                println!("Skip at {}", currIdx);
                 continue;
             }
 
             if deletionChunk {
-                println!("Deletion chunk at {}", i);
+                println!("Deletion chunk at {} with next idx {} and curr idx {} and deletion chunk pos {:?} next to curr pos {:?} direc pos {:?}", i, nextIdx, currIdx,
+            self.Chunks[currIdx].Position, self.TargetPosition, direction);
                 hold = self.Chunks[currIdx].clone();
 
                 //see if currIDX was already queued up. If it was, it hasn't been generated yet and we just put that empty chunk into hold
                 //Hold will equal the chunk at nextIDX, so change currIDX to next IDX
-                // for a in 0..self.RegenerationList.len(){
-                //     if self.RegenerationList[a] == currIdx {
-                //         println!("I FOUND ITT!!!!!!!!\n!!!!!!!!!!!!\n!!!!!!! {:?}", self.RegenerationList);
-                //         //TODO next ID could also be added into the array multiple times (say 3 quick swaps) so check for that (wasted computation)
-                //         self.RegenerationList[a] = nextIdx;
-                //        // break;
-                //     }
-                //  }
+                for a in 0..self.RegenerationList.len(){
+                    if self.RegenerationList[a] == currIdx {
+                        println!("I FOUND ITT!!!!!!!!\n!!!!!!!!!!!!\n!!!!!!! {:?}", self.RegenerationList);
+                        //TODO next ID could also be added into the array multiple times (say 3 quick swaps) so check for that (wasted computation)
+                        self.RegenerationList[a] = nextIdx;
+                       // break;
+                    }
+                 }
                 //TODO see if this copies it
                 //TODO We want to see if these are shallow copies and not full copies, test it
                 //TODO by printing the addresses
@@ -268,12 +259,13 @@ impl World{
 
             let row: i32 = index as i32 / (self.RenderDistance as i32 * 2 + 1);
             let col: i32 = index as i32 % (self.RenderDistance as i32 * 2 + 1);
+            let size = (self.RenderDistance as i32 * 2 + 1);
 
             let chunkList = [
-                if col - 1 == -1 {None} else {Some((row * (self.RenderDistance as i32 * 2 + 1) + col - 1) as usize)},//Left
-                if col + 1 == self.RenderDistance as i32 * 2 + 1 {None} else {Some((row * (self.RenderDistance as i32 * 2 + 1) + col + 1) as usize)}, //Right
-                if row + 1 == self.RenderDistance as i32 * 2 + 1 {None} else {Some(((row + 1) * (self.RenderDistance as i32 * 2 + 1) + col) as usize)}, //Right
-                if row - 1 == -1 as i32 {None} else {Some(((row - 1) * (self.RenderDistance as i32 * 2 + 1) + col) as usize)}, //Right
+                if col - 1 == -1 {None} else {Some((row * size + col - 1) as usize)},//Left
+                if col + 1 == self.RenderDistance as i32 * 2 + 1 {None} else {Some((row * size + col + 1) as usize)}, //Right
+                if row + 1 == self.RenderDistance as i32 * 2 + 1 {None} else {Some(((row + 1) * size + col) as usize)}, //Right
+                if row - 1 == -1 as i32 {None} else {Some(((row - 1) * size + col) as usize)}, //Right
             ];
 
             let mut minDifference = f32::MAX;
@@ -340,6 +332,7 @@ impl World{
                 if row - 1 == -1 as i32 {None} else {Some(((row - 1) * (self.RenderDistance as i32 * 2 + 1) + col) as usize)}, //Right
             ];
             //println!("row {} col {} regen size {}", row, col, self.RegenerationList.len());
+            println!("REMESH {:?}", self.RemeshList);
             GenerateMesh(&mut self.Chunks, index, &chunkList, &self.BlockRegistry, true);
             self.CandidateList.push(index);
             self.RemeshList.remove(idx);

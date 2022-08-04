@@ -1,3 +1,7 @@
+use glium::glutin::event::{ModifiersState, MouseButton, VirtualKeyCode};
+
+//TODO put all of this in mod.rs
+
 
 #[derive(Clone)]
 pub enum Event{
@@ -21,13 +25,13 @@ pub struct MouseMovedEvent{
 
 #[derive(Clone)]
 pub struct MouseButtonPressedEvent{
-    pub MouseButton: winit::event::MouseButton,
-    pub Mods: winit::event::ModifiersState,
+    pub MouseButton: MouseButton,
+    pub Mods: ModifiersState,
 }
 
 #[derive(Clone)]
 pub struct MouseButtonReleasedEvent{
-    pub MouseButton: winit::event::MouseButton,
+    pub MouseButton: MouseButton,
 }
 
 #[derive(Clone)]
@@ -38,13 +42,13 @@ pub struct MouseScrollEvent{
 
 #[derive(Clone)]
 pub struct KeyPressedEvent{
-    pub Key: winit::event::VirtualKeyCode,
-    pub Mods: winit::event::ModifiersState,
+    pub Key: VirtualKeyCode,
+    pub Mods: ModifiersState,
 }
 
 #[derive(Clone)]
 pub struct KeyReleasedEvent{
-    pub Key: winit::event::VirtualKeyCode,
+    pub Key: VirtualKeyCode,
 }
 
 #[derive(Clone)]
@@ -138,5 +142,4 @@ impl<'a> EventDispatcher<'a>{
        self.Handled = func(s, params);
     }
 }
-
 
