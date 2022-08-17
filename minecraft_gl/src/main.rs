@@ -10,6 +10,10 @@
 #![feature(cstr_from_bytes_until_nul)]
 #![feature(const_type_id)]
 
+use std::sync::Mutex;
+
+use rayon::{prelude::{IntoParallelRefIterator, ParallelIterator}, ThreadPoolBuilder};
+
 
 
 
@@ -26,25 +30,37 @@ mod Ecs;
 mod World;
 mod Renderer;
 
-struct Wrapper<'a>(Test<'a>);
-struct Test<'a> {
-    data: Vec<u32>,
-    dataRef: Vec<&'a u32>,
+struct Test{
+    data: std::sync::Arc<Mutex<Vec<u32>>>
 }
 
-impl<'a> Test<'a> {
-    pub fn New() -> Self {
-        Self { data: Vec::new(), dataRef: Vec::new() }
+const BATCH: usize = 1;
+const MAX: usize = 5;
+impl Test{
+    fn new() -> Self {
+        Self { data: std::sync::Arc::new(Mutex::new((0..10).collect())) }
     }
+    fn rayonTest(&mut self){
+    
+        rayon::scope(|s|{
+            let i: usize = 0;
+            while i < MAX {
 
-    pub fn AddChunk(&mut self){
-        self.data.push(0u32);
-    }
+                for b in 0..BATCH{
+                    let clone = self.data.clone();
+                    s.spawn( move |_|{
+                        println!("{}", clone.lock().unwrap().remove(i));
+                    });
 
-    pub fn AddRef(&'a mut self){
-        if self.data.len() > 0 {
-            self.dataRef.push(&self.data[0]);
-        }
+                    let a = i + 1;
+                    if a >= MAX {
+                        break;
+                    }
+                }
+            }
+        });
+
+ 
     }
 }
 
@@ -53,9 +69,9 @@ fn main() {
     let app = Core::application::Application::New();
     app.Run();
 
-    let mut a = 10;
-    let aa: *mut i32 = &mut a;
-    let bb: *mut i32 = &mut a;
+ 
+
+
 
 
    

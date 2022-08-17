@@ -14,5 +14,6 @@ nalgebra = "0.31.0"
 glium = "*"
 bracket-noise = "0.8.2"
 rand = "0.8.5"
+rayon = "1.5.3"
 proc_macro = {path = "../proc_macro"}
 proc_macro_derive = {path = "../proc_macro/proc_macro_derive"}

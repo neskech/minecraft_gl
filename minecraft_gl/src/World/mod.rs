@@ -186,13 +186,13 @@ pub fn ReadAttributes(blockRegistry: &mut BlockRegistry, itemRegistry: &mut Item
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-pub fn ReadBiomeGenerators(blockRegistry: &BlockRegistry) -> Result<HashMap<Biome, Box<dyn BiomeGenerator>>, Box<dyn std::error::Error>> {
+pub fn ReadBiomeGenerators(blockRegistry: &BlockRegistry) -> Result<HashMap<Biome, Box<dyn BiomeGenerator + Send>>, Box<dyn std::error::Error>> {
     //TODO implement the capacity for item and block registries
     let path = std::path::Path::new("./minecraft_gl/assets/data/biome/");
     let dir = std::fs::read_dir(path)
     .map_err(|e| format!("Error! Could not find ./minecraft_gl/assets/data/biome/ directory! The error:\n{}", e.to_string()))?;
     
-    let mut generators: HashMap<Biome, Box<dyn BiomeGenerator>> = HashMap::with_capacity(dir.count());
+    let mut generators: HashMap<Biome, Box<dyn BiomeGenerator + Send>> = HashMap::with_capacity(dir.count());
 
     for file in std::fs::read_dir(path).unwrap() {
         let path = file

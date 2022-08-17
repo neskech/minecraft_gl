@@ -731,6 +731,7 @@ dependencies = [
  "proc_macro_derive",
  "queues",
  "rand",
+ "rayon",
  "serde_json",
 ]
 

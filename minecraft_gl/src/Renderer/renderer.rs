@@ -38,8 +38,8 @@ impl Renderer{
        // self.SpriteRenderer.Init();
     }
 
-    pub fn Render(&mut self, chunks: &Vec<Chunk>, renderList: &HashSet<usize>, camera: &Camera, target: &mut glium::Frame){
-        self.WorldRenderer.Render(chunks, renderList, camera, target);
+    pub fn Render(&mut self, chunks: &HashSet<*const Chunk>, camera: &Camera, target: &mut glium::Frame){
+        self.WorldRenderer.Render(chunks, camera, target);
         self.SpriteRenderer.Render(camera, target);
     }
 
