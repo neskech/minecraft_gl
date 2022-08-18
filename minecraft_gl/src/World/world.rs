@@ -1,17 +1,15 @@
-use std::{collections::{HashSet, HashMap, VecDeque}, sync::{Arc, Mutex}, hash::Hash};
+use std::{collections::{HashSet, HashMap, VecDeque}, sync::{Arc, Mutex}, hash::Hash, thread};
 use nalgebra as na;
 use bracket_noise::prelude::FastNoise;
 use rand::Rng;
-use rayon::prelude::{IntoParallelRefIterator, ParallelIterator};
 
-use crate::{Scene::camera::Camera, World::biomeGenerator::Biome, Util::fustrum::{AABB, FustrumCullAABB}, Renderer::renderer};
+use crate::{Scene::camera::Camera, World::biomeGenerator::Biome, Renderer::renderer};
 
 use super::{block::BlockRegistry, chunk::{Chunk, CHUNK_BOUNDS_X, CHUNK_BOUNDS_Z, GenerateMesh, CHUNK_BOUNDS_Y}, item::ItemRegistry, crafting::CraftingRegistry, biomeGenerator::{BiomeGenerator, NoiseParameters}, ReadBiomeGenerators};
 
 
 const DEFAULT_RENDER_DISTANCE: i32 = 3;
 const MAX_CHUNK_GENERATION_PER_FRAME: usize = 1;
-const MAX_CHUNK_REMESH_PER_FRAME: usize = 1;
 const MAX_RENDER_DISTANCE: i32= 10;
 
 const CHUNK_BIOME_DISTANCE_THRESHOLD: f32 = 0.2f32;
@@ -24,13 +22,16 @@ const CHUNK_BATCH_SIZE: usize = 1;
 
 
 pub struct World{
-    pub Chunks: Arc<Mutex<HashMap<na::Vector2<i32>, Chunk>>>,
+    pub Chunks: HashMap<na::Vector2<i32>, Chunk>,
 
     RenderDistance: i32,
     TargetPosition: (i32, i32),
 
     pub RenderList: HashSet<*const Chunk>,
 
+    //creation queue acts as an intermediary between the chunks dictionary and the other thread creating chunks
+    //this is so we don't have to lock the chunks dictionary, as it would have to be locked for 100% of the time as its being sent to the renderer
+    CreationQueue: Arc<Mutex<VecDeque<(na::Vector2<i32>, Chunk)>>>,
     RemovalQueue: VecDeque<na::Vector2<i32>>,
 
     BlockRegistry: Arc<BlockRegistry>,
@@ -65,13 +66,14 @@ impl World{
 
    
         let mut self_ = Self{
-            Chunks: Arc::new(Mutex::new(HashMap::with_capacity( ( (DEFAULT_RENDER_DISTANCE * 2 + 1) * (DEFAULT_RENDER_DISTANCE * 2 + 1) ) as usize))),
+            Chunks: HashMap::with_capacity( ( (DEFAULT_RENDER_DISTANCE * 2 + 1) * (DEFAULT_RENDER_DISTANCE * 2 + 1) ) as usize),
 
             RenderDistance: 0,
             TargetPosition: (0i32, 0i32),
 
             RenderList: HashSet::new(),
 
+            CreationQueue: Arc::new(Mutex::new(VecDeque::new())),
             RemovalQueue: VecDeque::new(),
 
             BlockRegistry: Arc::new(blockRegistry),
@@ -88,14 +90,22 @@ impl World{
     }
 
     pub fn Update(&mut self, targetPos: (f32, f32), camera: &Camera){
+        if self.RemovalQueue.len() > 0 {
+             println!("Breaking with {} size", self.RemovalQueue.len());
+        }
 
-        println!("Breaking with {} size", self.RemovalQueue.len());
+        let l = self.CreationQueue.lock().unwrap().len();
+        if l > 0 {
+            println!("Creation with {} size", l);
+       }
+
+
         while self.RemovalQueue.len() > 0 {
             let vec = self.RemovalQueue.front().unwrap().clone();
             let mut exists = false;
 
             {
-                 if let Some(chunk) = self.Chunks.lock().unwrap().get(&vec) {
+                 if let Some(chunk) = self.Chunks.get(&vec) {
                       exists = true;
                       self.RenderList.remove(&(chunk as *const Chunk));
                       self.RemovalQueue.pop_front().unwrap();
@@ -103,18 +113,31 @@ impl World{
             }
 
             if exists {
-                self.Chunks.lock().unwrap().remove(&vec).unwrap();
+                self.Chunks.remove(&vec).unwrap();
             } else {
                 break;
             }
     
         }
 
+        let mut len = self.CreationQueue.lock().unwrap().len();
+        while len > 0 {
+            let el = self.CreationQueue.lock().unwrap().pop_front().unwrap();
+            self.Chunks.insert(el.0, el.1);
+            len = self.CreationQueue.lock().unwrap().len();
+        }
+
         let currChunkPos = ToChunkPos(targetPos);
         if self.TargetPosition != currChunkPos{
             println!("Swap!");
+            //TODO prevent (1, 1) and (-1, -1) and (1, -1) (-1, 1) swaps
             let direction = (currChunkPos.0 - self.TargetPosition.0, currChunkPos.1 - self.TargetPosition.1);
-            self.TranslateChunks(self.TargetPosition, currChunkPos, direction);
+            if direction.0 != 0 && direction.1 != 0 {
+                self.TranslateChunks(self.TargetPosition, currChunkPos, (direction.0, 0));
+                self.TranslateChunks(self.TargetPosition, currChunkPos, (0, direction.1));
+            } else {
+                self.TranslateChunks(self.TargetPosition, currChunkPos, direction);
+            }
         }
         self.TargetPosition = currChunkPos;
         self.RenderListUpdate();
@@ -124,29 +147,37 @@ impl World{
 
     fn generateChunk(&mut self, chunkPositions: Vec<na::Vector2<i32>>){
 
-        let chunks = self.Chunks.clone();
         let blockReg = self.BlockRegistry.clone();
         let biomeGens = self.BiomeGenerators.clone();
+        let queque = self.CreationQueue.clone();
+
         rayon::spawn(move || {
-            let mut i = 0;
+
+            //TODO add a queue for this guy to work through. Each time this method is called a new thread is dispatched
+            //TODO the queue is to just add on work so that only a single thread is going through all of them
+            //TODO to have a single thread, only spawn a new thread if the queue is empty
+            const THROTTLE: u128 = (1000_u128 / 60_u128) / MAX_CHUNK_GENERATION_PER_FRAME as u128; //in milliseconds
+
             for pos in &chunkPositions {
-                let len = chunks.lock().unwrap().len();
-                println!("capcity {} size {} ", chunks.lock().unwrap().capacity(), len);
+                let start = std::time::Instant::now();
                 let mut chunk = Chunk::New((pos.x, pos.y), 0f32);
                 //generate the blocks...
                 chunk.GenerateBlocks(biomeGens.lock().unwrap().get_mut(&Biome::Forest).unwrap());
                 //then generate the mesh...
                 chunk.GenerateMesh(&[None; 4], &*blockReg, false);
                 //then add to the chunks dictionary...
-                chunks.lock().unwrap().insert(*pos, chunk);
-                //println!("done! {}", i);
-                i += 1;
+                queque.lock().unwrap().push_front((pos.clone(), chunk));
+
+                //TODO add some throttling
+                if start.elapsed().as_millis() < THROTTLE {
+                    thread::sleep(std::time::Duration::from_millis((THROTTLE - start.elapsed().as_millis()) as u64));
+                }
 
             }
-            println!("done!");
+            //println!("done! {}", queque.lock().unwrap().len());
         });
         println!("done on main thread!");
-        println!("len {}", self.Chunks.lock().unwrap().len());
+        //println!("len {}", self.Chunks.len());
     }
 
     fn TranslateChunks(&mut self, oldPos: (i32, i32), newPos: (i32, i32), direc: (i32, i32)){
@@ -188,7 +219,7 @@ impl World{
         for a in -self.RenderDistance..=self.RenderDistance {
             for b in -self.RenderDistance..=self.RenderDistance {
                 let pos = na::Vector2::new(a + self.TargetPosition.0, b + self.TargetPosition.1);
-                if let Some(chunk) = self.Chunks.lock().unwrap().get(&pos){
+                if let Some(chunk) = self.Chunks.get(&pos){
                     self.RenderList.insert(chunk as *const Chunk);
                 }
      
@@ -223,7 +254,7 @@ impl World{
                      if increase {
                         newChunks.push(pos);
                      } else {
-                        self.Chunks.lock().unwrap().remove(&pos);
+                        self.Chunks.remove(&pos);
                      }
                 }
 
@@ -232,9 +263,9 @@ impl World{
         
         self.RenderDistance = renderDistance;
 
-        //everytime chunks internal buffer is reallocated (given a new capacity) the pointers in the render list get invalidated. Do this to be wary of that
-        self.RenderList.clear();
-        self.Chunks.lock().unwrap().reserve(((self.RenderDistance * 2 + 1) * (self.RenderDistance * 2 + 1)) as usize);
+        // //everytime chunks internal buffer is reallocated (given a new capacity) the pointers in the render list get invalidated. Do this to be wary of that
+        // self.RenderList.clear();
+        // self.Chunks.reserve(((self.RenderDistance * 2 + 1) * (self.RenderDistance * 2 + 1)) as usize);
         self.generateChunk(newChunks);
 
     }

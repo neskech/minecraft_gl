@@ -1,5 +1,5 @@
 
-use std::collections::HashSet;
+use std::collections::{HashSet, HashMap};
 use std::hash::Hash;
 use std::rc::Rc;
 use glium::{Surface, Blend, BlendingFunction, LinearBlendingFactor};
@@ -74,7 +74,7 @@ impl WorldRenderer{
 
     }
 
-    pub fn Render(&mut self, chunks: &HashSet<*const Chunk>, camera: &Camera, target: &mut glium::Frame){
+    pub fn Render(&mut self, chunks: &HashMap<nalgebra::Vector2<i32>, Chunk>, camera: &Camera, target: &mut glium::Frame){
 
         let behavior = glium::uniforms::SamplerBehavior {
             minify_filter: MinifySamplerFilter ::Nearest,
@@ -85,14 +85,20 @@ impl WorldRenderer{
        // let buffer = glium::VertexBuffer::dynamic(facade, data)
 
         unsafe {
-
+            let mut i = 0;
             for chunk in chunks {
+                let p = nalgebra::Vector3::new(chunk.0.x as f32 * CHUNK_BOUNDS_X as f32, 0f32, chunk.0.y as f32 * CHUNK_BOUNDS_Z as f32);
+                if ! camera.Fustrum.CheckChunk(&p, &(p + nalgebra::Vector3::new(CHUNK_BOUNDS_X as f32, CHUNK_BOUNDS_Y as f32, CHUNK_BOUNDS_Z as f32))) {
+                    continue;
+                }
+
+
                 let dims = (self.TextureAtlas.Image.dimensions().0 as f32, self.TextureAtlas.Image.dimensions().1 as f32);
                 let uniforms = uniform! {
                     proj: camera.GetProjectionMatrix(),
                     view: camera.GetViewMatrix(),
                     atlas_cols: self.TextureAtlas.Columns as f32,
-                    chunk_pos: [(**chunk).Position.0 as f32, (**chunk).Position.1 as f32],
+                    chunk_pos: [chunk.1.Position.0 as f32, chunk.1.Position.1 as f32],
                     atlas: glium::uniforms::Sampler(&self.TextureAtlas.Texture, behavior)
                 };
 
@@ -103,8 +109,8 @@ impl WorldRenderer{
             //             //println!("Vert {:?}", *mapping.add(i));
             //         }
             //     }
-                unsafe { mapping.copy_from((**chunk).Mesh.as_ptr(), (**chunk).Mesh.len()); }
-                let slice = self.IndexBuffer.slice(0 .. (**chunk).Mesh.len() / 4 * 6).unwrap();
+                unsafe { mapping.copy_from(chunk.1.Mesh.as_ptr(), chunk.1.Mesh.len()); }
+                let slice = self.IndexBuffer.slice(0 .. chunk.1.Mesh.len() / 4 * 6).unwrap();
         
                 let params = glium::DrawParameters {
                     depth: glium::Depth {
@@ -123,9 +129,11 @@ impl WorldRenderer{
 
                 target.draw(&self.VertexBuffer, &slice, &self.Shader, &uniforms,
                     &params).unwrap();
+                i += 1;
             }
             
             // unsafe { mapping.copy_from(self.EmptyBuffer.as_ptr(), chunk.Mesh.len()); }
+            println!("Chunks drawn {} and cam pos y {}", i, camera.Position.y);
         }
 
     }
