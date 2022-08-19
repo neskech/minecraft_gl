@@ -69,6 +69,6 @@ out vec4 Color;
 void main(){
       vec4 val = texture(atlas, fuvs);
       float mult = values[int(faceID)];
-      Color = vec4(val.x * mult, val.y * mult, val.z * mult, val.w);
-      //Color = vec4(1.0, 0.0, 1.0, 1.0);
+     // Color = vec4(val.x * mult, val.y * mult, val.z * mult, val.w);
+      Color = vec4(0.6 * mult, 0.1 * mult, 0.3 * mult, 1.0);
 }

@@ -2,7 +2,7 @@
 use std::collections::{HashSet, HashMap};
 use std::hash::Hash;
 use std::rc::Rc;
-use glium::{Surface, Blend, BlendingFunction, LinearBlendingFactor};
+use glium::{Surface, Blend, BlendingFunction, LinearBlendingFactor, PolygonMode};
 use glium::uniforms::{MinifySamplerFilter, MagnifySamplerFilter};
 use image::GenericImageView;
 use crate::Scene::camera::Camera;
@@ -82,58 +82,50 @@ impl WorldRenderer{
             ..Default::default()
         };
 
-       // let buffer = glium::VertexBuffer::dynamic(facade, data)
+        let mut i = 0;
+        for chunk in chunks {
 
-        unsafe {
-            let mut i = 0;
-            for chunk in chunks {
-                let p = nalgebra::Vector3::new(chunk.0.x as f32 * CHUNK_BOUNDS_X as f32, 0f32, chunk.0.y as f32 * CHUNK_BOUNDS_Z as f32);
-                if ! camera.Fustrum.CheckChunk(&p, &(p + nalgebra::Vector3::new(CHUNK_BOUNDS_X as f32, CHUNK_BOUNDS_Y as f32, CHUNK_BOUNDS_Z as f32))) {
-                    continue;
-                }
-
-
-                let dims = (self.TextureAtlas.Image.dimensions().0 as f32, self.TextureAtlas.Image.dimensions().1 as f32);
-                let uniforms = uniform! {
-                    proj: camera.GetProjectionMatrix(),
-                    view: camera.GetViewMatrix(),
-                    atlas_cols: self.TextureAtlas.Columns as f32,
-                    chunk_pos: [chunk.1.Position.0 as f32, chunk.1.Position.1 as f32],
-                    atlas: glium::uniforms::Sampler(&self.TextureAtlas.Texture, behavior)
-                };
-
-            // self.VertexBuffer.write(&chunk.Mesh);
-            let mapping = self.VertexBuffer.map().as_mut_ptr();
-            //     for i in 0..chunk.Mesh.len() {
-            //         unsafe { *mapping.add(i) = chunk.Mesh[i]; 
-            //             //println!("Vert {:?}", *mapping.add(i));
-            //         }
-            //     }
-                unsafe { mapping.copy_from(chunk.1.Mesh.as_ptr(), chunk.1.Mesh.len()); }
-                let slice = self.IndexBuffer.slice(0 .. chunk.1.Mesh.len() / 4 * 6).unwrap();
-        
-                let params = glium::DrawParameters {
-                    depth: glium::Depth {
-                        test: glium::draw_parameters::DepthTest::IfLess,
-                        write: true,
-                        .. Default::default()
-                    },
-                    blend: glium::draw_parameters::Blend::alpha_blending(),
-                    //blend: Blend { color: BlendingFunction::Subtraction { source: (), destination: LinearBlendingFactor::OneMinusSourceAlph }, alpha: LinearBlendingFactor::OneMinusSourceAlpha, ..Default::default() },
-                // backface_culling: glium::BackfaceCullingMode::CullClockwise,
-
-                    .. Default::default()
-                };
-
-            
-
-                target.draw(&self.VertexBuffer, &slice, &self.Shader, &uniforms,
-                    &params).unwrap();
-                i += 1;
+            let p = nalgebra::Vector3::new(chunk.0.x as f32 * CHUNK_BOUNDS_X as f32, 0f32, chunk.0.y as f32 * CHUNK_BOUNDS_Z as f32);
+            if ! camera.Fustrum.CheckChunk(&p, &(p + nalgebra::Vector3::new(CHUNK_BOUNDS_X as f32, CHUNK_BOUNDS_Y as f32, CHUNK_BOUNDS_Z as f32))) {
+                continue;
             }
-            
-            // unsafe { mapping.copy_from(self.EmptyBuffer.as_ptr(), chunk.Mesh.len()); }
-            println!("Chunks drawn {} and cam pos y {}", i, camera.Position.y);
+
+
+            let dims = (self.TextureAtlas.Image.dimensions().0 as f32, self.TextureAtlas.Image.dimensions().1 as f32);
+            let uniforms = uniform! {
+                proj: camera.GetProjectionMatrix(),
+                view: camera.GetViewMatrix(),
+                atlas_cols: self.TextureAtlas.Columns as f32,
+                chunk_pos: [chunk.1.Position.0 as f32, chunk.1.Position.1 as f32],
+                atlas: glium::uniforms::Sampler(&self.TextureAtlas.Texture, behavior)
+            };
+
+      
+      
+            let mapping = self.VertexBuffer.map().as_mut_ptr();
+            unsafe { mapping.copy_from(chunk.1.Mesh.as_ptr(), chunk.1.Mesh.len()); }
+
+
+            let slice = self.IndexBuffer.slice(0 .. chunk.1.Mesh.len() / 4 * 6).unwrap();
+    
+            let params = glium::DrawParameters {
+                depth: glium::Depth {
+                    test: glium::draw_parameters::DepthTest::IfLess,
+                    write: true,
+                    .. Default::default()
+                },
+                blend: glium::draw_parameters::Blend::alpha_blending(),
+                //blend: Blend { color: BlendingFunction::Subtraction { source: (), destination: LinearBlendingFactor::OneMinusSourceAlph }, alpha: LinearBlendingFactor::OneMinusSourceAlpha, ..Default::default() },
+            backface_culling: glium::BackfaceCullingMode::CullClockwise,
+                polygon_mode: PolygonMode::Line,
+
+                .. Default::default()
+            };
+
+        
+            target.draw(&self.VertexBuffer, &slice, &self.Shader, &uniforms,
+                &params).unwrap();
+
         }
 
     }

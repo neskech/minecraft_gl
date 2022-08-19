@@ -5,10 +5,10 @@ use rand::Rng;
 
 use crate::{Scene::camera::Camera, World::biomeGenerator::Biome, Renderer::renderer};
 
-use super::{block::BlockRegistry, chunk::{Chunk, CHUNK_BOUNDS_X, CHUNK_BOUNDS_Z, GenerateMesh, CHUNK_BOUNDS_Y}, item::ItemRegistry, crafting::CraftingRegistry, biomeGenerator::{BiomeGenerator, NoiseParameters}, ReadBiomeGenerators};
+use super::{block::BlockRegistry, chunk::{Chunk, CHUNK_BOUNDS_X, CHUNK_BOUNDS_Z, CHUNK_BOUNDS_Y}, item::ItemRegistry, crafting::CraftingRegistry, biomeGenerator::{BiomeGenerator, NoiseParameters}, ReadBiomeGenerators};
 
 
-const DEFAULT_RENDER_DISTANCE: i32 = 3;
+const DEFAULT_RENDER_DISTANCE: i32 = 1;
 const MAX_CHUNK_GENERATION_PER_FRAME: usize = 1;
 const MAX_RENDER_DISTANCE: i32= 10;
 
@@ -90,14 +90,14 @@ impl World{
     }
 
     pub fn Update(&mut self, targetPos: (f32, f32), camera: &Camera){
-        if self.RemovalQueue.len() > 0 {
-             println!("Breaking with {} size", self.RemovalQueue.len());
-        }
+    //     if self.RemovalQueue.len() > 0 {
+    //          println!("Breaking with {} size", self.RemovalQueue.len());
+    //     }
 
-        let l = self.CreationQueue.lock().unwrap().len();
-        if l > 0 {
-            println!("Creation with {} size", l);
-       }
+    //     let l = self.CreationQueue.lock().unwrap().len();
+    //     if l > 0 {
+    //         println!("Creation with {} size", l);
+    //    }
 
 
         while self.RemovalQueue.len() > 0 {
@@ -151,36 +151,102 @@ impl World{
         let biomeGens = self.BiomeGenerators.clone();
         let queque = self.CreationQueue.clone();
 
+        let mut adj = HashMap::with_capacity(chunkPositions.len());
+        let d = [-1, 1_i32];
+        for vec in &chunkPositions {
+            let mut arr: [Option<usize>; 4] = [None; 4];
+
+            //[(--1, 0), (1, 9), (0, -1), (0, 1)]
+            for a in 0..2 {
+                let v = na::Vector2::new(d[a] + vec.x, vec.y);
+                arr[a] = if self.Chunks.contains_key(&v) {Some(&self.Chunks[&v] as *const _ as usize)} else {None};
+
+                let v = na::Vector2::new(vec.x, d[a] + vec.y);
+                arr[a +  2] = if self.Chunks.contains_key(&v) {Some(&self.Chunks[&v] as *const _ as usize)} else {None};
+            }
+
+            adj.insert(*vec, arr);
+        }
+
+
+        const THROTTLE: u128 = (1000_u128 / 60_u128) / MAX_CHUNK_GENERATION_PER_FRAME as u128; //in milliseconds
+
         rayon::spawn(move || {
 
             //TODO add a queue for this guy to work through. Each time this method is called a new thread is dispatched
             //TODO the queue is to just add on work so that only a single thread is going through all of them
             //TODO to have a single thread, only spawn a new thread if the queue is empty
-            const THROTTLE: u128 = (1000_u128 / 60_u128) / MAX_CHUNK_GENERATION_PER_FRAME as u128; //in milliseconds
 
+            let mut regenMap = HashMap::with_capacity(chunkPositions.len());
             for pos in &chunkPositions {
                 let start = std::time::Instant::now();
+
                 let mut chunk = Chunk::New((pos.x, pos.y), 0f32);
                 //generate the blocks...
                 chunk.GenerateBlocks(biomeGens.lock().unwrap().get_mut(&Biome::Forest).unwrap());
-                //then generate the mesh...
-                chunk.GenerateMesh(&[None; 4], &*blockReg, false);
-                //then add to the chunks dictionary...
-                queque.lock().unwrap().push_front((pos.clone(), chunk));
+                regenMap.insert(*pos, chunk);
 
-                //TODO add some throttling
                 if start.elapsed().as_millis() < THROTTLE {
                     thread::sleep(std::time::Duration::from_millis((THROTTLE - start.elapsed().as_millis()) as u64));
                 }
 
             }
-            //println!("done! {}", queque.lock().unwrap().len());
+
+            //TODO can omit the use of so many hashmaps and can instead 
+            //TODO have a vector of these chunks where the index correspond to the chunk posistions array
+            let d = [-1, 1_i32];
+            for vec in &chunkPositions{
+    
+                //[(--1, 0), (1, 9), (0, -1), (0, 1)]
+                let arr = adj.get_mut(vec).unwrap();
+                for a in 0..2 {
+                    if arr[a].is_none() {
+                        let v = na::Vector2::new(d[a] + vec.x, vec.y);
+                        arr[a] = if regenMap.contains_key(&v) {Some(&regenMap[&v] as *const _ as usize)} else {None};
+                    }
+                    
+                    if arr[a + 2].is_none() {
+                        let v = na::Vector2::new(vec.x, d[a] + vec.y);
+                        arr[a +  2] = if regenMap.contains_key(&v) {Some(&regenMap[&v] as *const _ as usize)} else {None};
+                    }
+                }
+
+               // println!("chunk {:?} with adj {:?} {}", vec, adj[idx], regenMap.contains_key(&na::Vector2::new(-1 ,-1)));
+            }
+
+            for (pos, mut chunk) in regenMap.into_iter() {
+                let start = std::time::Instant::now();
+
+                let mut arr = [None; 4];
+                
+                let a = adj[&pos];
+                for i in 0..4 {
+                    if let Some(u) = a[i] {
+                         arr[i] = Some(u as *const Chunk);
+                    } else {
+                        arr[i] = None;
+                    }
+                }
+
+
+                //println!("{:?}", arr);
+
+                chunk.GreedyMesh(&arr, &*blockReg);
+                //then add to the chunks dictionary...
+                queque.lock().unwrap().push_front((pos.clone(), chunk));
+
+                 if start.elapsed().as_millis() < THROTTLE {
+                    thread::sleep(std::time::Duration::from_millis((THROTTLE - start.elapsed().as_millis()) as u64));
+                }
+            }
+       
         });
         println!("done on main thread!");
-        //println!("len {}", self.Chunks.len());
+
     }
 
     fn TranslateChunks(&mut self, oldPos: (i32, i32), newPos: (i32, i32), direc: (i32, i32)){
+        //TODO need to remesh chunks adjacent to new chunks
       
         //calculate the stuff that needs to be removed and the stuff that needs to be added
         //make a vec of positions to add and parallel iterate over that

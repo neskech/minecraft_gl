@@ -57,7 +57,7 @@ impl Application{
         let cb = glutin::ContextBuilder::new()
         .with_depth_buffer(24)
         .with_gl(glutin::GlRequest::Specific(Api::OpenGl, (4, 1)))
-        .with_vsync(true);
+        .with_vsync(false);
 
         //construct the display and return it along with the event loop
         let display = glium::Display::new(wb, cb, &eventLoop).unwrap();
@@ -81,13 +81,13 @@ impl Application{
             match event {
                 glutin::event::Event::RedrawRequested(_) => {
                     let mut target = display.draw();
-                    target.clear_color_and_depth((0.0, 0.0, 1.0, 1.0), 1.0);
+                    target.clear_color_and_depth((1.0, 1.0, 1.0, 1.0), 1.0);
 
                     //get the delta time
                     now = std::time::SystemTime::now();
                     delta = now.duration_since(then).unwrap().as_secs_f32();
                     //println!("{}", 1f32 / delta);
-                   // println!("Delta {}", 1f32 / delta);
+                    //println!("Delta {}", 1f32 / delta);
                     then = std::time::SystemTime::now();
                     
                     //main game logic happens here
