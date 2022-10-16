@@ -15,7 +15,8 @@ pub const BLOCK_TEXTURE_RESOLUTION: u32 = 64;
 
 #[derive(Clone, Copy, Debug)]
 pub struct Vertex{
-   pub Data: u32
+   pub Core: u32,
+   pub Dims: u32,
 }
 
 pub struct WorldRenderer{
@@ -28,7 +29,7 @@ pub struct WorldRenderer{
 //TODO change all the errors to be Result<_, Str&> to avoid heap allcoation
 impl WorldRenderer{
     pub fn New(resourceManager: &mut ResourceManager, atlas: TextureAtlas, display: &glium::Display) -> Self {
-        implement_vertex!(Vertex, Data);
+        implement_vertex!(Vertex, Core, Dims);
 
         let path = "./minecraft_gl/assets/shaders/world.glsl";
         let shader = resourceManager.GetShader(path, display);
@@ -116,8 +117,8 @@ impl WorldRenderer{
                 },
                 blend: glium::draw_parameters::Blend::alpha_blending(),
                 //blend: Blend { color: BlendingFunction::Subtraction { source: (), destination: LinearBlendingFactor::OneMinusSourceAlph }, alpha: LinearBlendingFactor::OneMinusSourceAlpha, ..Default::default() },
-            backface_culling: glium::BackfaceCullingMode::CullClockwise,
-                polygon_mode: PolygonMode::Line,
+           // backface_culling: glium::BackfaceCullingMode::CullClockwise,
+                //polygon_mode: PolygonMode::Line,
 
                 .. Default::default()
             };

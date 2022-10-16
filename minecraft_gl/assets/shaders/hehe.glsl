@@ -10,14 +10,12 @@ uniform mat4 view;
 uniform vec2 chunk_pos;
 uniform float atlas_cols;
 
-out vec2 fuv_top;
-out vec2 fuv_width;
+out vec2 fuvs;
 out float faceID;
-out float tile_size;
 
 const vec2 offsets[4] = vec2[4](
-    vec2(0, 0), vec2(1, 0),
-    vec2(0, 1), vec2(1, 1)
+    vec2(1, 1), vec2(0, 1),
+    vec2(1, 0), vec2(0, 0)
 );
 
 void main(){
@@ -28,22 +26,18 @@ void main(){
     float z = float( (Core >> 4u) & 0xFu ) + chunk_pos.y * 15.0;
     float y = float( (Core >> 8u) & 0xFFu );
 
-    vec2 fdims = vec2(float(Dims & 0xFFFFu), float((Dims >> 16u) & 0xFFFFu));
-
     uint texID = (Core >> 16u) & 0xFFu; //8 bits
     uint quadID = (Core >> 24u) & 0x3u; //2 bits
     faceID = float((Core >> 26u) & 0x7u); //3 bits
 
     float row = floor(float(texID) / atlas_cols);
     float col = float(texID % uint(atlas_cols));
-    float tile_dims = 1.0 / atlas_cols;
-    tile_size = tile_dims;
+    float dims = 1.0 / atlas_cols;
 
-    vec2 top_left_uv = vec2(col * tile_dims, row * tile_dims);
-    //top_left_uv += offsets[quadID] * tile_dims;
+    vec2 top_left_uv = vec2(col * dims, row * dims);
+    top_left_uv += offsets[quadID] * dims;
     top_left_uv.y = 1.0 - top_left_uv.y;
-    fuv_top = top_left_uv;
-    fuv_width = offsets[quadID] * fdims * tile_dims;
+    fuvs = top_left_uv;
 
     gl_Position = proj * view * vec4(x, y, z, 1.0);
 }
@@ -53,10 +47,10 @@ void main(){
 
 uniform sampler2D atlas;
 
-
-in vec2 fuv_top;
-in vec2 fuv_width;
-in float tile_size;
+// in int texID;
+// in int quadID;
+// in int faceID;
+in vec2 fuvs;
 in float faceID;
 
 const float values[6] = float[6](
@@ -74,8 +68,7 @@ const vec3 normals[6] = vec3[6](
 out vec4 Color;
 
 void main(){
-      vec4 val = texture(atlas, vec2(fuv_top.x + mod(fuv_width.x, tile_size), fuv_top.y - mod(fuv_width.y, tile_size)));
-      //vec4 val = texture(atlas, vec2(fuv_top.x, fuv_top.y));
+      vec4 val = texture(atlas, fuvs);
       float mult = values[int(faceID)];
       Color = vec4(val.x * mult, val.y * mult, val.z * mult, val.w);
       //Color = vec4(0.6 * mult, 0.1 * mult, 0.3 * mult, 1.0);

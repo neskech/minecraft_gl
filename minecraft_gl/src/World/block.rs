@@ -323,7 +323,7 @@ impl BlockRegistry{
                  let mut texData = TextureSix { Textures: texs, TextureID: textureCount, Offsets: [0; 6] };
 
                  /*
-                    This pioece of code determines the offset for each texture
+                    This piece of code determines the offset for each texture
                     What we do is we query if a texture has already been seen before,
                     which with the use of a hashmap is O(1). The we get the offset of that
                     particular texture, which is the value of the hashmap.
