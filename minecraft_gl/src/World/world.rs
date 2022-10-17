@@ -3,7 +3,7 @@ use nalgebra as na;
 use bracket_noise::prelude::FastNoise;
 use rand::Rng;
 
-use crate::{Scene::camera::Camera, World::biomeGenerator::Biome, Renderer::renderer};
+use crate::{Scene::camera::Camera, World::{biomeGenerator::Biome, block}, Renderer::renderer};
 
 use super::{block::BlockRegistry, chunk::{Chunk, CHUNK_BOUNDS_X, CHUNK_BOUNDS_Z, CHUNK_BOUNDS_Y}, item::ItemRegistry, crafting::CraftingRegistry, biomeGenerator::{BiomeGenerator, NoiseParameters}, ReadBiomeGenerators};
 
@@ -224,7 +224,7 @@ impl World{
                     if let Some(u) = a[i] {
                          arr[i] = Some(u as *const Chunk);
                     } else {
-                        arr[i] = None;
+                         arr[i] = None;
                     }
                 }
 
@@ -232,6 +232,7 @@ impl World{
                 //println!("{:?}", arr);
 
                 chunk.GreedyMesh(&arr, &*blockReg);
+                //chunk.GenerateMesh(&arr, &*blockReg, false);
                 //then add to the chunks dictionary...
                 queque.lock().unwrap().push_front((pos.clone(), chunk));
 
@@ -335,6 +336,8 @@ impl World{
         self.generateChunk(newChunks);
 
     }
+
+    
 
 
 }

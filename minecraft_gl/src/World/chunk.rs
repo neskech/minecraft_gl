@@ -155,7 +155,7 @@ impl Chunk{
             let mut block = self.Blocks[To1Di(( x[0],
                  x[1],
                  x[2])) as usize].clone();
-            if block == Block::Air() && x[dim] != dimensions[dim] as i32
+            if block == Block::Air() && x[dim] < dimensions[dim] as i32 - 1
             {
                 x[dim] += 1;
                 block = self.Blocks[To1Di(( x[0],
@@ -167,6 +167,64 @@ impl Chunk{
             }
             x[dim] = temp;
             block
+        };
+
+        let getBlockDos = |x: &mut [i32; 3], dim: usize| -> Block {
+            let mut arr = x.clone();
+            let idx = [(0, 1), (0, 0), (2, 3)]; //adjacent chunk indices
+
+            arr[dim] -= 1;
+         
+            if arr[dim] == -1 {
+                let tmp = arr[dim];
+                arr[dim] = dimensions[dim] as i32 - 1;
+                let chunk = adj[idx[dim].0];
+
+                if let Some(dat) = chunk {
+                    let block = unsafe { (*dat).Blocks[To1Di((arr[0], arr[1], arr[2])) as usize] };
+                    //if its a solid, then since the mask is true when we call this we know we don't
+                    //have two solids adjacent. As such, we know we must draw a face cooresponding to this block
+                    //If this block is air, then we know the block in bounds is solid so jump out of these nested ifs
+                    //and return the inbound block at the end
+                    if block != Block::Air() {
+                        return block;
+                    }
+          
+                }
+                arr[dim] = tmp;
+                
+            }
+            else if arr[dim] == dimensions[dim] as i32 - 1  {
+                let tmp = arr[dim];
+                arr[dim] = 0;
+                let chunk = adj[idx[dim].1];
+
+                if let Some(dat) = chunk {
+                    let block = unsafe { (*dat).Blocks[To1Di((arr[0], arr[1], arr[2])) as usize] };
+                    if block != Block::Air() {
+                        return block;
+                    }
+                }
+                arr[dim] = tmp;
+            }
+
+            //not out of bounds
+            arr[dim] = arr[dim].max(0);
+            let mut block = self.Blocks[To1Di(( arr[0],
+                arr[1],
+                arr[2])) as usize].clone();
+            if block == Block::Air() && arr[dim] < dimensions[dim] as i32 - 1
+            {
+                arr[dim] += 1;
+                block = self.Blocks[To1Di(( arr[0],
+                    arr[1],
+                    arr[2])) as usize].clone();
+
+            }
+
+            return block;
+            
+            
         };
 
         //TODO there are 2 faces per dimension. Imagine y, u have top and bottom face. Divide x[d] % 2 to get fID then add d * 2. Do euclid modulo b/c the -1
@@ -228,7 +286,17 @@ impl Chunk{
                         
                         //True in this case means we draw a face here. This happens if the adjacent blocks solidty are not the same
                         //For example, you wouldnt draw a face between two air or solid blocks. But you would draw one between an air and solid
-                        mask[n] = if currB.is_none() || compB.is_none() {false} else {currB != compB};  
+                        mask[n] = if currB.is_none() || compB.is_none() {false} else {currB.unwrap() != compB.unwrap()}; 
+                        // if ! (getBlock(&mut x, dim) == Block::Air() && (x[dim] == -1 || x[dim] + q[dim] >= dimensions[dim] as i32)) {
+                        //     mask[n] = if currB.is_none() || compB.is_none() {false} else {currB.unwrap() != compB.unwrap()}; 
+                        //     // mask[n] =  (currB.is_none() && compB.clone().unwrap()) || 
+                        //     // (compB.is_none() && currB.clone().unwrap())
+                        //     //  || currB.is_some() && compB.is_some() && currB.unwrap() != compB.unwrap();  
+                        // }
+                        
+                   
+
+
                         n += 1;
                         x[axis1] += 1;
                     }
@@ -252,7 +320,7 @@ impl Chunk{
 
                             //extend the width of this face as long as there are adjacent faces to the right of axis 1 (as determined by the mask)
                             //If an air block, then the next one will be a solid block
-                            let currBlock = getBlock(&mut x, dim);
+                            let currBlock = getBlockDos(&mut x, dim);
                             // if currBlock == Block::Air() {
                             //     let mut b = x.clone();
                             //     b[dim] += 1;
@@ -266,7 +334,7 @@ impl Chunk{
                             idx[axis1] += 1;
 
                             let mut w = 1;
-                            while i + w < dimensions[axis1] && mask[n + w] && currBlock == getBlock(&mut idx, dim) //TODO don't do &mut just clone it
+                            while i + w < dimensions[axis1] && mask[n + w] && currBlock == getBlockDos(&mut idx, dim) //TODO don't do &mut just clone it
                             { 
                                 w += 1;
                                 idx[axis1] += 1;
@@ -284,7 +352,7 @@ impl Chunk{
 
                                 for k in 0..w {
                                     //if there isn't a solid face present, the quad has a hole in it
-                                    if ! mask[k + n + h * dimensions[axis1]] || currBlock != getBlock(&mut idx, dim) { //n already includes the offset of j
+                                    if ! mask[k + n + h * dimensions[axis1]] || currBlock != getBlockDos(&mut idx, dim) { //n already includes the offset of j
                                         //perform a double break
                                         break_ = true;
                                         break;
@@ -309,8 +377,13 @@ impl Chunk{
                             //clear the mask to prevent the creation of duplicate faces
                            
                             //TODO DOES REM EUCLID MODIFY IT????
-                            let offsets = [0, 2, 4];
-                            let fID = (x[dim] - 1).rem_euclid(2) as i32 + offsets[dim];
+
+                            let mut tmpp = x.clone();
+                            tmpp[dim] += 1;
+                            let fID = (x[dim] != dimensions[dim] as i32 && getBlock(&mut tmpp, dim) == getBlockDos(&mut x, dim)) as i32
+                                              + dim as i32 * 2;
+
+
                             let mut texID = 7_i32;
                             //TODO textureData should not be an optional. Either its real or the null texture
                             if let Some(TextureData::SixSided(data)) = &blockRegistry.GetAttributesOf(&currBlock).TextureData {
@@ -329,7 +402,7 @@ impl Chunk{
                                 w = h;
                                 h = tmp;
                                 //offsets = [3, 2, 1, 0];
-                                println!("d1 {:?} d2 {:?}", d1, d2);
+                                //println!("d1 {:?} d2 {:?}", d1, d2);
                             }
                             addVert(x[0], x[1], x[2], texID, offsets[0], fID, w, h);                 // Top-left vertice position
                             addVert(x[0] + d1[0],x[1] + d1[1], x[2] + d1[2], texID, offsets[1], fID, w, h);       // Top right vertice position
@@ -360,6 +433,157 @@ impl Chunk{
                 }
             }
         }
+    }
+
+
+
+    pub fn GenerateMesh(&mut self, adjacentChunks: &[Option<*const Chunk>; 4], blockRegistry: &BlockRegistry, enableAdjacencyCulling: bool){
+        let directions = [na::Vector3::new(1i32, 0i32, 0i32), na::Vector3::new(-1i32, 0i32, 0i32), 
+                                                                   na::Vector3::new(0i32, 1i32, 0i32), na::Vector3::new(0i32, -1i32, 0i32),
+                                                                   na::Vector3::new(0i32, 0i32, 1i32), na::Vector3::new(0i32, 0i32, -1i32)];
+        let mut temp: Vec<Vertex> = Vec::new();
+        //println!("Chunks!! {:?}", adjacentChunks);                                                   
+        //Loop over each axis of the chunk
+        for x in 0..CHUNK_BOUNDS_X {
+            for y in 0..CHUNK_BOUNDS_Y {
+                for z in 0..CHUNK_BOUNDS_Z {
+    
+                    let mut faceID: u8 = 0;
+                    
+                    //push the mutable reference out of scope after this. That's why this is in a scope
+                    let currBlock = self.Blocks[To1DVec(na::Vector3::new(x as i32, y as i32, z as i32)) as usize].clone();
+    
+                    //If the current block is air, then there is nothing to draw. Continue...
+                    if currBlock.ID == 0 {
+                        continue;
+                    }
+                    //Each block has 6 faces in 6 different directions. Loop over each direction to build each face
+                    for direc in directions {
+                        //The 3D coordinate of a block in the direction of the current vector in this loop
+                        let new3D = na::Vector3::new(x as i32, y as i32, z as i32) + direc;
+                        //check for out of bounds on each axis
+                        let outX = new3D.x < 0 || new3D.x >= CHUNK_BOUNDS_X as i32;
+                        let outY = new3D.y < 0 || new3D.y >= CHUNK_BOUNDS_Y as i32;
+                        let outZ = new3D.z < 0 || new3D.z >= CHUNK_BOUNDS_Z as i32;
+    
+                        //grab the appropiate block based on these variables
+                        let mut adjacentBlock: Block = Block::Air();
+                        if outX {
+                            //the x index we use to sample from the adjacent chunk
+                            if new3D.x < 0 {
+                                let x = CHUNK_BOUNDS_X - 1;
+                                if let Some(val) = adjacentChunks[0] {
+                                        adjacentBlock = unsafe { (*val).Blocks[To1D((x, new3D.y as u32, new3D.z as u32)) as usize].clone() };
+                                }
+                                else if enableAdjacencyCulling {faceID += 1; continue}
+                            } else {
+                                let x = 0;
+                                if let Some(val) = adjacentChunks[1] {
+                                     adjacentBlock =  unsafe { (*val).Blocks[To1D((x, new3D.y as u32, new3D.z as u32)) as usize].clone() };
+                                    
+                                }
+                                else if enableAdjacencyCulling {faceID += 1; continue}
+                            }
+    
+                        }
+                        else if outZ {
+                            //the y index we use to sample from the adjacent chunk
+                            if new3D.z < 0 {
+                                let z = CHUNK_BOUNDS_Z - 1;
+                                if let Some(val) = adjacentChunks[2] {
+                                     adjacentBlock = unsafe { (*val).Blocks[To1D((new3D.x as u32, new3D.y as u32, z)) as usize].clone() };
+                                }
+                                else if enableAdjacencyCulling {faceID += 1; continue}
+                            } else {
+                                let z = 0;
+                                if let Some(val) = adjacentChunks[3] {
+                                      adjacentBlock = unsafe { (*val).Blocks[To1D((new3D.x as u32, new3D.y as u32, z)) as usize].clone() };
+                                }
+                                else if enableAdjacencyCulling {faceID += 1; continue}
+                            }
+                        }
+                        else if !outY { //Means y axis is not out of bounds
+                           
+                            adjacentBlock = self.Blocks[To1DVec(new3D) as usize].clone();
+                            
+                        }
+    
+                        if (adjacentBlock.ID != 0 && !blockRegistry.GetAttributesOf(&adjacentBlock).Decor) || new3D.y < 0{
+                            faceID += 1;
+                            continue;
+                        }
+    
+                        //Check if it is a decor block
+                        if blockRegistry.GetAttributesOf(&currBlock).Decor && y < CHUNK_BOUNDS_Y - 1 && x < CHUNK_BOUNDS_X - 1 && z < CHUNK_BOUNDS_Z - 1{ //TODO bounds check
+    
+                            let mut texID = 0;
+                            if let Some(TextureData::Decoration(data)) = &blockRegistry.GetAttributesOf(&currBlock).TextureData {
+                                    texID = data.TextureID;
+                            }
+    
+                            //Curr, +1 y, +1 y +1 x +1 z, +1x +1 z
+                            let offsets = [(0, 0, 0), (1, 0, 1), (0, 1, 0), (1, 1, 1)]; //TL, TR, BL, BR
+                            for i in 0..4 {
+                                let newPos = (x + offsets[i].0, y + offsets[i].1, z + offsets[i].2);
+                                let data =  newPos.0  | newPos.2 << 4 | newPos.1 << 8 |  texID << 16 | (i as u32) << 24 | (faceID as u32) << 26;
+                                let dims = 1 << 16 | 1;
+                                temp.push(Vertex { Core: data, Dims: dims } );
+                            }
+    
+                            let offsets = [(0, 0, 1), (1, 0, 0), (0, 1, 1), (1, 1, 0),]; //TL, TR, BL, BR
+                            for i in 0..4 {
+                                let newPos = (x  + offsets[i].0, y  + offsets[i].1, z  + offsets[i].2);
+                                let data =  (newPos.0 | newPos.2 << 4 | newPos.1 << 8 |  texID << 16 | (i as u32) << 24 | (0 as u32) << 26) as u32;
+                                let dims = 1 << 16 | 1;
+                                temp.push(Vertex { Core: data, Dims: dims } );
+                            }
+                            continue;
+                        }
+    
+    
+                        let offset = na::Vector3::new(0.5f32, 0.5f32, 0.5f32) + 0.5f32 * na::Vector3::new(direc.x as f32, direc.y as f32, direc.z as f32);
+                        let intOffset = na::Vector3::new(offset.x as i32, offset.y as i32, offset.z as i32);
+                        let axisA = na::Vector3::new(direc.y, direc.z, direc.x);
+                        let axisB = axisA.cross(&direc);
+     
+                        
+                        let off = [0, 1];
+                        for a in 0..2 {
+                            for b in 0..2 {
+                                let pos = axisA.abs() * off[a] + axisB.abs() * off[b] + na::Vector3::new(x as i32, y as i32, z as i32) + intOffset;
+                
+                                let mut texID = 0;
+                                //TODO textureData should not be an optional. Either its real or the null texture
+                                if let Some(TextureData::SixSided(data)) = &blockRegistry.GetAttributesOf(&currBlock).TextureData {
+                                    texID = data.TextureID + data.Offsets[faceID as usize];
+                                }
+        
+    
+                                let mut id = (a * 2 + b) as u32;
+                                if direc.x == 1 || direc.x == -1 {
+                                    id = (b * 2 + a) as u32;
+                                }
+                                let dat = ( pos.x  | pos.z << 4 | pos.y << 8 |  (texID as i32) << 16 | (id as i32) << 24 | (faceID as i32) << 26 ) as u32;
+                                let dims = 1 << 16 | 1;
+                                self.Mesh.push(Vertex { Core: dat, Dims: dims } );
+                               // println!("FACE ID {} and bits {:08b} and real {}", dat >> 24 & 0x7, dat >> 24 & 0x7, faceID);
+                            }
+                        }
+                    
+                        faceID += 1;
+                   }
+    
+                }
+    
+                
+            }
+    
+            }
+            //look in all 6 directions, only building faces if an air block is present
+            for item in &temp {
+                self.Mesh.push(*item);
+            }
+    
     }
 }
 pub fn To3D(idx: u32) -> (u32, u32, u32){
