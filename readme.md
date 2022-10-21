@@ -6,7 +6,8 @@ A *work in progress* Minecraft clone made using Rust and opengGL
 # Features
   -
       - Work in progress greedy meshing ![](./img/white.png) ![](./img/flaura.png)
-      - Dynamic creation of texture atlases at runtime ![](./minecraft_gl/assets/data/block/atlas/atlas.png)
+      - Dynamic creation of texture atlases at runtime
+      - ![](./minecraft_gl/assets/data/block/atlas/atlas.png)
       - Multithreaded chunk generation
 
  # Plans
