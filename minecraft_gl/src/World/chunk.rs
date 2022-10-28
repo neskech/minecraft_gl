@@ -287,6 +287,14 @@ impl Chunk{
                         //True in this case means we draw a face here. This happens if the adjacent blocks solidty are not the same
                         //For example, you wouldnt draw a face between two air or solid blocks. But you would draw one between an air and solid
                         mask[n] = if currB.is_none() || compB.is_none() {false} else {currB.unwrap() != compB.unwrap()}; 
+                        
+                        if currB.is_some() && compB.is_some() {
+                            let curb = currB.unwrap();
+                            let cmpb = compB.unwrap();
+                            if (curb && !cmpb && x[dim] == -1) || (!curb && cmpb && x[dim] + q[dim] >= dimensions[dim] as i32) {
+                                mask[n] = false;
+                            }
+                        }
                         // if ! (getBlock(&mut x, dim) == Block::Air() && (x[dim] == -1 || x[dim] + q[dim] >= dimensions[dim] as i32)) {
                         //     mask[n] = if currB.is_none() || compB.is_none() {false} else {currB.unwrap() != compB.unwrap()}; 
                         //     // mask[n] =  (currB.is_none() && compB.clone().unwrap()) || 
@@ -320,7 +328,7 @@ impl Chunk{
 
                             //extend the width of this face as long as there are adjacent faces to the right of axis 1 (as determined by the mask)
                             //If an air block, then the next one will be a solid block
-                            let currBlock = getBlockDos(&mut x, dim);
+                            let currBlock = getBlock(&mut x, dim);
                             // if currBlock == Block::Air() {
                             //     let mut b = x.clone();
                             //     b[dim] += 1;
@@ -334,7 +342,7 @@ impl Chunk{
                             idx[axis1] += 1;
 
                             let mut w = 1;
-                            while i + w < dimensions[axis1] && mask[n + w] && currBlock == getBlockDos(&mut idx, dim) //TODO don't do &mut just clone it
+                            while i + w < dimensions[axis1] && mask[n + w] && currBlock == getBlock(&mut idx, dim) //TODO don't do &mut just clone it
                             { 
                                 w += 1;
                                 idx[axis1] += 1;
@@ -352,7 +360,7 @@ impl Chunk{
 
                                 for k in 0..w {
                                     //if there isn't a solid face present, the quad has a hole in it
-                                    if ! mask[k + n + h * dimensions[axis1]] || currBlock != getBlockDos(&mut idx, dim) { //n already includes the offset of j
+                                    if ! mask[k + n + h * dimensions[axis1]] || currBlock != getBlock(&mut idx, dim) { //n already includes the offset of j
                                         //perform a double break
                                         break_ = true;
                                         break;
@@ -380,7 +388,7 @@ impl Chunk{
 
                             let mut tmpp = x.clone();
                             tmpp[dim] += 1;
-                            let fID = (x[dim] != dimensions[dim] as i32 && getBlock(&mut tmpp, dim) == getBlockDos(&mut x, dim)) as i32
+                            let fID = (x[dim] != dimensions[dim] as i32 && getBlock(&mut tmpp, dim) == getBlock(&mut x, dim)) as i32
                                               + dim as i32 * 2;
 
 

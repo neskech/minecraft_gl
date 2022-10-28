@@ -145,7 +145,11 @@ impl World{
    
     }
 
-    fn generateChunk(&mut self, chunkPositions: Vec<na::Vector2<i32>>){
+    fn generateChunk(&mut self, chunkPositions: Vec<na::Vector2<i32>>, remesh: Vec<(na::Vector2<i32>, Chunk)>){
+        //TODO add an extra Vec<(na::Vector2<i32>, ChunK)> param for remesh chunks
+        //TODO these remesh chunks will have to be removed from the chunks array
+        //TODO problem is those already-made chunks will be buffered at the back of the new chunks that need to be generated
+        //TODO creating a delay
 
         let blockReg = self.BlockRegistry.clone();
         let biomeGens = self.BiomeGenerators.clone();
@@ -153,7 +157,23 @@ impl World{
 
         let mut adj = HashMap::with_capacity(chunkPositions.len());
         let d = [-1, 1_i32];
+        //TODO do the same for remesh chunks
         for vec in &chunkPositions {
+            let mut arr: [Option<usize>; 4] = [None; 4];
+
+            //[(--1, 0), (1, 9), (0, -1), (0, 1)]
+            for a in 0..2 {
+                let v = na::Vector2::new(d[a] + vec.x, vec.y);
+                arr[a] = if self.Chunks.contains_key(&v) {Some(&self.Chunks[&v] as *const _ as usize)} else {None};
+
+                let v = na::Vector2::new(vec.x, d[a] + vec.y);
+                arr[a +  2] = if self.Chunks.contains_key(&v) {Some(&self.Chunks[&v] as *const _ as usize)} else {None};
+            }
+
+            adj.insert(*vec, arr);
+        }
+
+        for (vec, _) in &remesh {
             let mut arr: [Option<usize>; 4] = [None; 4];
 
             //[(--1, 0), (1, 9), (0, -1), (0, 1)]
@@ -176,6 +196,15 @@ impl World{
             //TODO add a queue for this guy to work through. Each time this method is called a new thread is dispatched
             //TODO the queue is to just add on work so that only a single thread is going through all of them
             //TODO to have a single thread, only spawn a new thread if the queue is empty
+            //TODO although that delay WILL have to be there, since the whole point of remeshing is grabbing adjacency
+            //TODO data from REGENERATED ADJACENT chunks, which need to be regenerated first in order to grab data from
+            //TODO as such, the delay is inevatible for the regeneration stage
+
+            //TODO solution could be to keep the old non-remeshed chunk and only replace it once the new one is ready
+            //TODO once new chunk is ready, remove the old one (removal qeuque) and add the new one (insertion queue)
+            //TODO requries copying of remeshed chunks
+            //TODO problem is the removal and insertion queues are async, so there's no real order to them. I could add
+            //TODO the removal chunk first THEN the insertion, but it could be that the new chunk is inserted FIRST then removed
 
             let mut regenMap = HashMap::with_capacity(chunkPositions.len());
             for pos in &chunkPositions {
@@ -192,6 +221,14 @@ impl World{
 
             }
 
+            //TODO AFTER THIS add all remesh chunks to the regen map
+            let mut vecs = Vec::new();
+
+            for (vec, chunk) in remesh.into_iter() {
+                regenMap.insert(vec, chunk);
+                vecs.push(vec);
+            }
+
             //TODO can omit the use of so many hashmaps and can instead 
             //TODO have a vector of these chunks where the index correspond to the chunk posistions array
             let d = [-1, 1_i32];
@@ -199,6 +236,26 @@ impl World{
     
                 //[(--1, 0), (1, 9), (0, -1), (0, 1)]
                 let arr = adj.get_mut(vec).unwrap();
+                for a in 0..2 {
+                    if arr[a].is_none() {
+                        let v = na::Vector2::new(d[a] + vec.x, vec.y);
+                        arr[a] = if regenMap.contains_key(&v) {Some(&regenMap[&v] as *const _ as usize)} else {None};
+                    }
+                    
+                    if arr[a + 2].is_none() {
+                        let v = na::Vector2::new(vec.x, d[a] + vec.y);
+                        arr[a +  2] = if regenMap.contains_key(&v) {Some(&regenMap[&v] as *const _ as usize)} else {None};
+                    }
+                }
+
+               // println!("chunk {:?} with adj {:?} {}", vec, adj[idx], regenMap.contains_key(&na::Vector2::new(-1 ,-1)));
+            }
+
+            //For remesh
+            for vec in vecs{
+    
+                //[(--1, 0), (1, 9), (0, -1), (0, 1)]
+                let arr = adj.get_mut(&vec).unwrap();
                 for a in 0..2 {
                     if arr[a].is_none() {
                         let v = na::Vector2::new(d[a] + vec.x, vec.y);
@@ -233,6 +290,7 @@ impl World{
 
                 chunk.GreedyMesh(&arr, &*blockReg);
                 //chunk.GenerateMesh(&arr, &*blockReg, false);
+                //TODO No need to put into removal queue as inserting into chunks hashmap will replace the previous chunk
                 //then add to the chunks dictionary...
                 queque.lock().unwrap().push_front((pos.clone(), chunk));
 
@@ -248,7 +306,7 @@ impl World{
 
     fn TranslateChunks(&mut self, oldPos: (i32, i32), newPos: (i32, i32), direc: (i32, i32)){
         //TODO need to remesh chunks adjacent to new chunks
-      
+        println!("translate with direc !!{:?}!!!!!", direc);
         //calculate the stuff that needs to be removed and the stuff that needs to be added
         //make a vec of positions to add and parallel iterate over that
         let size = (self.RenderDistance * 2 + 1) as i32;
@@ -271,14 +329,34 @@ impl World{
         let addRangeX = rangeFunc(direc.0, newPos.0, 1);
         let addRangeY = rangeFunc(direc.1, newPos.1, 1);
 
+        let mut remesh: Vec<(na::Vector2<i32>, Chunk)> = Vec::new(); //TODO do some capacity idk the calculation
+
         let mut vec = Vec::with_capacity(size as usize);
         for a in maybe_reverse_range(addRangeX.0, addRangeX.1) {
             for b in maybe_reverse_range(addRangeY.0, addRangeY.1) {
                 vec.push(na::Vector2::new(a, b));
+                //add adjacent chunks to be regenerated
+
+                let v = na::Vector2::new(a - direc.0, b - direc.1);
+                if ! self.Chunks.contains_key(&v) {
+                    println!("WJHAT THE FUCK!!!!!!");
+                    //ASSUME that if the chunk is not done generating yet its in the queue
+                    //It could already be past the regeneration stage (very likely)
+                    //Meaning by the time we add the new chunks, the chunk won't have that 
+                    //Information to go off of
+
+                    //If we add a 'dummy' chunk to the remesh list instead, then this will happen
+                    //1) The chunk in the queue gets finished and pushed to the chunks dictionary
+                    //2) The remesh (dummy) chunk gets put through the pipeline, eventually replacing the old one
+                    //TODO dummy chunks can be options ? 
+                    //remesh.push((v, Chunk::New((v.x, v.y), 0f32)));
+                    continue;
+                }
+                remesh.push((v, self.Chunks.get(&v).unwrap().clone()));
             }
         }
 
-        self.generateChunk(vec);
+        self.generateChunk(vec, remesh);
 
     }
 
@@ -313,6 +391,8 @@ impl World{
             ( (renderDistance * 2 + 1) * (renderDistance * 2 + 1) - (self.RenderDistance * 2 + 1) * (self.RenderDistance * 2 + 1) ).max(0) as usize
         );
 
+        let mut remesh: Vec<(na::Vector2<i32>, Chunk)> = Vec::new(); //TODO do some capacity idk the calculation
+        let d = [-1_i32, 1];
 
         for a in -renderDistance..=renderDistance {
             for b in -renderDistance..=renderDistance {
@@ -320,6 +400,29 @@ impl World{
                 if self.RenderDistance == 0 || (pos.x < -self.RenderDistance || pos.x > self.RenderDistance) && (pos.y < -self.RenderDistance || pos.y > self.RenderDistance) {
                      if increase {
                         newChunks.push(pos);
+
+                        //add adjacent chunks
+                        for a in d{
+                            for b in d{
+                                let v = na::Vector2::new(pos.x - a, pos.y - b);
+                                if self.Chunks.contains_key(&v) {
+                                    //Make sure this chunk isn't already in the remesh array
+                                    //TODO optomize this shit with hashing?????
+                                    let mut already_in = false;
+                                    for (vec, _) in &remesh {
+                                        if *vec == v {
+                                            already_in = true;
+                                            break;
+                                        }
+                                    }
+
+                                    if ! already_in {
+                                        remesh.push((v, self.Chunks.get(&v).unwrap().clone()));
+                                    }
+                                }
+                            }
+                        }
+
                      } else {
                         self.Chunks.remove(&pos);
                      }
@@ -333,7 +436,7 @@ impl World{
         // //everytime chunks internal buffer is reallocated (given a new capacity) the pointers in the render list get invalidated. Do this to be wary of that
         // self.RenderList.clear();
         // self.Chunks.reserve(((self.RenderDistance * 2 + 1) * (self.RenderDistance * 2 + 1)) as usize);
-        self.generateChunk(newChunks);
+        self.generateChunk(newChunks, remesh);
 
     }
 
