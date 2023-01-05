@@ -2,7 +2,7 @@
 
 A *work in progress* Minecraft clone made using Rust and opengGL
 
-Note: I'm reworking the chunk generation system so trying to run this project as of now will likely result in crashes
+Note: I'm reworking the chunk generation system so trying to run this project as of now will likely result in crashes or just simply not running
 
 # Features
   -
