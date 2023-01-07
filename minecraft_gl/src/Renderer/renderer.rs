@@ -1,4 +1,5 @@
 use std::collections::{HashSet, HashMap};
+use std::sync::Arc;
 
 use crate::Event::event::Event;
 use crate::Scene::camera::Camera;
@@ -38,7 +39,7 @@ impl Renderer{
        // self.SpriteRenderer.Init();
     }
 
-    pub fn Render(&mut self, chunks: &HashMap<nalgebra::Vector2<i32>, Chunk>, camera: &Camera, target: &mut glium::Frame){
+    pub fn Render(&mut self, chunks: &HashMap<nalgebra::Vector2<i32>, Arc<Chunk>>, camera: &Camera, target: &mut glium::Frame){
         self.WorldRenderer.Render(chunks, camera, target);
         self.SpriteRenderer.Render(camera, target);
     }

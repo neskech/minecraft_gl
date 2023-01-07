@@ -2,6 +2,7 @@
 use std::collections::{HashSet, HashMap};
 use std::hash::Hash;
 use std::rc::Rc;
+use std::sync::Arc;
 use glium::{Surface, Blend, BlendingFunction, LinearBlendingFactor, PolygonMode};
 use glium::uniforms::{MinifySamplerFilter, MagnifySamplerFilter};
 use image::GenericImageView;
@@ -75,7 +76,7 @@ impl WorldRenderer{
 
     }
 
-    pub fn Render(&mut self, chunks: &HashMap<nalgebra::Vector2<i32>, Chunk>, camera: &Camera, target: &mut glium::Frame){
+    pub fn Render(&mut self, chunks: &HashMap<nalgebra::Vector2<i32>, Arc<Chunk>>, camera: &Camera, target: &mut glium::Frame){
 
         let behavior = glium::uniforms::SamplerBehavior {
             minify_filter: MinifySamplerFilter ::Nearest,

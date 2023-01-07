@@ -13,7 +13,7 @@ impl<'a> WorldScene{
             World: World::New(craftingRegistry, blockRegistry, itemRegistry),
             Camera: Camera::New(),
         };
-
+        
         s.Init();
         s
     }

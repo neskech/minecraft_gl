@@ -116,7 +116,7 @@ impl Camera{
           //  println!("Direction {:?}, camRight {:?}, camUp {:?}", self.Direction, self.CameraRight, self.CameraUp);
         }
         else if let Event::KeyPressed(KeyPressedEvent { Key, ..}) = event {
-            let speed = 0.9f32;
+            let speed = 1.9f32;
             match *Key {
                 VirtualKeyCode::S => {
                     self.Position += self.Direction * speed;
@@ -132,7 +132,7 @@ impl Camera{
                 }
                 _ => {}
             }
-            println!("Position {:?}", self.Position);
+            //println!("Position {:?}", self.Position);
         }
         self.UpdateFustrum();
     }

@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, sync::Arc};
 use crate::Renderer::worldRenderer::Vertex;
 use super::{block::{Block, BlockRegistry, TextureData}, State, biomeGenerator::{Biome, BiomeGenerator}};
 use nalgebra as na;
@@ -115,7 +115,7 @@ impl Chunk{
         self.Blocks[To1DUsize((0, CHUNK_BOUNDS_Y as usize - 5, 0))] = Block { ID: 6 };
     }
 
-    pub fn GreedyMesh(&mut self, adj: &[Option<*const Chunk>; 4], blockRegistry: &BlockRegistry){
+    pub fn GreedyMesh(&mut self, adj: &[Option<Arc<Chunk>>; 4], blockRegistry: &BlockRegistry){
         let dimensions = [CHUNK_BOUNDS_X as usize, CHUNK_BOUNDS_Y as usize, CHUNK_BOUNDS_Z as usize];
 
         //TODO have this take in a global chunk cord and use it to index into the current chunk or adjacent chunks
@@ -138,7 +138,7 @@ impl Chunk{
                 return Some(self.Blocks[To1Di((arr[0], arr[1], arr[2])) as usize] != Block::Air());
             }
 
-            if let Some(dat) = adj[outIdx as usize] {
+            if let Some(dat) = adj[outIdx as usize].clone() {
 
                 return unsafe { Some((*dat).Blocks[To1Di((arr[0], arr[1], arr[2])) as usize] != Block::Air()) };
             }
@@ -178,7 +178,7 @@ impl Chunk{
             if arr[dim] == -1 {
                 let tmp = arr[dim];
                 arr[dim] = dimensions[dim] as i32 - 1;
-                let chunk = adj[idx[dim].0];
+                let chunk = adj[idx[dim].0].clone();
 
                 if let Some(dat) = chunk {
                     let block = unsafe { (*dat).Blocks[To1Di((arr[0], arr[1], arr[2])) as usize] };
@@ -197,7 +197,7 @@ impl Chunk{
             else if arr[dim] == dimensions[dim] as i32 - 1  {
                 let tmp = arr[dim];
                 arr[dim] = 0;
-                let chunk = adj[idx[dim].1];
+                let chunk = adj[idx[dim].1].clone();
 
                 if let Some(dat) = chunk {
                     let block = unsafe { (*dat).Blocks[To1Di((arr[0], arr[1], arr[2])) as usize] };
