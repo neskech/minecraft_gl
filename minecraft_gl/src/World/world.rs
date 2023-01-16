@@ -1,61 +1,48 @@
-use std::{collections::{HashSet, HashMap, VecDeque}, sync::{Arc, Mutex, mpsc::Receiver, atomic::AtomicBool}, hash::Hash, thread};
 use nalgebra as na;
 use bracket_noise::prelude::FastNoise;
 use rand::Rng;
 use std::sync::mpsc;
-use std::sync::atomic;
 
-use crate::{Scene::camera::Camera, World::{biomeGenerator::Biome, block}, Renderer::renderer};
+use std::{collections::{HashSet, HashMap, VecDeque}, 
+          sync::{Arc, Mutex, mpsc::Receiver}, thread
+         };
 
-use super::{block::BlockRegistry, chunk::{Chunk, CHUNK_BOUNDS_X, CHUNK_BOUNDS_Z, CHUNK_BOUNDS_Y}, item::ItemRegistry, crafting::CraftingRegistry, biomeGenerator::{BiomeGenerator, NoiseParameters}, ReadBiomeGenerators};
+use crate::{World::{block::BlockRegistry, 
+            chunk::{Chunk, CHUNK_BOUNDS_X, CHUNK_BOUNDS_Z}, 
+            item::ItemRegistry, crafting::CraftingRegistry, 
+            biomeGenerator::{BiomeGenerator, Biome, NoiseParameters}, 
+            ReadBiomeGenerators
+            }, Scene::camera::Camera
+           };
 
 
-const DEFAULT_RENDER_DISTANCE: i32 = 1;
-const MAX_CHUNK_GENERATION_PER_FRAME: usize = 1;
-const MAX_RENDER_DISTANCE: i32 = 10;
-
-const CHUNK_BIOME_DISTANCE_THRESHOLD: f32 = 0.2f32;
-
-const CHUNK_BATCH_SIZE: usize = 1;
-
-//TODO May be an issue where a chunk is added to the pipeline multiple times. Say if the user moved to fast, and as a chunk was in the
-//TODO remesh list it got added to the regeneration list. An issue?
-//TODO CHANGE chunk pos to i32's
-
+const DEFAULT_RENDER_DISTANCE: usize = 1;
+const MAX_RENDER_DISTANCE: usize = 10;
 
 pub struct World{
     pub Chunks: HashMap<na::Vector2<i32>, Arc<Chunk>>,
-
-    RenderDistance: i32,
-    TargetPosition: (i32, i32),
-
     pub RenderList: HashSet<*const Chunk>, //TODO change to basic list
 
-
-    //creation queue acts as an intermediary between the chunks dictionary and the other thread creating chunks
-    //this is so we don't have to lock the chunks dictionary, as it would have to be locked for 100% of the time as its being sent to the renderer
+    //Used for syncing the workers
     WorkerQueue: VecDeque<Vec<(bool, Chunk)>>,
     RemovalQueue: VecDeque<na::Vector2<i32>>,
-
     Reciever: Option<Receiver<Arc<Chunk>>>,
-
     IsWorking: Arc<Mutex<bool>>,
 
-
     BlockRegistry: Arc<BlockRegistry>,
-    ItemRegistry: ItemRegistry,
-    CraftingRegistry: CraftingRegistry,
+    ItemRegistry: ItemRegistry, //to be used
+    CraftingRegistry: CraftingRegistry, //to be used
 
     BiomeGenerators: Arc<Mutex<HashMap<Biome, Box<dyn BiomeGenerator + Send>>>>,
-    BiomeNoise: NoiseParameters,
-    BiomeNoiseGenerator: FastNoise,
+    BiomeNoise: NoiseParameters, //to be used
+    BiomeNoiseGenerator: FastNoise, //to be used
 
+    RenderDistance: usize,
+    TargetPosition: (i32, i32),
 }
 
 impl World{
     pub fn New(craftingRegistry: CraftingRegistry, blockRegistry: BlockRegistry, itemRegistry: ItemRegistry) -> Self{
-
-
         let mut rng = rand::thread_rng();
         let noise =  NoiseParameters {
             Octaves: 6,
@@ -68,24 +55,20 @@ impl World{
         let map = match ReadBiomeGenerators(&blockRegistry) {
             Ok(val) => val,
             Err(msg) => {
-                panic!("Error! World construction failed due to failure to read biome generators. The error:\n{}", msg.to_string())
+                panic!("Error! World construction failed due to failure to read 
+                        biome generators. The error:\n{}", msg.to_string())
             }
         };
 
    
         let mut self_ = Self{
-            Chunks: HashMap::with_capacity( ( (DEFAULT_RENDER_DISTANCE * 2 + 1) * (DEFAULT_RENDER_DISTANCE * 2 + 1) ) as usize),
-
-            RenderDistance: 0,
-            TargetPosition: (0i32, 0i32),
-
+            Chunks: HashMap::with_capacity( (DEFAULT_RENDER_DISTANCE * 2 + 1) * 
+                                            (DEFAULT_RENDER_DISTANCE * 2 + 1)),
             RenderList: HashSet::new(),
 
             WorkerQueue: VecDeque::new(),
             RemovalQueue: VecDeque::new(),
-
             Reciever: None,
-
             IsWorking: Arc::new(Mutex::new(false)),
 
             BlockRegistry: Arc::new(blockRegistry),
@@ -95,13 +78,16 @@ impl World{
             BiomeGenerators: Arc::new(Mutex::new(map)),
             BiomeNoise: noise,
             BiomeNoiseGenerator: FastNoise::new(),
+
+            RenderDistance: 0,
+            TargetPosition: (0i32, 0i32),
         };
 
         self_.RenderDistanceUpdate(DEFAULT_RENDER_DISTANCE);
         self_
     }
 
-    pub fn Update(&mut self, targetPos: (f32, f32), camera: &Camera){
+    pub fn Update(&mut self, targetPos: (f32, f32), _: &Camera){
         self.generationUpdate();
 
         while self.RemovalQueue.len() > 0 {
@@ -133,11 +119,8 @@ impl World{
             }
         }
 
-
-
         let currChunkPos = ToChunkPos(targetPos);
         if currChunkPos != self.TargetPosition {
-            println!("{:?}, {:?}, {:?}", currChunkPos, self.TargetPosition, (self.TargetPosition.0 - currChunkPos.0, self.TargetPosition.1 - currChunkPos.1));
             self.TranslateChunks(self.TargetPosition, currChunkPos);
         }
         self.TargetPosition = currChunkPos;
@@ -147,18 +130,18 @@ impl World{
     }
 
     fn generationUpdate(&mut self) {
-        //TODO first check if the current thread is still working
+        //first check if the current thread is still working
         let b = self.IsWorking.lock().unwrap().to_owned();
         if b || self.WorkerQueue.len() == 0 {
             return;
         }
 
-        //TODO then make a new vector of adjacents to send to the thread
+        //then make a new vector of adjacents to send to the thread
         let work = self.WorkerQueue.pop_front().unwrap();
         let mut buffer: Vec<(Chunk, bool, [Option<Arc<Chunk>>; 4])> = 
                     Vec::with_capacity(work.len());
 
-        //TODO add relevant adjacent chunks to the buffer
+        //add relevant adjacent chunks to the buffer
         let d = [-1, 1];
         for (remesh, chunk) in work.into_iter() {
             let pos = chunk.Position;
@@ -181,7 +164,7 @@ impl World{
             buffer.push((chunk, remesh, adj));
         }
 
-        //TODO spawn the thread
+        //spawn the thread
         let (tx, rx) = mpsc::channel();
         self.Reciever = Some(rx);
 
@@ -191,7 +174,7 @@ impl World{
         *isWorking.lock().unwrap() = true;
 
         thread::spawn(move || {
-            //TODO iterate through our buffer, generating chunk blocks
+            //iterate through our buffer, generating chunk blocks
             for (chunk, remesh, _) in &mut buffer {
                 //TODO add throttling
                 if ! *remesh {
@@ -204,7 +187,8 @@ impl World{
                 }
             }
 
-            //TODO add any new adjacencies from the chunks we just created
+            //add any new adjacencies from the chunks we just created
+            //TODO find a way to optomize this because copying all these chunks is bad ):
             let copy = buffer.clone();
             for (chunk_, _, adj) in &mut buffer {
                 let pos = chunk_.Position;
@@ -226,22 +210,21 @@ impl World{
                     }
                 }
             }
-            println!("HERE!!!");
-            //TODO now mesh the chunks
+
+            //now mesh the chunks
             for (mut chunk, _, adj) in buffer.into_iter() {
-                println!("{} {} {} {}", adj[0].is_some(), adj[1].is_some(), adj[2].is_some(), adj[3].is_some());
                 chunk.GreedyMesh(&adj, &blockReg);
-                tx.send(Arc::new(chunk));
+                tx.send(Arc::new(chunk)).unwrap();
             }
 
-            //TODO set the atomic bool to false or send a message to signify its all over
+            //set the bool to false or send a message to signify its all over
             *isWorking.lock().unwrap() = false;
 
         });
     }
 
     fn TranslateChunks(&mut self, oldPos: (i32, i32), newPos: (i32, i32)){
-        let radius = self.RenderDistance;
+        let radius: i32 = self.RenderDistance.try_into().unwrap();
 
         let inRadius = |pos: (i32, i32), center: (i32, i32) | {
             return pos.0 >= center.0 - radius &&
@@ -258,7 +241,6 @@ impl World{
                 let newPosOff = (newPos.0 + offX, newPos.1 + offY);
                 //First, add chunks that are in the newPos area and NOT in the oldPos area
                 if !inRadius(newPosOff, oldPos) {
-                    //TODO add this chunk pos to the pipeline
                     let chunk = Chunk::New(newPosOff, 0.0f32);
                     vec.push((false, chunk));
                 }
@@ -300,7 +282,6 @@ impl World{
                             break;
                         }
                     }
-
                     if exit {break;}
                 }
                 if exit {break};
@@ -310,22 +291,17 @@ impl World{
 
         self.WorkerQueue.push_back(vec);
 
-        //Now, we there could still be some chunks we wish to remove in the pipeline
-        //It's useless and a waste of computation to left them finish. so let us remove 
-        //Those chunks from the generation and removal queues
-        //TODO typedef vector2 to chunkpos
-        let map : HashMap<na::Vector2<i32>, u32> = HashMap::new();
         //TODO just send a message to the thread to quit its execution
-
         //TODO do this later. This is an optimization. It is not neccesary
 
     }
 
     pub fn RenderListUpdate(&mut self){
-        for a in -self.RenderDistance..=self.RenderDistance {
-            for b in -self.RenderDistance..=self.RenderDistance {
-                let pos = na::Vector2::new(a + self.TargetPosition.0, b + self.TargetPosition.1);
+        let extents: i32 = self.RenderDistance.try_into().unwrap();
 
+        for a in -extents..=extents {
+            for b in -extents..=extents {
+                let pos = na::Vector2::new(a + self.TargetPosition.0, b + self.TargetPosition.1);
 
                 if let Some(chunk) = self.Chunks.get(&pos){
                     self.RenderList.insert(chunk.as_ref() as *const Chunk);
@@ -337,10 +313,12 @@ impl World{
     }
 
 
-    pub fn RenderDistanceUpdate(&mut self, renderDistance: i32){
+    pub fn RenderDistanceUpdate(&mut self, renderDistance: usize){
         if renderDistance >= MAX_RENDER_DISTANCE {
-            eprintln!("Error! Cannot change render distance to {} since it is {} above the max render distance of {}!",
-            renderDistance, renderDistance - MAX_RENDER_DISTANCE, MAX_RENDER_DISTANCE);
+            eprintln!("Error! Cannot change render distance to {} 
+                      since it is {} above the max render distance of {}!",
+                      renderDistance, renderDistance - MAX_RENDER_DISTANCE,
+                      MAX_RENDER_DISTANCE);
             return;
         }
         else if renderDistance == self.RenderDistance {
@@ -350,31 +328,34 @@ impl World{
         let increase = renderDistance > self.RenderDistance;
 
         let target = self.TargetPosition;
-        let mut newChunks = Vec::with_capacity(
-            ( (renderDistance * 2 + 1) * (renderDistance * 2 + 1) - (self.RenderDistance * 2 + 1) * (self.RenderDistance * 2 + 1) ).max(0) as usize
-        );
+        let mut newChunks = Vec::with_capacity({
+            let sq = (renderDistance * 2 + 1) * (renderDistance * 2 + 1);
+            let sq2 = (self.RenderDistance * 2 + 1) * (self.RenderDistance * 2 + 1);
+            let rem = sq - sq2;
+            rem.max(0)
+        });
 
-        for a in -renderDistance..=renderDistance {
-            for b in -renderDistance..=renderDistance {
+        let extents: i32 = self.RenderDistance.try_into().unwrap();
+        for a in -extents..=extents {
+            for b in -extents..=extents {
+
                 let pos = na::Vector2::new(a + target.0, b + target.1);
-                if self.RenderDistance == 0 || (pos.x < -self.RenderDistance || pos.x > self.RenderDistance) && (pos.y < -self.RenderDistance || pos.y > self.RenderDistance) {
+
+                if self.RenderDistance == 0 || 
+                   (pos.x < -extents || pos.x > extents) && 
+                   (pos.y < -extents || pos.y > extents) 
+                {
                      if increase {
                         let chunk = Chunk::New((pos.x, pos.y), 0.0f32);
                         newChunks.push((false, chunk));
-
-                        //add adjacent chunks
-
-                     } else {
-                        //TODO WTF?? use removal queue!!
+                     } 
+                     else {
                         self.Chunks.remove(&pos);
                      }
                 }
-                //The new chunks go on the outer ring of the chunks array
-                //Remesh all chunks on the ORIGINAL outer ring
-                else if pos.x.abs() == self.RenderDistance && pos.y.abs() == self.RenderDistance {
-                    //WILL remesh this chunk ONLY once the outer ring is generated
-                    //The only missing adjacent chunk is the chunk on that outer ring
-                   // self.RemeshSet.insert(pos);
+                else if pos.x.abs() == extents && pos.y.abs() == extents{
+                    //Remesh all chunks on the ORIGINAL outer ring
+                    //TODO remesh the inner chunks
                 }
 
             }
@@ -382,7 +363,6 @@ impl World{
 
         self.RenderDistance = renderDistance;
         self.WorkerQueue.push_back(newChunks);
-
     }
 
     
@@ -393,12 +373,4 @@ impl World{
 fn ToChunkPos(pos: (f32, f32)) -> (i32, i32){
     (( ( pos.0 - if pos.0 < 0f32 {CHUNK_BOUNDS_X as f32} else {0f32} ) / CHUNK_BOUNDS_X as f32) as i32, 
     ( ( pos.1 - if pos.1 < 0f32 {CHUNK_BOUNDS_Z as f32} else {0f32} ) / CHUNK_BOUNDS_Z as f32) as i32)
-}
-
-fn maybe_reverse_range(init: i32, end: i32) -> Box<dyn Iterator<Item=i32>> {
-    if end < init {
-        Box::new((end..=init).rev())
-    } else {
-        Box::new((init..=end))
-    }
 }

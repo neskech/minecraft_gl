@@ -1,11 +1,8 @@
 
+#![allow(non_snake_case)] 
 #![allow(dead_code)]
-#![allow(non_snake_case)] //I need to stop changing my naming convenctions ):
-// #![feature(specialization)]
-#![feature(backtrace)]
 #![feature(trace_macros)]
 #![feature(core_intrinsics)]
-#![feature(core_c_str)]
 #![feature(concat_idents)]
 #![feature(cstr_from_bytes_until_nul)]
 #![feature(const_type_id)]

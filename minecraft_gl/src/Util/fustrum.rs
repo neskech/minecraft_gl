@@ -1,6 +1,4 @@
-use crate::{Core::application::WINDOW_SIZE, World::chunk::{CHUNK_BOUNDS_X, CHUNK_BOUNDS_Y, CHUNK_BOUNDS_Z}};
 use nalgebra as na;
-
 
 pub struct Fustrum {
     pub Planes: [na::Vector4<f32>; 6]

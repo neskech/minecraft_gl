@@ -4,11 +4,14 @@ pub mod blockBehavior;
 pub mod item;
 pub mod itemBehavior;
 pub mod chunk;
-mod biomeGenerator;
 pub mod world;
+mod biomeGenerator;
 use std::{io::BufReader, collections::HashMap};
-
-use self::{item::{ItemRegistry, ItemStack, ItemID}, block::{BlockRegistry, Block}, crafting::CraftingRegistry, biomeGenerator::{BiomeGenerator, Biome, GenerationData, HeightModifier, ForestGenerator}};
+use self::{item::{ItemRegistry, ItemStack, ItemID}, 
+           block::{BlockRegistry, Block}, crafting::CraftingRegistry, 
+           biomeGenerator::{BiomeGenerator, Biome, GenerationData, 
+           HeightModifier, ForestGenerator}
+          };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

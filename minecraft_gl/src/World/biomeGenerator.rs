@@ -230,7 +230,8 @@ impl BiomeGenerator for ForestGenerator {
                 self.HeightMapNoise.Apply(&mut self.Noise);
                 let heightNoisenoise = self.Noise.get_noise((x as i32 + chunkX * CHUNK_BOUNDS_X as i32) as f32, (z as i32 + chunkZ * CHUNK_BOUNDS_Z as i32) as f32);
                 let heightNoiseNormalized = (heightNoisenoise + 1f32) / 2f32;
-                let height = (self.GenData.HeightLevel as f32 + self.GenData.SurfaceAmplitude as f32 * heightNoiseNormalized) as u32;
+                let height = (self.GenData.HeightLevel as f32 + 
+                                   self.GenData.SurfaceAmplitude as f32 * heightNoiseNormalized) as u32;
                 heightMap[(z * CHUNK_BOUNDS_X + x) as usize] = height;
 
                 self.SelectionNoise.Apply(&mut self.Noise);

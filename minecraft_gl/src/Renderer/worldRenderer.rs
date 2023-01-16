@@ -1,9 +1,8 @@
 
-use std::collections::{HashSet, HashMap};
-use std::hash::Hash;
+use std::collections::HashMap;
 use std::rc::Rc;
 use std::sync::Arc;
-use glium::{Surface, Blend, BlendingFunction, LinearBlendingFactor, PolygonMode};
+use glium::Surface;
 use glium::uniforms::{MinifySamplerFilter, MagnifySamplerFilter};
 use image::GenericImageView;
 use crate::Scene::camera::Camera;
@@ -84,7 +83,6 @@ impl WorldRenderer{
             ..Default::default()
         };
 
-        let mut i = 0;
         for chunk in chunks {
 
             let p = nalgebra::Vector3::new(chunk.0.x as f32 * CHUNK_BOUNDS_X as f32, 0f32, chunk.0.y as f32 * CHUNK_BOUNDS_Z as f32);

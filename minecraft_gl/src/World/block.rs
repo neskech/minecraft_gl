@@ -19,7 +19,7 @@ use std::error::Error;
 use std::io::{BufReader, Write};
 use std::collections::{HashMap, HashSet};
 use std::fs::{self, File};
-use std::path::{PathBuf, Path, self};
+use std::path::{PathBuf, Path};
 use crate::Util::atlas::TextureAtlas;
 use super::{State, GenericError};
 use super::item::{Item, ItemID, ItemStack};
