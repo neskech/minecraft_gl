@@ -171,7 +171,8 @@ pub fn ReadAttributes(blockRegistry: &mut BlockRegistry, itemRegistry: &mut Item
 
     for placeBlock in dataItem {
         if blockRegistry.HasBlock(placeBlock.1.as_str()) {
-            let id = blockRegistry.NameToID(placeBlock.1.as_str());
+            let id = blockRegistry.NameToID(placeBlock.1.as_str()).expect(
+                format!("could not find {} in block registry", placeBlock.1).as_ref());
             let attrib = itemRegistry.ItemAttributes.get_mut(&placeBlock.0).unwrap();
             attrib.PlaceableBlock = Some(Block { ID: id} );
         }
@@ -265,7 +266,9 @@ pub fn ReadBiomeGenerators(blockRegistry: &BlockRegistry) -> Result<HashMap<Biom
         }
 
         if let Some(val) = json.get("Mantle") {
-            genData.Mantle = Some(Block { ID: blockRegistry.NameToID(val.as_str().unwrap()) });
+            genData.Mantle = Some(Block { ID: blockRegistry.NameToID(val.as_str().unwrap()).expect(
+                format!("could not find {} in block registry", val.as_str().unwrap()).as_ref()
+            ) });
         }
 
         if let Some(val) = json.get("Mantle Min Length") {
@@ -283,7 +286,9 @@ pub fn ReadBiomeGenerators(blockRegistry: &BlockRegistry) -> Result<HashMap<Biom
         }
 
         if let Some(val) = json.get("Core") {
-            genData.Core = Block { ID: blockRegistry.NameToID(val.as_str().unwrap()) };
+            genData.Core = Block { ID: blockRegistry.NameToID(val.as_str().unwrap()).expect(
+                format!("could not find {} in block registry", val.as_str().unwrap()).as_ref()
+            ) };
         }  else {
             return Err(GenericError::NewBoxed(
                 format!("The {} biome json has no property 'Core'. Fix the json file!", name)));
@@ -375,7 +380,10 @@ fn ReadBlockList(json: &serde_json::Value, biomeName: &str, propertyName: &str, 
     for val in arr {
         println!("VALUES\n\n{}", val.to_string());
         if let Some(v) = val.get("Name") {
-            let id = blockRegistry.NameToID(v.as_str().unwrap());
+            let name = v.as_str().unwrap();
+            let id = blockRegistry.NameToID(name).expect(
+                format!("could not find {} in block registry", name).as_ref()
+            );
             println!("ABout to write push value my little kitten :3");
             vec.push((Block {ID: id}, ReadHeightModifier(val, biomeName, propertyName)?));
         }

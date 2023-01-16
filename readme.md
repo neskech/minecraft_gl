@@ -2,7 +2,8 @@
 
 A *work in progress* Minecraft clone made using Rust and opengGL
 
-Note: I'm reworking the chunk generation system so trying to run this project as of now will likely result in crashes or just simply not running
+Project should be running again! Note that I developed this on my mac, so I can't
+make any guarantees as to whether or not this will run on windows
 
 # Features
   -
@@ -15,7 +16,13 @@ Note: I'm reworking the chunk generation system so trying to run this project as
    -
       - General cleanup of the chunk generation system code
       - Event based communication between the scene and renderer
+      - Switch back to raw OpenGL
+      - Backface culling
+      - Batching of chunks into a single draw call
+      - CubeMap for skybox
       - Transparent blocks via sorting of mesh faces in particular chunks
+      - Better JSON parsing with helper functions for better organization
+      - Null texture implementation
       - Noisemap generation on a seperate thread to reduce chunk generation time
       - Dynamic biomes
       - Physics and a player model

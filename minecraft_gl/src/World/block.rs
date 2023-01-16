@@ -33,7 +33,8 @@ use serde_json;
 #[derive(Clone)]
 pub enum TextureData{
     SixSided(TextureSix),
-    Decoration(TextureSingle)
+    Single(TextureSingle),
+    PlaceHolder
 }
 
 #[derive(Clone)]
@@ -72,7 +73,7 @@ pub struct BlockAttribute{
     //Not every block has an effective tool (think a shovel for dirt) so this is an option
     pub EffectiveTool: Option<ItemID>,
     //If the user did not define a proper texture, the null texture is used
-    pub TextureData: Option<TextureData>,
+    pub TextureData: TextureData,
     //Custom attributes are for more lossly defined attributes. Not every attribute can be covered by this struct
     pub CustomAttributes: HashMap<String, State>,
     //Whether or not the block is decoration (tall grass, flowers, etc)
@@ -87,7 +88,7 @@ impl Default for BlockAttribute{
             Friction: 1f32, 
             DropItem: None, 
             EffectiveTool: None,
-            TextureData: None,
+            TextureData: TextureData::PlaceHolder,
             CustomAttributes: HashMap::new(),
             Decor: false,
         }
@@ -227,10 +228,10 @@ impl BlockRegistry{
                     blockAttribs.Decor = true;
                     //get the texture
                     if let Some(tex) = json.get("Texture") {
-                        blockAttribs.TextureData = Some(TextureData::Decoration(TextureSingle {
+                        blockAttribs.TextureData = TextureData::Single(TextureSingle {
                             Texture: tex.as_str().unwrap().to_owned(),
                             TextureID: textureCount
-                        }));
+                        });
                     } else {
                         return Err(GenericError::NewBoxed(format!("Error in block registry creation! Texture attribute for decoration block {} of id {} does not exist.", name, id)));
                     }
@@ -346,10 +347,14 @@ impl BlockRegistry{
                     texData.Offsets[i] = map[&texData.Textures[i].as_str()];
                  }
                  textureCount += cumul + 1;
-                 blockAttribs.TextureData = Some(TextureData::SixSided(texData));
+                 blockAttribs.TextureData = TextureData::SixSided(texData);
             }
             else {
-                //for the null texture, leave texture data field as None()
+                blockAttribs.TextureData = TextureData::Single(TextureSingle {
+                    Texture: "./minecraft_gl/assets/data/block/img/nullTexture.png".to_owned(),
+                    TextureID: textureCount
+                    
+                });
                 textureCount += 1; 
             }
 
@@ -449,7 +454,7 @@ impl BlockRegistry{
             }
 
             //If there is texture data...
-            if let Some(TextureData::SixSided(texData)) = &self.BlocksAttributes[id].TextureData {
+            if let TextureData::SixSided(texData) = &self.BlocksAttributes[id].TextureData {
 
                 let mut set: HashSet<&str> = HashSet::new(); //&str to prevent heap allocation
                 for i in 0..6 {
@@ -478,21 +483,12 @@ impl BlockRegistry{
                     }
                 }
             }
-            else if let Some(TextureData::Decoration(texData)) = &self.BlocksAttributes[id].TextureData {
-                println!("HERE!!!!");
+            else if let TextureData::Single(texData) = &self.BlocksAttributes[id].TextureData {
                 let mut pathBuf = PathBuf::new();
                 pathBuf.push("./minecraft_gl/assets/data/block/img/");
                 pathBuf.push(texData.Texture.as_str());
 
                 let mut texture = resource::GetImageFromPath(pathBuf.as_os_str().to_str().unwrap())?;
-                texture = image::DynamicImage::ImageRgba8(image::imageops::resize(&mut texture, textureResolution, textureResolution, image::imageops::FilterType::Nearest));
-                let coords = ((runningTextureCount % dims) * textureResolution, (runningTextureCount / dims) * textureResolution);
-                image::imageops::overlay(&mut img, &texture, coords.0, coords.1);
-                runningTextureCount += 1;
-            }
-            else {
-                //Else add the null texture...
-                let mut texture = resource::GetImageFromPath("./minecraft_gl/assets/data/block/img/nullTexture.png")?;
                 texture = image::DynamicImage::ImageRgba8(image::imageops::resize(&mut texture, textureResolution, textureResolution, image::imageops::FilterType::Nearest));
                 let coords = ((runningTextureCount % dims) * textureResolution, (runningTextureCount / dims) * textureResolution);
                 image::imageops::overlay(&mut img, &texture, coords.0, coords.1);
@@ -560,9 +556,12 @@ impl BlockRegistry{
         Ok(&self.BlocksAttributes[&id].Name)
     }
 
-    pub fn NameToID(&self, blockName: &str) -> u8{
+    pub fn NameToID(&self, blockName: &str) -> Option<u8>{
         //TODO Convert the whole string to lowercase, then the first charactet to uppercase
-        self.StringToID[blockName]
+        if ! self.StringToID.contains_key(blockName) {
+            return None
+        }
+        Some(self.StringToID[blockName])
     }
 
     pub fn HasBlock(&self, blockName: &str) -> bool{

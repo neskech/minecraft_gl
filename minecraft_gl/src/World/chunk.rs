@@ -1,6 +1,6 @@
 use std::{collections::HashMap, sync::Arc};
 use crate::{Renderer::worldRenderer::Vertex, Util::greedyMeshHelper};
-use super::{block::{Block, BlockRegistry}, State, 
+use super::{block::{Block, BlockRegistry, TextureData}, State, 
             biomeGenerator::{Biome, BiomeGenerator}
            };
 
@@ -115,16 +115,47 @@ impl Chunk{
         self.Blocks.resize(TOTAL_CHUNK_SIZE as usize, Block::Air());
         generator.Generate(&mut self.Blocks, self.Position.0, self.Position.1);
         self.Blocks[To1DUsize((0, CHUNK_BOUNDS_Y as usize - 5, 0))] = Block { ID: 6 };
+
+        //get rid of straggler stone block
+        //TODO figure out why the straggler is being generated
+        self.Blocks[To1Di((0, 55,0)) as usize] = Block::Air();
     }
 
     pub fn GreedyMesh(&mut self, adj: &[Option<Arc<Chunk>>; 4], blockRegistry: &BlockRegistry){
         self.ClearMesh();
         let dimensions = [CHUNK_BOUNDS_X as usize, CHUNK_BOUNDS_Y as usize, CHUNK_BOUNDS_Z as usize];
+
         for dim in 0..3 {
             greedyMeshHelper::SweepVolume(self, &dimensions, 
-                                            dim, adj, blockRegistry);
+                            dim, adj, blockRegistry);
         }
+        self.MeshFlora(blockRegistry);
+    }
 
+    pub fn MeshFlora(&mut self, blockRegistry: &BlockRegistry) {
+        //TODO for this to not have those wierd white squares show up we must have proper draw order
+        //TODO drawing the flora LAST ensures proper draw in order within the chunk but not 
+        //TODO in regards to other chunks. Draw the other chunks in order of distance from camera
+        for x in 0..CHUNK_BOUNDS_X {
+            for y in 0..CHUNK_BOUNDS_Y {
+                for z in 0..CHUNK_BOUNDS_Z {
+
+                    let p = [x as i32, y as i32, z as i32];
+                    let block = self.Blocks[greedyMeshHelper::To1D(&p) as usize];
+                    
+                    //TODO fix flower rendering
+                    let mut texID = -1;
+                    if let TextureData::Single(data) = &blockRegistry.GetAttributesOf(&block).TextureData {
+                        texID = data.TextureID as i32;
+                    } 
+
+                    if greedyMeshHelper::IsFlora(block, blockRegistry) {
+                        let pp = greedyMeshHelper::AddArrayVector(&p, &[0, 1, 0]);
+                        greedyMeshHelper::ConstructFloraFaces(self, &pp, texID);
+                    }
+                }
+            }
+        }
     }
 }
 

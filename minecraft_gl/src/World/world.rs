@@ -193,7 +193,6 @@ impl World{
             for (chunk_, _, adj) in &mut buffer {
                 let pos = chunk_.Position;
 
-                println!("{} {} {} {}", adj[0].is_some(), adj[1].is_some(), adj[2].is_some(), adj[3].is_some());
                 for (chunk, _, _) in &copy {
                     let targetPos = chunk.Position;
 

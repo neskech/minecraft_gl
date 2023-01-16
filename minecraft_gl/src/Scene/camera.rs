@@ -2,7 +2,6 @@
 use glium::glutin::event::VirtualKeyCode;
 use crate::{Core::application::WINDOW_SIZE, Util::fustrum::Fustrum};
 use nalgebra as na;
-
 use crate::Event::event::{Event, MouseMovedEvent, KeyPressedEvent};
 
 //intial values
@@ -91,29 +90,21 @@ impl Camera{
             self.PreviousCursorPos = (*x as f32, *y as f32);
             
             let sensitivity = 0.5f32;
-            // let noZone = 100f32;
-            // let dist = f32::sqrt((x - 400f32) * (x - 400f32) + (y - 400f32) * (y - 400f32) );
-            // println!("Dist {}", dist);
-            // if dist > noZone {
-            //     self.Yaw -= f32::abs(x - 400f32 - 300f32) * sensitivity;
-            //     self.Pitch -= f32::abs(-y - 400f32 - 300f32) * sensitivity;
-            // }
             self.Pitch -= dMouse.1 * sensitivity;
+
             if f32::abs(self.Pitch) > 89f32 {
                 self.Pitch = self.Pitch / f32::abs(self.Pitch) * 89f32;
             }
             self.Yaw += dMouse.0 * sensitivity;
-            // self.Yaw= 360f32 * ( x/ 800f32 );
-            // self.Pitch = 360f32 * ( y / 800f32 );
 
             self.Direction.x = f32::cos(f32::to_radians(self.Pitch)) * f32::cos(f32::to_radians(self.Yaw));
             self.Direction.y = f32::sin(f32::to_radians(self.Pitch));
             self.Direction.z = f32::sin(f32::to_radians(self.Yaw)) * f32::cos(f32::to_radians(self.Pitch));
             self.Direction = self.Direction.normalize();
-            //println!("Yaw {} Pitch {}", self.Yaw % 360f32, self.Pitch % 360f32);
+
             self.CameraRight = na::Vector3::y_axis().cross(&self.Direction).normalize();
             self.CameraUp = self.Direction.cross(&self.CameraRight);
-          //  println!("Direction {:?}, camRight {:?}, camUp {:?}", self.Direction, self.CameraRight, self.CameraUp);
+
         }
         else if let Event::KeyPressed(KeyPressedEvent { Key, ..}) = event {
             let speed = 1.9f32;
@@ -132,7 +123,6 @@ impl Camera{
                 }
                 _ => {}
             }
-            //println!("Position {:?}", self.Position);
         }
         self.UpdateFustrum();
     }

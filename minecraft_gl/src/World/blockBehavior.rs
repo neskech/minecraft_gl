@@ -38,7 +38,7 @@ impl Default for BlockBehavior{
 crate::CreateBinding!(BlockBindingFunction,
 
     pub fn BindCraftingTable(registry: &mut BlockRegistry) {
-        let craftingTableID = registry.NameToID("craftingTable");
+        let craftingTableID = registry.NameToID("craftingTable").expect("could not find crafting table");
         #[allow(unused)]
         fn onLeft(attributes: &BlockAttribute, hit: Item){
 

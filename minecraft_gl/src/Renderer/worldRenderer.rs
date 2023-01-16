@@ -4,7 +4,6 @@ use std::rc::Rc;
 use std::sync::Arc;
 use glium::Surface;
 use glium::uniforms::{MinifySamplerFilter, MagnifySamplerFilter};
-use image::GenericImageView;
 use crate::Scene::camera::Camera;
 use crate::World::chunk::{CHUNK_BOUNDS_X, CHUNK_BOUNDS_Y, CHUNK_BOUNDS_Z};
 use crate::Util::atlas::TextureAtlas;
@@ -55,9 +54,6 @@ impl WorldRenderer{
     }
 
     pub fn Init(&mut self){
-   
-
-
         let maxNumQuads: usize = (CHUNK_BOUNDS_X * CHUNK_BOUNDS_Y * CHUNK_BOUNDS_Z * 6) as usize;
         let mut indices: Vec<u32> = vec![0; maxNumQuads * 6];
         for i in 0..maxNumQuads {
@@ -90,8 +86,6 @@ impl WorldRenderer{
                 continue;
             }
 
-
-            let dims = (self.TextureAtlas.Image.dimensions().0 as f32, self.TextureAtlas.Image.dimensions().1 as f32);
             let uniforms = uniform! {
                 proj: camera.GetProjectionMatrix(),
                 view: camera.GetViewMatrix(),
@@ -115,10 +109,8 @@ impl WorldRenderer{
                     .. Default::default()
                 },
                 blend: glium::draw_parameters::Blend::alpha_blending(),
-                //blend: Blend { color: BlendingFunction::Subtraction { source: (), destination: LinearBlendingFactor::OneMinusSourceAlph }, alpha: LinearBlendingFactor::OneMinusSourceAlpha, ..Default::default() },
-           // backface_culling: glium::BackfaceCullingMode::CullClockwise,
+                //backface_culling: glium::BackfaceCullingMode::CullClockwise, //TODO get backface culling working
                 //polygon_mode: PolygonMode::Line,
-
                 .. Default::default()
             };
 
