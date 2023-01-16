@@ -335,7 +335,7 @@ impl World{
             rem.max(0)
         });
 
-        let extents: i32 = self.RenderDistance.try_into().unwrap();
+        let extents: i32 = renderDistance.try_into().unwrap();
         for a in -extents..=extents {
             for b in -extents..=extents {
 
