@@ -543,6 +543,37 @@ fn AddVertex(point: &[i32; 3], textureId: i32, vertexId: i32, faceId: i32,
 fn GetBlock(mut point: [i32; 3], currentDimension: usize, blocks: &Vec<Block>,
             dimensions: &[usize; 3], blockRegistry: &BlockRegistry) -> Block 
 {
+    /*
+        Imagine we have 2 blocks and 3 faces oriented as such
+        (The dashes are the faces, with their indices written adjacent)
+        
+        - 2
+        - 1        block 1
+        - 0        block 0
+
+        We can see that we have three faces. The bottom face belongs
+        to block 0, top belongs to block 1, and the middle face is 
+        shared by the two blocks
+
+        But what does 'sharing' a face even mean? When we're texturing 
+        it, who's texture do we use? Block 0 or block 1?
+
+        Well thanks to our mask, we don't have to deal with this problem.
+        Since our mask is true, we know that either block 1 or 0 is
+        AIR (or an equivalent 'empty' type). As such, that middle face
+        will belong to only one of the blocks
+
+        So assume we call this function with a 'point' variable
+        pointing to the middle face. Thus point[current Dimension] = 1.
+        
+        Let's assume initially that block 1 is air. Thus we want to subtract
+        1 from point[current Dimension] (and do .max(0) in case 
+        point[current dimension] = 0) to get the index for block 0
+
+        We check if block 0 is air just in case our assumption was wrong.
+        If block 0 is air, then we know block 1 ISN'T air so we return block
+        1. Else we return block 0
+    */
     point[currentDimension] = (point[currentDimension] - 1).max(0);
     let mut block = blocks[To1D(&point)].clone();
 
