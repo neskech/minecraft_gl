@@ -6,7 +6,7 @@ pub mod itemBehavior;
 pub mod chunk;
 pub mod world;
 mod biomeGenerator;
-use std::{io::BufReader, collections::HashMap};
+use std::{io::BufReader, collections::HashMap, marker::PhantomData};
 use self::{item::{ItemRegistry, ItemStack, ItemID}, 
            block::{BlockRegistry, Block}, crafting::CraftingRegistry, 
            biomeGenerator::{BiomeGenerator, Biome, GenerationData, 
@@ -69,6 +69,7 @@ impl State{
         if let Self::IntAttribute(val) = self {
             return Some(val);
         }
+
         None
     }
 
