@@ -2,7 +2,7 @@
 
 A *work in progress* Minecraft clone made using Rust and opengGL
 
-Project should be running again! Note that I developed this on my mac, so I can't
+Project should be running again! Note that I developed this on MacOS so I can't
 make any guarantees as to whether or not this will run on windows
 
 # Features
