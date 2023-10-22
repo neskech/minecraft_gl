@@ -2,6 +2,8 @@
 
 A *work in progress* Minecraft clone made using Rust and opengGL
 
+I plan to rewrite this entire project in the future. This was my first ever Rust application and as such a lot of it isn't idiomatic
+
 Project should be running again! Note that I developed this on MacOS so I can't
 make any guarantees as to whether or not this will run on windows
 
