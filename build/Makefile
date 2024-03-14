@@ -239,6 +239,21 @@ stb_image/fast:
 	$(MAKE) $(MAKESILENT) -f libs/stb_image/CMakeFiles/stb_image.dir/build.make libs/stb_image/CMakeFiles/stb_image.dir/build
 .PHONY : stb_image/fast
 
+# target to build an object file
+cmake_pch.hxx.pch:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch
+.PHONY : cmake_pch.hxx.pch
+
+# target to preprocess a source file
+cmake_pch.hxx.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.i
+.PHONY : cmake_pch.hxx.i
+
+# target to generate assembly for a file
+cmake_pch.hxx.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.s
+.PHONY : cmake_pch.hxx.s
+
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
@@ -281,6 +296,9 @@ help:
 	@echo "... glad"
 	@echo "... glfw"
 	@echo "... stb_image"
+	@echo "... cmake_pch.hxx.pch"
+	@echo "... cmake_pch.hxx.i"
+	@echo "... cmake_pch.hxx.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

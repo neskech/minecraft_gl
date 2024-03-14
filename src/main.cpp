@@ -2,10 +2,12 @@
 #include <expected>
 #include <print>
 #include "hello.hpp"
+#include "event/eventManager.hpp"
+
 
 int main()
 {
-    std::println("hello {} {}", 5, "fuck");
-    auto s = Sex();
-    s.fuck();
+  
+    auto man = EventManager();
+    man.Subscribe<Event>([](auto e){});
 }

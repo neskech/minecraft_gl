@@ -16,6 +16,9 @@ project(MinecraftCppGL)
 file(GLOB_RECURSE file_sources src/*.cpp)
 add_executable(${PROJECT_NAME} ${file_sources})
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include)
+target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include/core)
+target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include/event)
+target_precompile_headers(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include/pch.hpp)
 
 # GLFW
 add_subdirectory(libs/glfw EXCLUDE_FROM_ALL)
