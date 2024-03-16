@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "C/C++: g++ build and debug project",
+        "type": "lldb",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/MinecraftCppGL",
+        "args": [],
+        "cwd": "${workspaceFolder}",
+        "preLaunchTask": "Build"
+      },
+    ]
+}

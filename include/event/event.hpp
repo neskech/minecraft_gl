@@ -1,4 +1,8 @@
+#pragma once
+namespace Event
+{
+  class Event
+  {
+  };
 
-class Event {
-
-};
+} // namespace Event

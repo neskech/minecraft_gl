@@ -179,12 +179,12 @@ CMakeFiles/MinecraftCppGL.dir/all: libs/Glad/CMakeFiles/glad.dir/all
 CMakeFiles/MinecraftCppGL.dir/all: libs/stb_image/CMakeFiles/stb_image.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles --progress-num=1,2,3 "Built target MinecraftCppGL"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles --progress-num=1,2,3,4,5 "Built target MinecraftCppGL"
 .PHONY : CMakeFiles/MinecraftCppGL.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/MinecraftCppGL.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles 30
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles 32
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/MinecraftCppGL.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles 0
 .PHONY : CMakeFiles/MinecraftCppGL.dir/rule
@@ -231,7 +231,7 @@ libs/glfw/CMakeFiles/uninstall.dir/clean:
 libs/glfw/src/CMakeFiles/glfw.dir/all:
 	$(MAKE) $(MAKESILENT) -f libs/glfw/src/CMakeFiles/glfw.dir/build.make libs/glfw/src/CMakeFiles/glfw.dir/depend
 	$(MAKE) $(MAKESILENT) -f libs/glfw/src/CMakeFiles/glfw.dir/build.make libs/glfw/src/CMakeFiles/glfw.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles --progress-num=6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28 "Built target glfw"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles --progress-num=8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30 "Built target glfw"
 .PHONY : libs/glfw/src/CMakeFiles/glfw.dir/all
 
 # Build rule for subdir invocation for target.
@@ -257,7 +257,7 @@ libs/glfw/src/CMakeFiles/glfw.dir/clean:
 libs/glfw/src/CMakeFiles/update_mappings.dir/all:
 	$(MAKE) $(MAKESILENT) -f libs/glfw/src/CMakeFiles/update_mappings.dir/build.make libs/glfw/src/CMakeFiles/update_mappings.dir/depend
 	$(MAKE) $(MAKESILENT) -f libs/glfw/src/CMakeFiles/update_mappings.dir/build.make libs/glfw/src/CMakeFiles/update_mappings.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles --progress-num=31 "Built target update_mappings"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles --progress-num=33 "Built target update_mappings"
 .PHONY : libs/glfw/src/CMakeFiles/update_mappings.dir/all
 
 # Build rule for subdir invocation for target.
@@ -283,7 +283,7 @@ libs/glfw/src/CMakeFiles/update_mappings.dir/clean:
 libs/Glad/CMakeFiles/glad.dir/all:
 	$(MAKE) $(MAKESILENT) -f libs/Glad/CMakeFiles/glad.dir/build.make libs/Glad/CMakeFiles/glad.dir/depend
 	$(MAKE) $(MAKESILENT) -f libs/Glad/CMakeFiles/glad.dir/build.make libs/Glad/CMakeFiles/glad.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles --progress-num=4,5 "Built target glad"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles --progress-num=6,7 "Built target glad"
 .PHONY : libs/Glad/CMakeFiles/glad.dir/all
 
 # Build rule for subdir invocation for target.
@@ -309,7 +309,7 @@ libs/Glad/CMakeFiles/glad.dir/clean:
 libs/stb_image/CMakeFiles/stb_image.dir/all:
 	$(MAKE) $(MAKESILENT) -f libs/stb_image/CMakeFiles/stb_image.dir/build.make libs/stb_image/CMakeFiles/stb_image.dir/depend
 	$(MAKE) $(MAKESILENT) -f libs/stb_image/CMakeFiles/stb_image.dir/build.make libs/stb_image/CMakeFiles/stb_image.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles --progress-num=29,30 "Built target stb_image"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles --progress-num=31,32 "Built target stb_image"
 .PHONY : libs/stb_image/CMakeFiles/stb_image.dir/all
 
 # Build rule for subdir invocation for target.

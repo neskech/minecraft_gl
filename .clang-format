@@ -1,0 +1,12 @@
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterEnum: true
+  AfterStruct: true
+  AfterClass: true
+  AfterNamespace: true
+  AfterFunction: true
+  SplitEmptyFunction: false
+
+EmptyLineBeforeAccessModifier: LogicalBlock
+IndentAccessModifiers: true
+NamespaceIndentation: All

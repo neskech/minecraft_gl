@@ -254,29 +254,77 @@ cmake_pch.hxx.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.s
 .PHONY : cmake_pch.hxx.s
 
-src/main.o: src/main.cpp.o
-.PHONY : src/main.o
+src/core/main.o: src/core/main.cpp.o
+.PHONY : src/core/main.o
 
 # target to build an object file
-src/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/main.cpp.o
-.PHONY : src/main.cpp.o
+src/core/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o
+.PHONY : src/core/main.cpp.o
 
-src/main.i: src/main.cpp.i
-.PHONY : src/main.i
+src/core/main.i: src/core/main.cpp.i
+.PHONY : src/core/main.i
 
 # target to preprocess a source file
-src/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/main.cpp.i
-.PHONY : src/main.cpp.i
+src/core/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.i
+.PHONY : src/core/main.cpp.i
 
-src/main.s: src/main.cpp.s
-.PHONY : src/main.s
+src/core/main.s: src/core/main.cpp.s
+.PHONY : src/core/main.s
 
 # target to generate assembly for a file
-src/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/main.cpp.s
-.PHONY : src/main.cpp.s
+src/core/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.s
+.PHONY : src/core/main.cpp.s
+
+src/util/contracts.o: src/util/contracts.cpp.o
+.PHONY : src/util/contracts.o
+
+# target to build an object file
+src/util/contracts.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o
+.PHONY : src/util/contracts.cpp.o
+
+src/util/contracts.i: src/util/contracts.cpp.i
+.PHONY : src/util/contracts.i
+
+# target to preprocess a source file
+src/util/contracts.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.i
+.PHONY : src/util/contracts.cpp.i
+
+src/util/contracts.s: src/util/contracts.cpp.s
+.PHONY : src/util/contracts.s
+
+# target to generate assembly for a file
+src/util/contracts.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.s
+.PHONY : src/util/contracts.cpp.s
+
+src/util/input.o: src/util/input.cpp.o
+.PHONY : src/util/input.o
+
+# target to build an object file
+src/util/input.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o
+.PHONY : src/util/input.cpp.o
+
+src/util/input.i: src/util/input.cpp.i
+.PHONY : src/util/input.i
+
+# target to preprocess a source file
+src/util/input.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.i
+.PHONY : src/util/input.cpp.i
+
+src/util/input.s: src/util/input.cpp.s
+.PHONY : src/util/input.s
+
+# target to generate assembly for a file
+src/util/input.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.s
+.PHONY : src/util/input.cpp.s
 
 # Help Target
 help:
@@ -299,9 +347,15 @@ help:
 	@echo "... cmake_pch.hxx.pch"
 	@echo "... cmake_pch.hxx.i"
 	@echo "... cmake_pch.hxx.s"
-	@echo "... src/main.o"
-	@echo "... src/main.i"
-	@echo "... src/main.s"
+	@echo "... src/core/main.o"
+	@echo "... src/core/main.i"
+	@echo "... src/core/main.s"
+	@echo "... src/util/contracts.o"
+	@echo "... src/util/contracts.i"
+	@echo "... src/util/contracts.s"
+	@echo "... src/util/input.o"
+	@echo "... src/util/input.i"
+	@echo "... src/util/input.s"
 .PHONY : help
 
 

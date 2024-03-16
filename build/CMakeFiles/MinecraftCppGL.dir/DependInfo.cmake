@@ -10,8 +10,12 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.cxx" "CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch" "gcc" "CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch.d"
   "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx" "CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch" "gcc" "CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch.d"
-  "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/main.cpp" "CMakeFiles/MinecraftCppGL.dir/src/main.cpp.o" "gcc" "CMakeFiles/MinecraftCppGL.dir/src/main.cpp.o.d"
-  "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx" "CMakeFiles/MinecraftCppGL.dir/src/main.cpp.o" "gcc" "CMakeFiles/MinecraftCppGL.dir/src/main.cpp.o.d"
+  "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/core/main.cpp" "CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o" "gcc" "CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o.d"
+  "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx" "CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o" "gcc" "CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o.d"
+  "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/util/contracts.cpp" "CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o" "gcc" "CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o.d"
+  "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx" "CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o" "gcc" "CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o.d"
+  "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/util/input.cpp" "CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o" "gcc" "CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o.d"
+  "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx" "CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o" "gcc" "CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

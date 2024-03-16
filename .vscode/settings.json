@@ -80,5 +80,6 @@
         "queue": "cpp",
         "expected": "cpp",
         "version": "cpp"
-    }
+    },
+    "cmake.configureOnOpen": false
 }
