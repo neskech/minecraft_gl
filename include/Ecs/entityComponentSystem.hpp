@@ -1,0 +1,5 @@
+
+class EntityComponentSystem {
+public:
+private:
+};

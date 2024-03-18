@@ -25,7 +25,7 @@ void Input::OnWindowKeyEvent(GLFWwindow *, i32 key, i32 scancode, i32 action,
     Event::KeyPressed ev;
     ev.key = static_cast<KeyInput>(key);
     ev.modifiers = static_cast<KeyModifiers>(mods);
-    Event::EventManager::Invoke<Event::KeyPressed>(ev);
+    EventManager::Invoke<Event::KeyPressed>(ev);
 
     break;
   }
@@ -37,7 +37,7 @@ void Input::OnWindowKeyEvent(GLFWwindow *, i32 key, i32 scancode, i32 action,
     Event::KeyUp ev;
     ev.key = static_cast<KeyInput>(key);
     ev.modifiers = static_cast<KeyModifiers>(mods);
-    Event::EventManager::Invoke<Event::KeyUp>(ev);
+    EventManager::Invoke<Event::KeyUp>(ev);
 
     break;
   }
@@ -60,7 +60,7 @@ void Input::OnWindowMousePressedEvent(GLFWwindow *, i32 button, i32 action,
     Event::MousePressed ev;
     ev.button = static_cast<MouseInput>(button);
     ev.modifiers = static_cast<KeyModifiers>(mods);
-    Event::EventManager::Invoke<Event::MousePressed>(ev);
+    EventManager::Invoke<Event::MousePressed>(ev);
 
     break;
   }
@@ -72,7 +72,7 @@ void Input::OnWindowMousePressedEvent(GLFWwindow *, i32 button, i32 action,
     Event::MousePressed ev;
     ev.button = static_cast<MouseInput>(button);
     ev.modifiers = static_cast<KeyModifiers>(mods);
-    Event::EventManager::Invoke<Event::MousePressed>(ev);
+    EventManager::Invoke<Event::MousePressed>(ev);
 
     break;
   }
@@ -84,6 +84,11 @@ void Input::OnWindowMouseMoveEvent(GLFWwindow *, double xpos, double ypos)
   auto &self = Input::Instance();
   self.m_mouseX = xpos;
   self.m_mouseY = ypos;
+
+  Event::MouseMoved ev;
+  ev.mouseX = self.m_mouseX;
+  ev.mouseY = self.m_mouseY;
+  EventManager::Invoke<Event::MouseMoved>(ev);
 }
 
 void Input::OnWindowMouseScrolledEvent(GLFWwindow *, double xoffset,
@@ -92,6 +97,11 @@ void Input::OnWindowMouseScrolledEvent(GLFWwindow *, double xoffset,
   auto &self = Input::Instance();
   self.m_scrollX = xoffset;
   self.m_scrollY = yoffset;
+
+  Event::MouseScrolled ev;
+  ev.scrollX = self.m_scrollX;
+  ev.scrollY = self.m_scrollY;
+  EventManager::Invoke<Event::MouseScrolled>(ev);
 }
 
 bool Input::IsKeyPressed(KeyInput key, KeyModifiers modifiers)

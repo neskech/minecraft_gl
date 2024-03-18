@@ -1,115 +1,170 @@
 #pragma once
-#include "event.hpp"
 #include "pch.hpp"
-#include "util/macros.hpp"
+#include "util/contracts.hpp"
 #include "util/types.hpp"
+#include <functional>
+#include <utility>
 
-namespace Event
+template <typename EventType> class CallbackContainer
 {
-  class EventManager
-  {
-    public:
-      EventManager() : m_globalCount(0) {}
-      NO_COPY_OR_MOVE_CONSTRUCTORS(EventManager)
+  public:
+    using Callback = std::function<void(const EventType &)>;
 
-      template <typename E>
-        requires std::is_base_of_v<Event, E>
-      static void Invoke(const E &event)
-      {
-        EventManager &self = EventManager::Instance();
+    struct SubscriberHandle
+    {
+        friend CallbackContainer<EventType>;
 
-        u32 typeID = self.typeId<E>();
-        for (const auto &[f, _] : self.m_functions[typeID])
-          f(static_cast<const Event &>(event));
-      }
-
-      template <typename E, typename Fn>
-        requires std::invocable<Fn, const E &> &&
-                 (std::is_base_of_v<Event, E> || std::is_same_v<Event, E>)
-      static void Subscribe(Fn fn)
-      {
-        EventManager &self = EventManager::Instance();
-
-        u32 typeID = self.typeId<E>();
-        if (typeID + 1 > self.m_functions.size())
-          self.m_functions.emplace_back();
-
-        FunctionList &functionList = self.m_functions[typeID];
-
-        Function func;
-        func.f = [&](const Event &e) { fn(static_cast<const E &>(e)); };
-        func.address = Optional::None<usize>();
-
-        functionList.push_back(func);
-      }
-
-      template <typename E, typename Fn>
-        requires std::invocable<Fn, const E &> &&
-                 (std::is_base_of_v<Event, E> || std::is_same_v<Event, E>)
-      static void SubscribeRef(const Fn &fn)
-      {
-        EventManager &self = EventManager::Instance();
-
-        u32 typeID = self.typeId<E>();
-        if (typeID + 1 > self.m_functions.size())
-          self.m_functions.emplace_back();
-
-        FunctionList &functionList = self.m_functions[typeID];
-
-        Function func;
-        func.f = [&](const Event &e) { fn(static_cast<const E &>(e)); };
-        func.address = Optional::Some<usize>(reinterpret_cast<usize>(&fn));
-
-        functionList.push_back(func);
-      }
-
-      template <typename E, typename Fn>
-        requires std::invocable<Fn, const E &> &&
-                 (std::is_base_of_v<Event, E> || std::is_same_v<Event, E>)
-      static void UnSubscribe(Fn &fn)
-      {
-        EventManager &self = EventManager::Instance();
-
-        u32 typeID = self.typeId<E>();
-        if (typeID + 1 > self.m_functions.size())
-          self.m_functions.emplace_back();
-
-        FunctionList &functionList = self.m_functions[typeID];
-        for (i32 i = functionList.size() - 1; i >= 0; i--) {
-          auto &[_, adr] = functionList[i];
-          if (adr.has_value() && adr.value() == reinterpret_cast<usize>(&fn))
-            functionList.erase(std::next(functionList.begin(), i));
+        bool operator==(const SubscriberHandle &other) const
+        {
+          return id == other.id;
         }
-      }
 
-    private:
-      static EventManager &Instance()
-      {
-        static EventManager manager{};
-        return manager;
-      }
+        struct HashFunction
+        {
+            usize operator()(const SubscriberHandle &handle) const
+            {
+              return std::hash<usize>{}(handle.id);
+            }
+        };
 
-      template <typename T> u32 typeId()
-      {
-        static u32 id = m_globalCount;
+      private:
+        u32 id;
+    };
 
-        if (id == m_globalCount)
-          m_globalCount++;
+    struct CallbackAndHandle
+    {
+        Callback callback;
+        SubscriberHandle handle;
+        CallbackAndHandle(Callback &&callback, SubscriberHandle handle)
+            : callback(std::move(callback)), handle(handle)
+        {}
+    };
 
-        return id;
-      }
+    CallbackContainer() {}
 
-      using Func = std::function<void(const Event &)>;
+    SubscriberHandle Subscribe(Callback callback);
+    void UnSubscribe(SubscriberHandle handle);
+    void Invoke(const EventType &event);
 
-      struct Function
-      {
-          Func f;
-          Option<usize> address;
-      };
+  private:
+    std::vector<CallbackAndHandle> m_callbacks;
+    std::vector<SubscriberHandle> m_freeHandles;
+    std::unordered_map<SubscriberHandle, usize,
+                       typename SubscriberHandle::HashFunction>
+        m_handleMap;
+};
 
-      using FunctionList = std::vector<Function>;
+/* To Shorten */
+template <typename EvType> using Class = CallbackContainer<EvType>;
+template <typename EvType>
+using SubscriberHandle = CallbackContainer<EvType>::SubscriberHandle;
 
-      std::vector<FunctionList> m_functions;
-      u32 m_globalCount = 0;
-  };
-} // namespace Event
+template <typename EType>
+SubscriberHandle<EType> Class<EType>::Subscribe(Callback callback)
+{
+  SubscriberHandle handle;
+
+  if (m_freeHandles.empty())
+    handle.id = m_callbacks.size();
+  else {
+    handle = m_freeHandles.back();
+    m_freeHandles.pop_back();
+  }
+
+  usize lastIndex = m_callbacks.size();
+  m_handleMap[handle] = lastIndex;
+
+  m_callbacks.emplace_back(std::move(callback), handle);
+
+  return handle;
+}
+
+template <typename EType>
+void Class<EType>::UnSubscribe(SubscriberHandle deletionHandle)
+{
+  Requires(m_handleMap.contains(deletionHandle));
+
+  usize elemToDeleteIndex = m_handleMap.at(deletionHandle);
+  usize lastIndex = m_callbacks.size() - 1;
+
+  /* Swap target element with last element for O(1) delete */
+  if (elemToDeleteIndex != lastIndex) {
+    SubscriberHandle swappedHandle = m_callbacks[lastIndex].handle;
+    m_handleMap[swappedHandle] = elemToDeleteIndex;
+    std::swap(m_callbacks[elemToDeleteIndex], m_callbacks[lastIndex]);
+  }
+
+  m_callbacks.pop_back();
+  m_handleMap.erase(deletionHandle);
+  m_freeHandles.push_back(deletionHandle);
+}
+
+template <typename EType> void Class<EType>::Invoke(const EType &event)
+{
+  for (const auto &[callback, _] : m_callbacks)
+    callback(event);
+}
+
+class EventManager
+{
+  public:
+    EventManager() {}
+
+    template <typename EventType, typename Function>
+    typename CallbackContainer<EventType>::SubscriberHandle static Subscribe(
+        Function f);
+
+    template <typename EventType, typename Method, typename ClassInstance>
+    typename CallbackContainer<EventType>::SubscriberHandle static Subscribe(
+        Method method, ClassInstance instance);
+
+    template <typename EventType>
+    void static UnSubscribe(
+        typename CallbackContainer<EventType>::SubscriberHandle handle);
+
+    template <typename EventType> static void Invoke(const EventType &event);
+
+    template <typename EventType> static void Invoke(EventType &&event);
+
+  private:
+    static EventManager &Instance()
+    {
+      static EventManager manager{};
+      return manager;
+    }
+    template <typename EventType>
+    static inline CallbackContainer<EventType> s_callbackContainer;
+};
+
+template <typename EventType, typename Function>
+typename CallbackContainer<EventType>::SubscriberHandle
+EventManager::Subscribe(Function f)
+{
+  return s_callbackContainer<EventType>.Subscribe(f);
+}
+
+template <typename EventType, typename Method, typename ClassInstance>
+typename CallbackContainer<EventType>::SubscriberHandle
+EventManager::Subscribe(Method method, ClassInstance instance)
+{
+  typename CallbackContainer<EventType>::Callback callback =
+      std::bind(method, instance, std::placeholders::_1);
+  return s_callbackContainer<EventType>.Subscribe(callback);
+}
+
+template <typename EventType>
+void EventManager::UnSubscribe(
+    typename CallbackContainer<EventType>::SubscriberHandle handle)
+{
+  s_callbackContainer<EventType>.UnSubscribe(handle);
+}
+
+template <typename EventType> void EventManager::Invoke(const EventType &event)
+{
+  s_callbackContainer<EventType>.Invoke(event);
+}
+
+template <typename EventType> void EventManager::Invoke(EventType &&event)
+{
+  s_callbackContainer<EventType>.Invoke(std::forward<EventType>(event));
+}

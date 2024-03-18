@@ -6,7 +6,9 @@ BraceWrapping:
   AfterNamespace: true
   AfterFunction: true
   SplitEmptyFunction: false
+  BeforeElse: true
 
 EmptyLineBeforeAccessModifier: LogicalBlock
 IndentAccessModifiers: true
 NamespaceIndentation: All
+#PenaltyReturnTypeOnItsOwnLine: 10000

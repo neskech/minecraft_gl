@@ -729,7 +729,6 @@ CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o: CMakeFiles/MinecraftCppGL.dir
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__config \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__config_site \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__exception/exception.h \
-  /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__exception/operations.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__expected/bad_expected_access.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__expected/expected.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__expected/unexpect.h \
@@ -1032,11 +1031,13 @@ CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o: CMakeFiles/MinecraftCppGL.dir
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__undef_macros \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/as_const.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/auto_cast.h \
+  /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/cmp.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/convert_to_integral.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/declval.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/exception_guard.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/exchange.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/forward.h \
+  /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/forward_like.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/in_place.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/integer_sequence.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/is_pointer_in_range.h \
@@ -1044,6 +1045,7 @@ CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o: CMakeFiles/MinecraftCppGL.dir
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/pair.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/piecewise_construct.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/priority_tag.h \
+  /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/rel_ops.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/swap.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/to_underlying.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/unreachable.h \
@@ -1073,8 +1075,6 @@ CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o: CMakeFiles/MinecraftCppGL.dir
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/initializer_list \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/ios \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/iosfwd \
-  /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/iostream \
-  /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/istream \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/limits \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/limits.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/locale \
@@ -1084,7 +1084,6 @@ CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o: CMakeFiles/MinecraftCppGL.dir
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/mutex \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/new \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/optional \
-  /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/ostream \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/print \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/ratio \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/stddef.h \
@@ -1099,6 +1098,7 @@ CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o: CMakeFiles/MinecraftCppGL.dir
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/tuple \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/typeinfo \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/unordered_map \
+  /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/utility \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/vector \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/version \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/wchar.h \
@@ -1109,8 +1109,10 @@ CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o: CMakeFiles/MinecraftCppGL.dir
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/lib/clang/17/include/stddef.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/lib/clang/17/include/stdint.h \
   CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.cxx \
+  /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/event/eventManager.hpp \
   /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/pch.hpp \
   /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/util/contracts.hpp \
+  /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/util/types.hpp \
   /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/Glad/include/KHR/khrplatform.h \
   /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include/GLFW/glfw3.h \
   /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/core/main.cpp \
@@ -2263,11 +2265,13 @@ CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o: CMakeFiles/MinecraftCppGL.di
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__undef_macros \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/as_const.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/auto_cast.h \
+  /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/cmp.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/convert_to_integral.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/declval.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/exception_guard.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/exchange.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/forward.h \
+  /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/forward_like.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/in_place.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/integer_sequence.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/is_pointer_in_range.h \
@@ -2275,6 +2279,7 @@ CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o: CMakeFiles/MinecraftCppGL.di
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/pair.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/piecewise_construct.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/priority_tag.h \
+  /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/rel_ops.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/swap.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/to_underlying.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/unreachable.h \
@@ -2327,6 +2332,7 @@ CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o: CMakeFiles/MinecraftCppGL.di
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/tuple \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/typeinfo \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/unordered_map \
+  /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/utility \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/vector \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/version \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/wchar.h \
@@ -2478,11 +2484,11 @@ CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o: CMakeFiles/MinecraftCppGL.di
 
 /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/util/contracts.hpp:
 
-/home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/ostream:
+/home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/rel_ops.h:
 
-/home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/iostream:
+/home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/forward_like.h:
 
-/home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__exception/operations.h:
+/home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__utility/cmp.h:
 
 /usr/include/x86_64-linux-gnu/sys/types.h:
 
@@ -2603,6 +2609,8 @@ CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o: CMakeFiles/MinecraftCppGL.di
 /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__iterator/wrap_iter.h:
 
 /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/stdexcept:
+
+/home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/utility:
 
 /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__iterator/size.h:
 
@@ -3429,8 +3437,6 @@ CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o: CMakeFiles/MinecraftCppGL.di
 /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__type_traits/is_member_object_pointer.h:
 
 /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/version:
-
-/home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/istream:
 
 /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/include/c++/v1/__concepts/assignable.h:
 
