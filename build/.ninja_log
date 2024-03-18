@@ -1,0 +1,16 @@
+# ninja log v5
+234	240	1710346111753432051	/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/CXXModules.json	50a44d8f3709868
+225	246	1710345908738280000	libs/stb_image/libstb_image.a	baff96a25a6229dd
+187	233	1710346111743851778	CMakeFiles/MinecraftCppGL.dir/src/hehe.cpp.o.ddi	5149794df4df0533
+234	240	1710346111753432051	CMakeFiles/MinecraftCppGL.dir/src/hehe.cpp.o.modmap	50a44d8f3709868
+5	187	1710346111697139743	CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.pch	ed9fea6458790b41
+57	77	1710345908569133000	libs/Glad/libglad.a	1810ca676f945dca
+1	57	1710345908547532566	libs/Glad/CMakeFiles/glad.dir/src/glad.c.o	ff1f0c9229d6ac72
+46	225	1710345908714731330	libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.o	4ba4f8176b49f94f
+38	46	1710345908538424083	libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.o.modmap	30f2b5862c63f451
+234	240	1710346111753432051	CMakeFiles/MinecraftCppGL.dir/CXX.dd	50a44d8f3709868
+38	46	1710345908538424083	libs/stb_image/CMakeFiles/stb_image.dir/CXX.dd	30f2b5862c63f451
+38	46	1710345908538424083	/Users/ness/Projects/GameDev/minecraft_gl/build/libs/stb_image/CMakeFiles/stb_image.dir/CXXModules.json	30f2b5862c63f451
+2	38	1710345908527232188	libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.o.ddi	3e3da99393e11b32
+241	755	1710346112264905447	CMakeFiles/MinecraftCppGL.dir/src/hehe.cpp.o	a370ccf69b6e7124
+755	804	1710346112315324184	MinecraftCppGL	f0d9e679097f14ae

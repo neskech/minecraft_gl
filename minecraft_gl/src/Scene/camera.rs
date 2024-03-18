@@ -86,7 +86,7 @@ impl Camera{
 
     pub fn OnEvent(&mut self, event: &Event){
         if let Event::MouseMoved(MouseMovedEvent{X: x, Y: y}) = event {
-            let dMouse = (*x as f32 - self.PreviousCursorPos.0, *y as f32 - self.PreviousCursorPos.1);
+            let dMouse = (-(*x as f32 - self.PreviousCursorPos.0), *y as f32 - self.PreviousCursorPos.1);
             self.PreviousCursorPos = (*x as f32, *y as f32);
             
             let sensitivity = 0.5f32;
