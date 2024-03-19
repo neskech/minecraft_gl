@@ -1,5 +1,7 @@
 #include "Ecs/entityComponentSystem.hpp"
+#include "component.hpp"
 #include "eventManager.hpp"
+#include "typeId.hpp"
 
 EntityComponentSystem::EntityComponentSystem()
 {
@@ -14,8 +16,9 @@ Entity EntityComponentSystem::MakeEntity()
 
 void EntityComponentSystem::DeleteEntity(Entity entity)
 {
-  m_entityManager.DeleteEntity(entity.m_id);
   m_componentManager.EntityDestroyed(entity.m_id, m_entityManager);
+  m_systemManager.EntityDestroyed(entity);
+  m_entityManager.DeleteEntity(entity.m_id);
 }
 
 template <typename ComponentType, typename... Args>
@@ -23,10 +26,14 @@ template <typename ComponentType, typename... Args>
 ComponentType &EntityComponentSystem::AddComponent(Entity entity,
                                                    Args &&...args)
 {
-  usize componentId = m_componentManager.ComponentID<ComponentType>();
+  usize componentId = TypeIdMaker<Component::Component>::GetId<ComponentType>();
+  Signature sig = m_entityManager.GetSignature(entity.GetID());
+
   m_entityManager.AddComponent(entity.m_id, componentId);
   m_componentManager.AddComponent<ComponentType>(entity.m_id,
                                                  std::forward<Args>(args)...);
+  m_systemManager.EntitySignatureChanged(entity, sig);
+
   return m_componentManager.GetComponent<ComponentType>(entity.m_id);
 }
 
@@ -34,7 +41,10 @@ template <typename ComponentType>
   requires std::is_base_of_v<Component::Component, ComponentType>
 void EntityComponentSystem::RemoveComponent(Entity entity)
 {
-  usize componentId = m_componentManager.ComponentID<ComponentType>();
+  usize componentId = TypeIdMaker<Component::Component>::GetId<ComponentType>();
+  Signature sig = m_entityManager.GetSignature(entity.GetID());
+
+  m_systemManager.EntitySignatureChanged(entity, sig);
   m_entityManager.RemoveComponent(entity.m_id, componentId);
   m_componentManager.DeleteComponent<ComponentType>(entity.m_id);
 }
@@ -43,7 +53,7 @@ template <typename ComponentType>
   requires std::is_base_of_v<Component::Component, ComponentType>
 bool EntityComponentSystem::HasComponent(Entity entity)
 {
-  usize componentId = m_componentManager.ComponentID<ComponentType>();
+  usize componentId = TypeIdMaker<Component::Component>::GetId<ComponentType>();
   return m_entityManager.HasComponent(entity.m_id, componentId);
 }
 

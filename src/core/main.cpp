@@ -1,17 +1,11 @@
-#include "eventManager.hpp"
-#include "util/contracts.hpp"
+#include "Ecs/component.hpp"
+#include "Ecs/signature.hpp"
 #include <expected>
 #include <print>
-
-struct Shit
-{
-};
-void s(const Shit &shit) { std::println("FUCK"); }
-
+struct h{};
 int main()
 {
-  auto handle = EventManager::Subscribe<Shit>(s);
-  EventManager::Invoke(Shit());
-  EventManager::UnSubscribe<Shit>(handle);
-  EventManager::Invoke(Shit());
+  auto sig = SignatureBuilder()
+                 .AddComponentType<h>()
+                 .Finish();
 }

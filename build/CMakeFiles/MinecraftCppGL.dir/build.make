@@ -44,19 +44,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake
+CMAKE_COMMAND = /opt/homebrew/Cellar/cmake/3.28.3/bin/cmake
 
 # The command to remove a file.
-RM = /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E rm -f
+RM = /opt/homebrew/Cellar/cmake/3.28.3/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp
+CMAKE_SOURCE_DIR = /Users/ness/Projects/GameDev/minecraft_gl
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build
+CMAKE_BINARY_DIR = /Users/ness/Projects/GameDev/minecraft_gl/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/MinecraftCppGL.dir/depend.make
@@ -69,90 +69,178 @@ include CMakeFiles/MinecraftCppGL.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/MinecraftCppGL.dir/flags.make
 
-CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch: CMakeFiles/MinecraftCppGL.dir/flags.make
-CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch: CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.cxx
-CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch: CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx
-CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch: CMakeFiles/MinecraftCppGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch"
-	/home/linuxbrew/.linuxbrew/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -fpch-instantiate-templates -Xclang -emit-pch -Xclang -include -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx -x c++-header -MD -MT CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch -MF CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch.d -o CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.cxx
+CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.pch: CMakeFiles/MinecraftCppGL.dir/flags.make
+CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.pch: CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.cxx
+CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.pch: CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx
+CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.pch: CMakeFiles/MinecraftCppGL.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.pch"
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGSarm64) -Winvalid-pch -fpch-instantiate-templates -Xclang -emit-pch -Xclang -include -Xclang /Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -x c++-header -MD -MT CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.pch -MF CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.pch.d -o CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.pch -c /Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.cxx
 
-CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.i"
-	/home/linuxbrew/.linuxbrew/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -fpch-instantiate-templates -Xclang -emit-pch -Xclang -include -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx -x c++-header -E /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.cxx > CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.i
+CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.i"
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGSarm64) -Winvalid-pch -fpch-instantiate-templates -Xclang -emit-pch -Xclang -include -Xclang /Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -x c++-header -E /Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.cxx > CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.i
 
-CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.s"
-	/home/linuxbrew/.linuxbrew/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -fpch-instantiate-templates -Xclang -emit-pch -Xclang -include -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx -x c++-header -S /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.cxx -o CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.s
+CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.s"
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGSarm64) -Winvalid-pch -fpch-instantiate-templates -Xclang -emit-pch -Xclang -include -Xclang /Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -x c++-header -S /Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.cxx -o CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.s
+
+CMakeFiles/MinecraftCppGL.dir/src/ECS/componentManager.cpp.o: CMakeFiles/MinecraftCppGL.dir/flags.make
+CMakeFiles/MinecraftCppGL.dir/src/ECS/componentManager.cpp.o: /Users/ness/Projects/GameDev/minecraft_gl/src/ECS/componentManager.cpp
+CMakeFiles/MinecraftCppGL.dir/src/ECS/componentManager.cpp.o: CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx
+CMakeFiles/MinecraftCppGL.dir/src/ECS/componentManager.cpp.o: CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.pch
+CMakeFiles/MinecraftCppGL.dir/src/ECS/componentManager.cpp.o: CMakeFiles/MinecraftCppGL.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/MinecraftCppGL.dir/src/ECS/componentManager.cpp.o"
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -MD -MT CMakeFiles/MinecraftCppGL.dir/src/ECS/componentManager.cpp.o -MF CMakeFiles/MinecraftCppGL.dir/src/ECS/componentManager.cpp.o.d -o CMakeFiles/MinecraftCppGL.dir/src/ECS/componentManager.cpp.o -c /Users/ness/Projects/GameDev/minecraft_gl/src/ECS/componentManager.cpp
+
+CMakeFiles/MinecraftCppGL.dir/src/ECS/componentManager.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MinecraftCppGL.dir/src/ECS/componentManager.cpp.i"
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -E /Users/ness/Projects/GameDev/minecraft_gl/src/ECS/componentManager.cpp > CMakeFiles/MinecraftCppGL.dir/src/ECS/componentManager.cpp.i
+
+CMakeFiles/MinecraftCppGL.dir/src/ECS/componentManager.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MinecraftCppGL.dir/src/ECS/componentManager.cpp.s"
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -S /Users/ness/Projects/GameDev/minecraft_gl/src/ECS/componentManager.cpp -o CMakeFiles/MinecraftCppGL.dir/src/ECS/componentManager.cpp.s
+
+CMakeFiles/MinecraftCppGL.dir/src/ECS/entityComponentSystem.cpp.o: CMakeFiles/MinecraftCppGL.dir/flags.make
+CMakeFiles/MinecraftCppGL.dir/src/ECS/entityComponentSystem.cpp.o: /Users/ness/Projects/GameDev/minecraft_gl/src/ECS/entityComponentSystem.cpp
+CMakeFiles/MinecraftCppGL.dir/src/ECS/entityComponentSystem.cpp.o: CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx
+CMakeFiles/MinecraftCppGL.dir/src/ECS/entityComponentSystem.cpp.o: CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.pch
+CMakeFiles/MinecraftCppGL.dir/src/ECS/entityComponentSystem.cpp.o: CMakeFiles/MinecraftCppGL.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/MinecraftCppGL.dir/src/ECS/entityComponentSystem.cpp.o"
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -MD -MT CMakeFiles/MinecraftCppGL.dir/src/ECS/entityComponentSystem.cpp.o -MF CMakeFiles/MinecraftCppGL.dir/src/ECS/entityComponentSystem.cpp.o.d -o CMakeFiles/MinecraftCppGL.dir/src/ECS/entityComponentSystem.cpp.o -c /Users/ness/Projects/GameDev/minecraft_gl/src/ECS/entityComponentSystem.cpp
+
+CMakeFiles/MinecraftCppGL.dir/src/ECS/entityComponentSystem.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MinecraftCppGL.dir/src/ECS/entityComponentSystem.cpp.i"
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -E /Users/ness/Projects/GameDev/minecraft_gl/src/ECS/entityComponentSystem.cpp > CMakeFiles/MinecraftCppGL.dir/src/ECS/entityComponentSystem.cpp.i
+
+CMakeFiles/MinecraftCppGL.dir/src/ECS/entityComponentSystem.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MinecraftCppGL.dir/src/ECS/entityComponentSystem.cpp.s"
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -S /Users/ness/Projects/GameDev/minecraft_gl/src/ECS/entityComponentSystem.cpp -o CMakeFiles/MinecraftCppGL.dir/src/ECS/entityComponentSystem.cpp.s
+
+CMakeFiles/MinecraftCppGL.dir/src/ECS/entityManager.cpp.o: CMakeFiles/MinecraftCppGL.dir/flags.make
+CMakeFiles/MinecraftCppGL.dir/src/ECS/entityManager.cpp.o: /Users/ness/Projects/GameDev/minecraft_gl/src/ECS/entityManager.cpp
+CMakeFiles/MinecraftCppGL.dir/src/ECS/entityManager.cpp.o: CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx
+CMakeFiles/MinecraftCppGL.dir/src/ECS/entityManager.cpp.o: CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.pch
+CMakeFiles/MinecraftCppGL.dir/src/ECS/entityManager.cpp.o: CMakeFiles/MinecraftCppGL.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/MinecraftCppGL.dir/src/ECS/entityManager.cpp.o"
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -MD -MT CMakeFiles/MinecraftCppGL.dir/src/ECS/entityManager.cpp.o -MF CMakeFiles/MinecraftCppGL.dir/src/ECS/entityManager.cpp.o.d -o CMakeFiles/MinecraftCppGL.dir/src/ECS/entityManager.cpp.o -c /Users/ness/Projects/GameDev/minecraft_gl/src/ECS/entityManager.cpp
+
+CMakeFiles/MinecraftCppGL.dir/src/ECS/entityManager.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MinecraftCppGL.dir/src/ECS/entityManager.cpp.i"
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -E /Users/ness/Projects/GameDev/minecraft_gl/src/ECS/entityManager.cpp > CMakeFiles/MinecraftCppGL.dir/src/ECS/entityManager.cpp.i
+
+CMakeFiles/MinecraftCppGL.dir/src/ECS/entityManager.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MinecraftCppGL.dir/src/ECS/entityManager.cpp.s"
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -S /Users/ness/Projects/GameDev/minecraft_gl/src/ECS/entityManager.cpp -o CMakeFiles/MinecraftCppGL.dir/src/ECS/entityManager.cpp.s
+
+CMakeFiles/MinecraftCppGL.dir/src/ECS/systemManager.cpp.o: CMakeFiles/MinecraftCppGL.dir/flags.make
+CMakeFiles/MinecraftCppGL.dir/src/ECS/systemManager.cpp.o: /Users/ness/Projects/GameDev/minecraft_gl/src/ECS/systemManager.cpp
+CMakeFiles/MinecraftCppGL.dir/src/ECS/systemManager.cpp.o: CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx
+CMakeFiles/MinecraftCppGL.dir/src/ECS/systemManager.cpp.o: CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.pch
+CMakeFiles/MinecraftCppGL.dir/src/ECS/systemManager.cpp.o: CMakeFiles/MinecraftCppGL.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/MinecraftCppGL.dir/src/ECS/systemManager.cpp.o"
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -MD -MT CMakeFiles/MinecraftCppGL.dir/src/ECS/systemManager.cpp.o -MF CMakeFiles/MinecraftCppGL.dir/src/ECS/systemManager.cpp.o.d -o CMakeFiles/MinecraftCppGL.dir/src/ECS/systemManager.cpp.o -c /Users/ness/Projects/GameDev/minecraft_gl/src/ECS/systemManager.cpp
+
+CMakeFiles/MinecraftCppGL.dir/src/ECS/systemManager.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MinecraftCppGL.dir/src/ECS/systemManager.cpp.i"
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -E /Users/ness/Projects/GameDev/minecraft_gl/src/ECS/systemManager.cpp > CMakeFiles/MinecraftCppGL.dir/src/ECS/systemManager.cpp.i
+
+CMakeFiles/MinecraftCppGL.dir/src/ECS/systemManager.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MinecraftCppGL.dir/src/ECS/systemManager.cpp.s"
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -S /Users/ness/Projects/GameDev/minecraft_gl/src/ECS/systemManager.cpp -o CMakeFiles/MinecraftCppGL.dir/src/ECS/systemManager.cpp.s
 
 CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o: CMakeFiles/MinecraftCppGL.dir/flags.make
-CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o: /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/core/main.cpp
-CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o: CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx
-CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o: CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch
+CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o: /Users/ness/Projects/GameDev/minecraft_gl/src/core/main.cpp
+CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o: CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx
+CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o: CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.pch
 CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o: CMakeFiles/MinecraftCppGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o"
-	/home/linuxbrew/.linuxbrew/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xclang -include-pch -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch -Xclang -include -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx -MD -MT CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o -MF CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o.d -o CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/core/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o"
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -MD -MT CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o -MF CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o.d -o CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o -c /Users/ness/Projects/GameDev/minecraft_gl/src/core/main.cpp
 
 CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.i"
-	/home/linuxbrew/.linuxbrew/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xclang -include-pch -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch -Xclang -include -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx -E /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/core/main.cpp > CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.i
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -E /Users/ness/Projects/GameDev/minecraft_gl/src/core/main.cpp > CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.i
 
 CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.s"
-	/home/linuxbrew/.linuxbrew/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xclang -include-pch -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch -Xclang -include -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx -S /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/core/main.cpp -o CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.s
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -S /Users/ness/Projects/GameDev/minecraft_gl/src/core/main.cpp -o CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.s
+
+CMakeFiles/MinecraftCppGL.dir/src/scene/scene.cpp.o: CMakeFiles/MinecraftCppGL.dir/flags.make
+CMakeFiles/MinecraftCppGL.dir/src/scene/scene.cpp.o: /Users/ness/Projects/GameDev/minecraft_gl/src/scene/scene.cpp
+CMakeFiles/MinecraftCppGL.dir/src/scene/scene.cpp.o: CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx
+CMakeFiles/MinecraftCppGL.dir/src/scene/scene.cpp.o: CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.pch
+CMakeFiles/MinecraftCppGL.dir/src/scene/scene.cpp.o: CMakeFiles/MinecraftCppGL.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/MinecraftCppGL.dir/src/scene/scene.cpp.o"
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -MD -MT CMakeFiles/MinecraftCppGL.dir/src/scene/scene.cpp.o -MF CMakeFiles/MinecraftCppGL.dir/src/scene/scene.cpp.o.d -o CMakeFiles/MinecraftCppGL.dir/src/scene/scene.cpp.o -c /Users/ness/Projects/GameDev/minecraft_gl/src/scene/scene.cpp
+
+CMakeFiles/MinecraftCppGL.dir/src/scene/scene.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MinecraftCppGL.dir/src/scene/scene.cpp.i"
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -E /Users/ness/Projects/GameDev/minecraft_gl/src/scene/scene.cpp > CMakeFiles/MinecraftCppGL.dir/src/scene/scene.cpp.i
+
+CMakeFiles/MinecraftCppGL.dir/src/scene/scene.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MinecraftCppGL.dir/src/scene/scene.cpp.s"
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -S /Users/ness/Projects/GameDev/minecraft_gl/src/scene/scene.cpp -o CMakeFiles/MinecraftCppGL.dir/src/scene/scene.cpp.s
 
 CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o: CMakeFiles/MinecraftCppGL.dir/flags.make
-CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o: /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/util/contracts.cpp
-CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o: CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx
-CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o: CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch
+CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o: /Users/ness/Projects/GameDev/minecraft_gl/src/util/contracts.cpp
+CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o: CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx
+CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o: CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.pch
 CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o: CMakeFiles/MinecraftCppGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o"
-	/home/linuxbrew/.linuxbrew/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xclang -include-pch -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch -Xclang -include -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx -MD -MT CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o -MF CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o.d -o CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/util/contracts.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o"
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -MD -MT CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o -MF CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o.d -o CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o -c /Users/ness/Projects/GameDev/minecraft_gl/src/util/contracts.cpp
 
 CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.i"
-	/home/linuxbrew/.linuxbrew/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xclang -include-pch -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch -Xclang -include -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx -E /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/util/contracts.cpp > CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.i
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -E /Users/ness/Projects/GameDev/minecraft_gl/src/util/contracts.cpp > CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.i
 
 CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.s"
-	/home/linuxbrew/.linuxbrew/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xclang -include-pch -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch -Xclang -include -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx -S /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/util/contracts.cpp -o CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.s
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -S /Users/ness/Projects/GameDev/minecraft_gl/src/util/contracts.cpp -o CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.s
 
 CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o: CMakeFiles/MinecraftCppGL.dir/flags.make
-CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o: /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/util/input.cpp
-CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o: CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx
-CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o: CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch
+CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o: /Users/ness/Projects/GameDev/minecraft_gl/src/util/input.cpp
+CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o: CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx
+CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o: CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.pch
 CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o: CMakeFiles/MinecraftCppGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o"
-	/home/linuxbrew/.linuxbrew/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xclang -include-pch -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch -Xclang -include -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx -MD -MT CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o -MF CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o.d -o CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/util/input.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o"
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -MD -MT CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o -MF CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o.d -o CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o -c /Users/ness/Projects/GameDev/minecraft_gl/src/util/input.cpp
 
 CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.i"
-	/home/linuxbrew/.linuxbrew/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xclang -include-pch -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch -Xclang -include -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx -E /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/util/input.cpp > CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.i
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -E /Users/ness/Projects/GameDev/minecraft_gl/src/util/input.cpp > CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.i
 
 CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.s"
-	/home/linuxbrew/.linuxbrew/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xclang -include-pch -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch -Xclang -include -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx -S /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/util/input.cpp -o CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.s
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx -S /Users/ness/Projects/GameDev/minecraft_gl/src/util/input.cpp -o CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.s
 
 # Object files for target MinecraftCppGL
 MinecraftCppGL_OBJECTS = \
+"CMakeFiles/MinecraftCppGL.dir/src/ECS/componentManager.cpp.o" \
+"CMakeFiles/MinecraftCppGL.dir/src/ECS/entityComponentSystem.cpp.o" \
+"CMakeFiles/MinecraftCppGL.dir/src/ECS/entityManager.cpp.o" \
+"CMakeFiles/MinecraftCppGL.dir/src/ECS/systemManager.cpp.o" \
 "CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o" \
+"CMakeFiles/MinecraftCppGL.dir/src/scene/scene.cpp.o" \
 "CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o" \
 "CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o"
 
 # External object files for target MinecraftCppGL
 MinecraftCppGL_EXTERNAL_OBJECTS =
 
-MinecraftCppGL: CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch
+MinecraftCppGL: CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.pch
+MinecraftCppGL: CMakeFiles/MinecraftCppGL.dir/src/ECS/componentManager.cpp.o
+MinecraftCppGL: CMakeFiles/MinecraftCppGL.dir/src/ECS/entityComponentSystem.cpp.o
+MinecraftCppGL: CMakeFiles/MinecraftCppGL.dir/src/ECS/entityManager.cpp.o
+MinecraftCppGL: CMakeFiles/MinecraftCppGL.dir/src/ECS/systemManager.cpp.o
 MinecraftCppGL: CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o
+MinecraftCppGL: CMakeFiles/MinecraftCppGL.dir/src/scene/scene.cpp.o
 MinecraftCppGL: CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o
 MinecraftCppGL: CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o
 MinecraftCppGL: CMakeFiles/MinecraftCppGL.dir/build.make
 MinecraftCppGL: libs/glfw/src/libglfw3.a
 MinecraftCppGL: libs/Glad/libglad.a
 MinecraftCppGL: libs/stb_image/libstb_image.a
-MinecraftCppGL: /usr/lib/x86_64-linux-gnu/librt.a
-MinecraftCppGL: /usr/lib/x86_64-linux-gnu/libm.so
 MinecraftCppGL: CMakeFiles/MinecraftCppGL.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable MinecraftCppGL"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable MinecraftCppGL"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/MinecraftCppGL.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -164,6 +252,6 @@ CMakeFiles/MinecraftCppGL.dir/clean:
 .PHONY : CMakeFiles/MinecraftCppGL.dir/clean
 
 CMakeFiles/MinecraftCppGL.dir/depend:
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/DependInfo.cmake "--color=$(COLOR)"
+	cd /Users/ness/Projects/GameDev/minecraft_gl/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/ness/Projects/GameDev/minecraft_gl /Users/ness/Projects/GameDev/minecraft_gl /Users/ness/Projects/GameDev/minecraft_gl/build /Users/ness/Projects/GameDev/minecraft_gl/build /Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/MinecraftCppGL.dir/depend
 

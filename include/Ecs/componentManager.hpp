@@ -2,7 +2,6 @@
 #include "Ecs/EcsConstants.hpp"
 #include "Ecs/component.hpp"
 #include "Ecs/componentAllocator.hpp"
-#include "Ecs/typeId.hpp"
 #include "pch.hpp"
 #include "util/contracts.hpp"
 #include "util/macros.hpp"
@@ -20,12 +19,9 @@ class ComponentManager
     void AddComponent(EntityID id, Args &&...args);
 
     template <typename ComponentType> ComponentType &GetComponent(EntityID id);
-
     template <typename ComponentType> void DeleteComponent(EntityID id);
 
     void EntityDestroyed(EntityID id, const EntityManager &manager);
-
-    template <typename ComponentType> inline usize ComponentID();
 
   private:
     template <typename ComponentType>
@@ -91,5 +87,4 @@ class ComponentManager
 
     std::array<Box<IComponentAllocator>, MAX_COMPONENTS> m_componentLists;
     usize m_size = 0;
-    TypeIdMaker m_typeIdMaker;
 };

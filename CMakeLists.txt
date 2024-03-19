@@ -13,11 +13,12 @@ endif ()
 
 project(MinecraftCppGL)
 
-file(GLOB_RECURSE file_sources src/*.cpp)
+file(GLOB_RECURSE file_sources src/**.cpp)
 add_executable(${PROJECT_NAME} ${file_sources})
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include/core)
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include/event)
+target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include/Ecs)
 target_precompile_headers(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include/pch.hpp)
 
 # GLFW

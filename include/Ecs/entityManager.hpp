@@ -1,5 +1,5 @@
 #pragma once
-#include "Ecs/EcsConstants.hpp"
+#include "Ecs/signature.hpp"
 #include "pch.hpp"
 #include "util/macros.hpp"
 
@@ -14,6 +14,16 @@ class Entity
 
     inline EntityID GetID() { return m_id; }
 
+    bool operator==(const Entity &other) const { return m_id == other.m_id; }
+    struct Hasher
+    {
+
+        usize operator()(const Entity &handle) const
+        {
+          return std::hash<usize>{}(handle.m_id);
+        }
+    };
+
   private:
     explicit Entity(EntityID id) : m_id(id) {}
     EntityID m_id;
@@ -22,13 +32,13 @@ class Entity
 class EntityManager
 {
   public:
-
     EntityManager() {}
     NO_COPY_OR_MOVE_CONSTRUCTORS(EntityManager)
 
     Entity MakeEntity();
     void DeleteEntity(EntityID entity);
 
+    Signature GetSignature(EntityID entity) const;
     bool HasComponent(EntityID entity, usize componentID) const;
     void AddComponent(EntityID entity, usize componentID);
     void RemoveComponent(EntityID entity, usize componentID);

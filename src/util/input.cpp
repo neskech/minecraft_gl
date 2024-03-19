@@ -13,12 +13,10 @@ void Input::OnWindowKeyEvent(GLFWwindow *, i32 key, i32 scancode, i32 action,
 {
   Requires(0 <= key && key < NUM_KEYS, "unknown keyboard key");
 
-  auto &self = Input::Instance();
-
   switch (action) {
   case GLFW_REPEAT:
   case GLFW_PRESS: {
-    auto &bits = self.m_keyPresses[key];
+    auto &bits = m_keyPresses[key];
     bits.set(IS_PRESSED_BIT_OFFSET, 1);
     bits |= MODIFIERS_BIT_MASK & mods;
 
@@ -30,7 +28,7 @@ void Input::OnWindowKeyEvent(GLFWwindow *, i32 key, i32 scancode, i32 action,
     break;
   }
   case GLFW_RELEASE: {
-    auto &bits = self.m_keyPresses[key];
+    auto &bits = m_keyPresses[key];
     bits.set(IS_PRESSED_BIT_OFFSET, 0);
     bits |= MODIFIERS_BIT_MASK & mods;
 
@@ -49,11 +47,9 @@ void Input::OnWindowMousePressedEvent(GLFWwindow *, i32 button, i32 action,
 {
   Requires(0 <= button && button < NUM_MOUSE_BUTTONS, "unknown mouse button");
 
-  auto &self = Input::Instance();
-
   switch (action) {
   case GLFW_PRESS: {
-    auto &bits = self.m_mouseButtons[button];
+    auto &bits = m_mouseButtons[button];
     bits.set(IS_PRESSED_BIT_OFFSET, 1);
     bits |= MODIFIERS_BIT_MASK & mods;
 
@@ -65,7 +61,7 @@ void Input::OnWindowMousePressedEvent(GLFWwindow *, i32 button, i32 action,
     break;
   }
   default: {
-    auto &bits = self.m_mouseButtons[button];
+    auto &bits = m_mouseButtons[button];
     bits.set(IS_PRESSED_BIT_OFFSET, 0);
     bits |= MODIFIERS_BIT_MASK & mods;
 
@@ -81,33 +77,30 @@ void Input::OnWindowMousePressedEvent(GLFWwindow *, i32 button, i32 action,
 
 void Input::OnWindowMouseMoveEvent(GLFWwindow *, double xpos, double ypos)
 {
-  auto &self = Input::Instance();
-  self.m_mouseX = xpos;
-  self.m_mouseY = ypos;
+  m_mouseX = xpos;
+  m_mouseY = ypos;
 
   Event::MouseMoved ev;
-  ev.mouseX = self.m_mouseX;
-  ev.mouseY = self.m_mouseY;
+  ev.mouseX = m_mouseX;
+  ev.mouseY = m_mouseY;
   EventManager::Invoke<Event::MouseMoved>(ev);
 }
 
 void Input::OnWindowMouseScrolledEvent(GLFWwindow *, double xoffset,
                                        double yoffset)
 {
-  auto &self = Input::Instance();
-  self.m_scrollX = xoffset;
-  self.m_scrollY = yoffset;
+  m_scrollX = xoffset;
+  m_scrollY = yoffset;
 
   Event::MouseScrolled ev;
-  ev.scrollX = self.m_scrollX;
-  ev.scrollY = self.m_scrollY;
+  ev.scrollX = m_scrollX;
+  ev.scrollY = m_scrollY;
   EventManager::Invoke<Event::MouseScrolled>(ev);
 }
 
 bool Input::IsKeyPressed(KeyInput key, KeyModifiers modifiers)
 {
-  const auto &self = Input::Instance();
-  const auto &bits = self.m_keyPresses[static_cast<usize>(key)];
+  const auto &bits = m_keyPresses[static_cast<usize>(key)];
   bool isPressed = bits.test(IS_PRESSED_BIT_OFFSET);
   bool isModifiers = static_cast<bool>(bits.to_ulong() & modifiers);
   return isPressed && isModifiers;
@@ -115,8 +108,7 @@ bool Input::IsKeyPressed(KeyInput key, KeyModifiers modifiers)
 
 bool Input::IsMouseButtonDown(MouseInput key, KeyModifiers modifiers)
 {
-  const auto &self = Input::Instance();
-  const auto &bits = self.m_mouseButtons[static_cast<usize>(key)];
+  const auto &bits = m_mouseButtons[static_cast<usize>(key)];
   bool isPressed = bits.test(IS_PRESSED_BIT_OFFSET);
   bool isModifiers = static_cast<bool>(bits.to_ulong() & modifiers);
   return isPressed && isModifiers;

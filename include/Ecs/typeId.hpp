@@ -2,19 +2,27 @@
 #pragma once
 #include "util/types.hpp"
 
-class TypeIdMaker
+template <typename Category> class TypeIdMaker
 {
   public:
-    template <typename T> usize GetId()
+    template <typename T> static usize GetId()
     {
-      static usize typeId = m_globalCount;
+      auto& self = Instance();
 
-      if (typeId == m_globalCount)
-        m_globalCount++;
+      static usize typeId = self.m_globalCount;
+
+      if (typeId == self.m_globalCount)
+        self.m_globalCount++;
 
       return typeId;
     }
 
   private:
+    static TypeIdMaker<Category> &Instance()
+    {
+      static TypeIdMaker<Category> self{};
+      return self;
+    }
+
     usize m_globalCount = 0;
 };

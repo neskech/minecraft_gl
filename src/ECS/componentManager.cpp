@@ -1,5 +1,7 @@
 #include "Ecs/componentManager.hpp"
+#include "Ecs/component.hpp"
 #include "Ecs/entityManager.hpp"
+#include "Ecs/typeId.hpp"
 
 template <typename ComponentType, typename... Args>
   requires std::is_constructible_v<ComponentType, Args...>
@@ -52,5 +54,5 @@ void ComponentManager::EntityDestroyed(EntityID id,
 
 template <typename ComponentType> usize ComponentManager::ComponentID()
 {
-  return m_typeIdMaker.GetId<ComponentType>();
+  return TypeIdMaker<Component::Component>::GetId<ComponentType>();
 }

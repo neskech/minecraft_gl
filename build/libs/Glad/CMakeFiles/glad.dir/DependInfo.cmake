@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/Glad/src/glad.c" "libs/Glad/CMakeFiles/glad.dir/src/glad.c.o" "gcc" "libs/Glad/CMakeFiles/glad.dir/src/glad.c.o.d"
+  "/Users/ness/Projects/GameDev/minecraft_gl/libs/Glad/src/glad.c" "libs/Glad/CMakeFiles/glad.dir/src/glad.c.o" "gcc" "libs/Glad/CMakeFiles/glad.dir/src/glad.c.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

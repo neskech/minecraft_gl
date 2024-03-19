@@ -18,5 +18,6 @@ namespace Component
 
   struct Chunk : LargeComponent
   {
+    int stuff = 10;
   };
 } // namespace Component

@@ -48,19 +48,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake
+CMAKE_COMMAND = /opt/homebrew/Cellar/cmake/3.28.3/bin/cmake
 
 # The command to remove a file.
-RM = /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E rm -f
+RM = /opt/homebrew/Cellar/cmake/3.28.3/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp
+CMAKE_SOURCE_DIR = /Users/ness/Projects/GameDev/minecraft_gl
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build
+CMAKE_BINARY_DIR = /Users/ness/Projects/GameDev/minecraft_gl/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -68,7 +68,7 @@ CMAKE_BINARY_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/b
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake cache editor..."
-	/home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/opt/homebrew/Cellar/cmake/3.28.3/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -78,7 +78,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake to regenerate build system..."
-	/home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/opt/homebrew/Cellar/cmake/3.28.3/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -97,49 +97,49 @@ list_install_components/fast: list_install_components
 # Special rule for the target install
 install: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Install the project..."
-	/home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -P cmake_install.cmake
+	/opt/homebrew/Cellar/cmake/3.28.3/bin/cmake -P cmake_install.cmake
 .PHONY : install
 
 # Special rule for the target install
 install/fast: preinstall/fast
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Install the project..."
-	/home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -P cmake_install.cmake
+	/opt/homebrew/Cellar/cmake/3.28.3/bin/cmake -P cmake_install.cmake
 .PHONY : install/fast
 
 # Special rule for the target install/local
 install/local: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Installing only the local directory..."
-	/home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+	/opt/homebrew/Cellar/cmake/3.28.3/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
 .PHONY : install/local
 
 # Special rule for the target install/local
 install/local/fast: preinstall/fast
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Installing only the local directory..."
-	/home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+	/opt/homebrew/Cellar/cmake/3.28.3/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
 .PHONY : install/local/fast
 
 # Special rule for the target install/strip
 install/strip: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Installing the project stripped..."
-	/home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+	/opt/homebrew/Cellar/cmake/3.28.3/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
 .PHONY : install/strip
 
 # Special rule for the target install/strip
 install/strip/fast: preinstall/fast
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Installing the project stripped..."
-	/home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+	/opt/homebrew/Cellar/cmake/3.28.3/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
 .PHONY : install/strip/fast
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/stb_image//CMakeFiles/progress.marks
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libs/stb_image/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles 0
+	cd /Users/ness/Projects/GameDev/minecraft_gl/build && $(CMAKE_COMMAND) -E cmake_progress_start /Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles /Users/ness/Projects/GameDev/minecraft_gl/build/libs/stb_image//CMakeFiles/progress.marks
+	cd /Users/ness/Projects/GameDev/minecraft_gl/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libs/stb_image/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libs/stb_image/clean
+	cd /Users/ness/Projects/GameDev/minecraft_gl/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libs/stb_image/clean
 .PHONY : clean
 
 # The main clean target
@@ -148,22 +148,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libs/stb_image/preinstall
+	cd /Users/ness/Projects/GameDev/minecraft_gl/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libs/stb_image/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libs/stb_image/preinstall
+	cd /Users/ness/Projects/GameDev/minecraft_gl/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libs/stb_image/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /Users/ness/Projects/GameDev/minecraft_gl/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 libs/stb_image/CMakeFiles/stb_image.dir/rule:
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libs/stb_image/CMakeFiles/stb_image.dir/rule
+	cd /Users/ness/Projects/GameDev/minecraft_gl/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libs/stb_image/CMakeFiles/stb_image.dir/rule
 .PHONY : libs/stb_image/CMakeFiles/stb_image.dir/rule
 
 # Convenience name for target.
@@ -172,7 +172,7 @@ stb_image: libs/stb_image/CMakeFiles/stb_image.dir/rule
 
 # fast build rule for target.
 stb_image/fast:
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(MAKE) $(MAKESILENT) -f libs/stb_image/CMakeFiles/stb_image.dir/build.make libs/stb_image/CMakeFiles/stb_image.dir/build
+	cd /Users/ness/Projects/GameDev/minecraft_gl/build && $(MAKE) $(MAKESILENT) -f libs/stb_image/CMakeFiles/stb_image.dir/build.make libs/stb_image/CMakeFiles/stb_image.dir/build
 .PHONY : stb_image/fast
 
 stb_image.o: stb_image.cpp.o
@@ -180,7 +180,7 @@ stb_image.o: stb_image.cpp.o
 
 # target to build an object file
 stb_image.cpp.o:
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(MAKE) $(MAKESILENT) -f libs/stb_image/CMakeFiles/stb_image.dir/build.make libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.o
+	cd /Users/ness/Projects/GameDev/minecraft_gl/build && $(MAKE) $(MAKESILENT) -f libs/stb_image/CMakeFiles/stb_image.dir/build.make libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.o
 .PHONY : stb_image.cpp.o
 
 stb_image.i: stb_image.cpp.i
@@ -188,7 +188,7 @@ stb_image.i: stb_image.cpp.i
 
 # target to preprocess a source file
 stb_image.cpp.i:
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(MAKE) $(MAKESILENT) -f libs/stb_image/CMakeFiles/stb_image.dir/build.make libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.i
+	cd /Users/ness/Projects/GameDev/minecraft_gl/build && $(MAKE) $(MAKESILENT) -f libs/stb_image/CMakeFiles/stb_image.dir/build.make libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.i
 .PHONY : stb_image.cpp.i
 
 stb_image.s: stb_image.cpp.s
@@ -196,7 +196,7 @@ stb_image.s: stb_image.cpp.s
 
 # target to generate assembly for a file
 stb_image.cpp.s:
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(MAKE) $(MAKESILENT) -f libs/stb_image/CMakeFiles/stb_image.dir/build.make libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.s
+	cd /Users/ness/Projects/GameDev/minecraft_gl/build && $(MAKE) $(MAKESILENT) -f libs/stb_image/CMakeFiles/stb_image.dir/build.make libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.s
 .PHONY : stb_image.cpp.s
 
 # Help Target
@@ -226,6 +226,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /Users/ness/Projects/GameDev/minecraft_gl/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

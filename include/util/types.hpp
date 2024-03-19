@@ -10,7 +10,7 @@ template <typename T, typename... Args> inline Box<T> MakeBox(Args &&...args)
   return std::make_unique<T>(std::forward<T>(args)...);
 }
 
-template <typename T, typename... Args> inline Box<T> MakeRef(Args &&...args)
+template <typename T, typename... Args> inline Ref<T> MakeRef(Args &&...args)
 {
   return std::make_shared<T>(std::forward<T>(args)...);
 }

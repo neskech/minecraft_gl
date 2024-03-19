@@ -2,6 +2,7 @@
 #include "Ecs/component.hpp"
 #include "Ecs/componentManager.hpp"
 #include "Ecs/entityManager.hpp"
+#include "Ecs/systemManager.hpp"
 #include "util/macros.hpp"
 #include <type_traits>
 class EntityComponentSystem
@@ -35,6 +36,7 @@ class EntityComponentSystem
     const ComponentType &GetComponentConst(Entity entity);
 
   private:
+    SystemManager m_systemManager;
     ComponentManager m_componentManager;
     EntityManager m_entityManager;
 };

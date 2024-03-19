@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/stb_image/stb_image.cpp" "libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.o" "gcc" "libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.o.d"
+  "/Users/ness/Projects/GameDev/minecraft_gl/libs/stb_image/stb_image.cpp" "libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.o" "gcc" "libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

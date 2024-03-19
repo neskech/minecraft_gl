@@ -15,30 +15,25 @@ class Input
     Input() {}
     NO_COPY_OR_MOVE_CONSTRUCTORS(Input)
 
-    static bool IsKeyPressed(KeyInput key,
-                             KeyModifiers modifiers = KeyModifiers::None);
-    static bool IsMouseButtonDown(MouseInput button,
-                                  KeyModifiers modifiers = KeyModifiers::None);
+    bool IsKeyPressed(KeyInput key,
+                      KeyModifiers modifiers = KeyModifiers::None);
+    bool IsMouseButtonDown(MouseInput button,
+                           KeyModifiers modifiers = KeyModifiers::None);
 
-    static inline float GetMouseX() { return Input::Instance().m_mouseX; }
-    static inline float GetMouseY() { return Input::Instance().m_mouseY; }
-    static inline float GetScrollX() { return Input::Instance().m_scrollX; }
-    static inline float GetScrollY() { return Input::Instance().m_scrollY; }
+    inline float GetMouseX() { return m_mouseX; }
+    inline float GetMouseY() { return m_mouseY; }
+    inline float GetScrollX() { return m_scrollX; }
+    inline float GetScrollY() { return m_scrollY; }
 
-    static void OnWindowKeyEvent(GLFWwindow *, i32 key, i32 scancode,
-                                 i32 action, i32 mods);
-    static void OnWindowMousePressedEvent(GLFWwindow *, i32 button, i32 action,
-                                          i32 mods);
-    static void OnWindowMouseMoveEvent(GLFWwindow *, double xpos, double ypos);
-    static void OnWindowMouseScrolledEvent(GLFWwindow *, double xoffset,
-                                           double yoffset);
+    void OnWindowKeyEvent(GLFWwindow *, i32 key, i32 scancode, i32 action,
+                          i32 mods);
+    void OnWindowMousePressedEvent(GLFWwindow *, i32 button, i32 action,
+                                   i32 mods);
+    void OnWindowMouseMoveEvent(GLFWwindow *, double xpos, double ypos);
+    void OnWindowMouseScrolledEvent(GLFWwindow *, double xoffset,
+                                    double yoffset);
 
   private:
-    static Input &Instance()
-    {
-      static Input input{};
-      return input;
-    }
     std::array<std::bitset<8>, NUM_KEYS> m_keyPresses;
     std::array<std::bitset<8>, NUM_MOUSE_BUTTONS> m_mouseButtons;
     float m_mouseX, m_mouseY;
