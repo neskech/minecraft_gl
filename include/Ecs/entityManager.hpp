@@ -3,13 +3,16 @@
 #include "pch.hpp"
 #include "util/macros.hpp"
 
-class Entity;
+class EntityComponentSystem;
 typedef usize EntityID;
 
 class Entity
 {
   public:
     friend class EntityManager;
+    friend class EntityComponentSystem;
+
+    inline EntityID GetID() { return m_id; }
 
   private:
     explicit Entity(EntityID id) : m_id(id) {}
@@ -19,7 +22,6 @@ class Entity
 class EntityManager
 {
   public:
-    using Signature = std::bitset<MAX_COMPONENTS>;
 
     EntityManager() {}
     NO_COPY_OR_MOVE_CONSTRUCTORS(EntityManager)

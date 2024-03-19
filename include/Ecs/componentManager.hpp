@@ -1,11 +1,13 @@
 #pragma once
 #include "Ecs/EcsConstants.hpp"
+#include "Ecs/component.hpp"
 #include "Ecs/componentAllocator.hpp"
 #include "Ecs/typeId.hpp"
 #include "pch.hpp"
 #include "util/contracts.hpp"
 #include "util/macros.hpp"
 #include "util/types.hpp"
+#include <type_traits>
 
 class ComponentManager
 {
@@ -17,8 +19,12 @@ class ComponentManager
       requires std::is_constructible_v<ComponentType, Args...>
     void AddComponent(EntityID id, Args &&...args);
 
+    template <typename ComponentType> ComponentType &GetComponent(EntityID id);
+
     template <typename ComponentType> void DeleteComponent(EntityID id);
-    void EntityDestroyed(EntityID id, const EntityManager& manager);
+
+    void EntityDestroyed(EntityID id, const EntityManager &manager);
+
     template <typename ComponentType> inline usize ComponentID();
 
   private:
@@ -30,6 +36,18 @@ class ComponentManager
 
       usize id = ComponentID<ComponentType>();
       auto *c = dynamic_cast<ComponentAllocator<ComponentType> *>(
+          m_componentLists[id].get());
+      return *c;
+    }
+
+    template <typename ComponentType>
+    DynamicComponentAllocator<ComponentType> &GetDynamicComponentAllocator()
+    {
+      if (!DoesAllocatorExist<ComponentType>())
+        MakeComponentAllocator<ComponentType>();
+
+      usize id = ComponentID<ComponentType>();
+      auto *c = dynamic_cast<DynamicComponentAllocator<ComponentType> *>(
           m_componentLists[id].get());
       return *c;
     }
@@ -48,7 +66,13 @@ class ComponentManager
              std::format("Exceeded maximum number of components (which is {})",
                          MAX_COMPONENTS));
 
-      m_componentLists[id] = MakeBox<ComponentType>();
+      if constexpr (IsLargeComponent<ComponentType>()) {
+        m_componentLists[id] =
+            MakeBox<DynamicComponentAllocator<ComponentType>>();
+      }
+      else {
+        m_componentLists[id] = MakeBox<ComponentAllocator<ComponentType>>();
+      }
 
       m_size++;
       Ensures(m_size == id);
@@ -58,6 +82,11 @@ class ComponentManager
     {
       usize id = ComponentID<ComponentType>();
       return id < m_size;
+    }
+
+    template <typename ComponentType> constexpr bool IsLargeComponent()
+    {
+      return std::is_base_of_v<Component::LargeComponent, ComponentType>;
     }
 
     std::array<Box<IComponentAllocator>, MAX_COMPONENTS> m_componentLists;
