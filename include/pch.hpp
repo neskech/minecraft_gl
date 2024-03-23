@@ -1,5 +1,6 @@
 #pragma once
 #include "GLFW/glfw3.h"  // IWYU pragma: export
+#include "glm/glm.hpp"   // IWYU pragma: export
 #include <array>         // IWYU pragma: export
 #include <bitset>        // IWYU pragma: export
 #include <cassert>       // IWYU pragma: export

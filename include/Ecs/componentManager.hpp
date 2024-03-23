@@ -16,12 +16,51 @@ class ComponentManager
 
     template <typename ComponentType, typename... Args>
       requires std::is_constructible_v<ComponentType, Args...>
-    void AddComponent(EntityID id, Args &&...args);
+    void AddComponent(EntityID id, Args &&...args)
+    {
+      if constexpr (IsLargeComponent<ComponentType>()) {
+        auto &allocator = GetDynamicComponentAllocator<ComponentType>();
+        allocator.AllocateComponent(id, std::forward<Args>(args)...);
+      }
+      else {
+        auto &allocator = GetComponentAllocator<ComponentType>();
+        allocator.AllocateComponent(id, std::forward<Args>(args)...);
+      }
+    }
 
-    template <typename ComponentType> ComponentType &GetComponent(EntityID id);
-    template <typename ComponentType> void DeleteComponent(EntityID id);
+    template <typename ComponentType>
+    ComponentType &GetComponent(EntityID id)
+    {
+      if constexpr (IsLargeComponent<ComponentType>()) {
+        auto &allocator = GetDynamicComponentAllocator<ComponentType>();
+        return allocator.GetComponent(id);
+      }
+      else {
+        auto &allocator = GetComponentAllocator<ComponentType>();
+        return allocator.GetComponent(id);
+      }
+    }
 
-    void EntityDestroyed(EntityID id, const EntityManager &manager);
+    template <typename ComponentType>
+    void DeleteComponent(EntityID id)
+    {
+      if constexpr (IsLargeComponent<ComponentType>()) {
+        auto &allocator = GetDynamicComponentAllocator<ComponentType>();
+        allocator.FreeComponent(id);
+      }
+      else {
+        auto &allocator = GetComponentAllocator<ComponentType>();
+        allocator.FreeComponent(id);
+      }
+    }
+
+    void EntityDestroyed(EntityID id, const EntityManager &manager)
+    {
+      for (u32 i = 0; i < m_size; i++) {
+        if (manager.HasComponent(id, i))
+          m_componentLists[i].get()->FreeComponent(id);
+      }
+    }
 
   private:
     template <typename ComponentType>
@@ -48,7 +87,8 @@ class ComponentManager
       return *c;
     }
 
-    template <typename ComponentType> void MakeComponentAllocator()
+    template <typename ComponentType>
+    void MakeComponentAllocator()
     {
       usize id = ComponentID<ComponentType>();
 
@@ -74,13 +114,15 @@ class ComponentManager
       Ensures(m_size == id);
     }
 
-    template <typename ComponentType> bool DoesAllocatorExist()
+    template <typename ComponentType>
+    bool DoesAllocatorExist()
     {
       usize id = ComponentID<ComponentType>();
       return id < m_size;
     }
 
-    template <typename ComponentType> constexpr bool IsLargeComponent()
+    template <typename ComponentType>
+    constexpr bool IsLargeComponent()
     {
       return std::is_base_of_v<Component::LargeComponent, ComponentType>;
     }

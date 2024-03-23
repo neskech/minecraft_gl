@@ -11,4 +11,5 @@ BraceWrapping:
 EmptyLineBeforeAccessModifier: LogicalBlock
 IndentAccessModifiers: true
 NamespaceIndentation: All
+AlwaysBreakTemplateDeclarations: Yes
 #PenaltyReturnTypeOnItsOwnLine: 10000

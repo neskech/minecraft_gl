@@ -1,4 +1,5 @@
 #pragma once
+#include "glm/fwd.hpp"
 #include "pch.hpp"
 
 template <typename T> using Box = std::unique_ptr<T>;
@@ -41,6 +42,14 @@ template <typename T, typename E> inline Option<T> Err(E &&e)
   return std::expected(std::forward<E>(e));
 }
 
+typedef glm::vec2 Vector2;
+typedef glm::vec3 Vector3;
+typedef glm::vec4 Vector4;
+typedef glm::ivec2 IntVector2;
+typedef glm::ivec3 IntVector3;
+typedef glm::mat3 Matrix3;
+typedef glm::mat4 Matrix4;
+
 typedef u_int8_t u8;
 typedef u_int16_t u16;
 typedef u_int32_t u32;
@@ -52,3 +61,6 @@ typedef int16_t i16;
 typedef int32_t i32;
 typedef int64_t i64;
 typedef int64_t isize;
+
+typedef float f32;
+typedef double f64;
