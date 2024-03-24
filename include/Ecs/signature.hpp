@@ -2,6 +2,7 @@
 #include "Ecs/EcsConstants.hpp"
 #include "Ecs/component.hpp"
 #include "typeId.hpp"
+#include "util/contracts.hpp"
 
 using Signature = std::bitset<MAX_COMPONENTS>;
 
@@ -10,14 +11,20 @@ class SignatureBuilder
   public:
     SignatureBuilder() {}
 
-    template <typename ComponentType> SignatureBuilder &AddComponentType();
-    template <typename... ComponentTypes> SignatureBuilder &AddComponentTypes();
-    Signature Finish() {return m_signature; }
+    template <typename ComponentType>
+    SignatureBuilder &AddComponentType();
+    template <typename... ComponentTypes>
+    SignatureBuilder &AddComponentTypes();
+    Signature Finish() { return m_signature; }
 
   private:
-    template <typename ComponentType> usize ComponentID()
+    template <typename ComponentType>
+    usize ComponentID()
     {
-      return TypeIdMaker<Component::Component>::GetId<ComponentType>();
+      usize id = TypeIdMaker<Component::Component>::GetId<ComponentType>();
+      // TODO: Get an import on component manager for IsValidID static method, without import errors
+      Assert(0 <= id && id < MAX_COMPONENTS, "Too many components!");
+      return id;
     }
 
     Signature m_signature = 0;
@@ -28,7 +35,7 @@ SignatureBuilder &SignatureBuilder::AddComponentType()
 {
   usize id = ComponentID<ComponentType>();
   m_signature.set(id);
-  
+
   return *this;
 }
 

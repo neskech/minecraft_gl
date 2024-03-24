@@ -11,11 +11,11 @@ class LayerRegistry
     LayerRegistry();
     NO_COPY_OR_MOVE_CONSTRUCTORS(LayerRegistry)
 
-    void AddLayerName(const char* name);
-    std::bitset<MAX_LAYERS> GetLayerNameMask(const char* name);
-    usize GetLayerNameIndex(const char* name);
+    void AddLayerName(std::string_view name);
+    LayerMask GetLayerMaskByName(std::string_view name);
+    usize GetLayerIndexByName(std::string_view name);
     usize GetLayerCount();
-    
+
   private:
-    std::unordered_map<const char *, usize> m_layerToIndex;
+    std::unordered_map<std::string_view, usize> m_layerToIndex;
 };

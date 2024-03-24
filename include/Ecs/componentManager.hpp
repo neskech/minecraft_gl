@@ -62,6 +62,10 @@ class ComponentManager
       }
     }
 
+    static inline bool IsValidComponentID(usize componentID) {
+      return 0 <= componentID && componentID < MAX_COMPONENTS;
+    }
+
   private:
     template <typename ComponentType>
     ComponentAllocator<ComponentType> &GetComponentAllocator()
