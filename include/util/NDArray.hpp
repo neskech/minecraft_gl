@@ -2,159 +2,229 @@
 #include "pch.hpp"
 #include "util/contracts.hpp"
 #include "util/types.hpp"
-#include <cstring>
-#include <memory>
+#include <algorithm>
+#include <tuple>
 
-template <typename T, usize Rows, usize Columns> class StaticArray2D
+/* https://stackoverflow.com/questions/33511753/how-can-i-generate-a-tuple-of-n-type-ts
+ */
+template <typename /*LEFT_TUPLE*/, typename /*RIGHT_TUPLE*/>
+struct join_tuples
+{
+};
+
+template <typename... LEFT, typename... RIGHT>
+struct join_tuples<std::tuple<LEFT...>, std::tuple<RIGHT...>>
+{
+    typedef std::tuple<LEFT..., RIGHT...> type;
+};
+
+template <typename T, unsigned N>
+struct generate_tuple_type
+{
+    typedef typename generate_tuple_type<T, N / 2>::type left;
+    typedef typename generate_tuple_type<T, N / 2 + N % 2>::type right;
+    typedef typename join_tuples<left, right>::type type;
+};
+
+template <typename T>
+struct generate_tuple_type<T, 1>
+{
+    typedef std::tuple<T> type;
+};
+
+template <typename T>
+struct generate_tuple_type<T, 0>
+{
+    typedef std::tuple<> type;
+};
+
+template <typename T, usize... Dimensions>
+class StaticNDArray
 {
   public:
-    StaticArray2D() = default;
-    StaticArray2D(const StaticArray2D &other) = default;
-    StaticArray2D(StaticArray2D &&other) = default;
+    StaticNDArray(const StaticNDArray &other) = default;
+    StaticNDArray(StaticNDArray &&other) = default;
 
-    T &operator[](usize row, usize col)
+    StaticNDArray()
     {
-      Requires(0 <= row && row < Rows);
-      Requires(0 <= col && col < Columns);
-      return m_data[row * Columns + col];
+      std::array<usize, sizeof...(Dimensions)> dims{Dimensions...};
+
+      usize prod = 1;
+      m_coefficients[0] = prod;
+
+      for (u32 i = 1; i < dims.size(); i++) {
+        prod *= dims[dims.size() - i];
+        m_coefficients[i] = prod;
+      }
+
+      /*
+        For 3D arrays, are dimensions are
+        H = height
+        R = rows
+        C = columns
+
+        [H, R, C]
+
+        We want our indices to be multiplied with
+        their coefficients like so
+        (x, y, z) -> (x * RC, y * C, z * 1)
+
+        Before reversal, our coefficient list looks like this
+        [1, C, RC]
+
+        After, it's this
+        [RC, C, 1]
+      */
+
+      std::reverse(m_coefficients.begin(), m_coefficients.end());
+    }
+
+    T &operator[](std::integral auto... indices)
+    {
+      static_assert(sizeof...(indices) == sizeof...(Dimensions));
+
+      usize index1D = 0;
+      usize coefIndex = 0;
+      ((index1D += m_coefficients[coefIndex++] * indices), ...);
+
+      Assert(0 <= index1D && index1D < m_data.size(), "Index out of bounds");
+      return m_data[index1D];
+    }
+
+    T &operator[](std::integral auto index1D)
+    {
+      Assert(0 <= index1D && index1D < m_data.size(), "Index out of bounds");
+      return m_data[index1D];
     }
 
     void ZeroOut(T &defaultValue)
     {
-      for (usize i = 0; i < Rows * Columns; i++)
+      for (usize i = 0; i < m_data.size(); i++)
         m_data[i] = defaultValue;
     }
 
-    usize Size() { return m_data.size(); }
+    usize NDimensionalIndexTo1D(std::integral auto... indices)
+    {
+      static_assert(sizeof...(indices) == sizeof...(Dimensions));
 
-    std::array<T, Rows * Columns> &GetInner() { return m_data; }
+      usize index1D = 0;
+      usize coefIndex = 0;
+      ((index1D += m_coefficients[coefIndex++] * indices), ...);
+
+      return index1D;
+    }
+
+    std::array<usize, sizeof...(Dimensions)>
+    OneDimensionalIndexToND(usize index)
+    {
+      usize i = 0;
+      std::print("{}", m_coefficients[0]);
+      return std::array<usize, sizeof...(Dimensions)>{
+          ((index / m_coefficients[i++]) % Dimensions)...};
+    }
+
+    std::array<T, (... * Dimensions)> &GetInnerArray() { return m_data; }
+    usize GetSize() { return m_data.size(); }
 
   private:
-    std::array<T, Rows * Columns> m_data;
+    std::array<T, (... * Dimensions)> m_data;
+    std::array<u32, sizeof...(Dimensions)> m_coefficients;
 };
 
-template <typename T, usize Slices, usize Rows, usize Columns>
-class StaticArray3D
+template <typename T, usize... Dimensions>
+class NDArray
 {
   public:
-    StaticArray3D() = default;
-    StaticArray3D(const StaticArray3D &other) = default;
-    StaticArray3D(StaticArray3D &&other) = default;
+    NDArray(const NDArray &other) = default;
 
-    T &operator[](usize slice, usize row, usize col)
+    NDArray(NDArray<T, Dimensions...> &&other)
     {
-      Requires(0 <= slice && slice < Slices);
-      Requires(0 <= row && row < Rows);
-      Requires(0 <= col && col < Columns);
-      return m_data[slice * Rows * Columns + row * Columns + col];
+      m_data = std::move(other.m_data);
+    }
+
+    NDArray()
+    {
+      m_data.reserve((... * Dimensions));
+
+      std::array<usize, sizeof...(Dimensions)> dims{Dimensions...};
+
+      usize prod = 1;
+      m_coefficients[0] = prod;
+
+      for (u32 i = 1; i < dims.size() - 1; i--) {
+        prod *= dims[dims.size() - i];
+        m_coefficients[i] = prod;
+      }
+
+      /*
+        For 3D arrays, are dimensions are
+        H = height
+        R = rows
+        C = columns
+
+        [H, R, C]
+
+        We want our indices to be multiplied with
+        their coefficients like so
+        (x, y, z) -> (x * RC, y * C, z * 1)
+
+        Before reversal, our coefficient list looks like this
+        [1, C, RC]
+
+        After, it's this
+        [RC, C, 1]
+      */
+
+      std::reverse(m_coefficients.begin(), m_coefficients.end());
+    }
+
+    T &operator[](std::integral auto... indices)
+    {
+      static_assert(sizeof...(indices) == sizeof...(Dimensions));
+
+      usize index1D = 0;
+      usize coefIndex = 0;
+      ((index1D += m_coefficients[coefIndex++] * indices), ...);
+
+      Assert(0 <= index1D && index1D < m_data.size(), "Index out of bounds");
+      return m_data[index1D];
+    }
+
+    T &operator[](std::integral auto index1D)
+    {
+      Assert(0 <= index1D && index1D < m_data.size(), "Index out of bounds");
+      return m_data[index1D];
     }
 
     void ZeroOut(T &defaultValue)
     {
-      for (usize i = 0; i < Slices * Rows * Columns; i++)
+      for (usize i = 0; i < m_data.size(); i++)
         m_data[i] = defaultValue;
     }
 
-    usize Size() { return m_data.size(); }
+    usize NDimensionalIndexTo1D(std::integral auto... indices)
+    {
+      static_assert(sizeof...(indices) == sizeof...(Dimensions));
 
-    std::array<T, Slices * Rows * Columns> &GetInner() { return m_data; }
+      usize index1D = 0;
+      usize coefIndex = 0;
+      ((index1D += m_coefficients[coefIndex++] * indices), ...);
+
+      return index1D;
+    }
+
+    std::array<usize, sizeof...(Dimensions)>
+    OneDimensionalIndexToND(usize index)
+    {
+      usize i = 0;
+      return std::array<usize, sizeof...(Dimensions)>{
+          ((index / m_coefficients[i++]) % Dimensions)...};
+    }
+
+    std::array<T, (... * Dimensions)> &GetInnerArray() { return m_data; }
+    usize GetSize() { return m_data.size(); }
 
   private:
-    std::array<T, Slices * Rows * Columns> m_data;
-};
-
-template <typename T> class Array2D
-{
-  public:
-    Array2D(usize rows, usize columns)
-    {
-      m_rows = rows;
-      m_cols = columns;
-      m_data = std::unique_ptr<T>(new T[rows * columns]);
-    }
-
-    Array2D(const Array2D &other)
-    {
-      T *data = m_data.get();
-      T *otherData = other.m_data.get();
-      memcpy(data, otherData, Size() * sizeof(T));
-    }
-
-    Array2D(Array2D &&other)
-    {
-      m_data.reset();
-      m_data = std::move(other.m_data);
-    }
-
-    T &operator[](usize row, usize col)
-    {
-      Requires(0 <= row && row < m_rows);
-      Requires(0 <= col && col < m_cols);
-      return m_data.get()[row * m_cols + col];
-    }
-
-    void ZeroOut(T &defaultValue)
-    {
-      for (usize i = 0; i < m_rows * m_cols; i++)
-        m_data.get()[i] = defaultValue;
-    }
-
-    usize Rows() { return m_rows; }
-    usize Columns() { return m_cols; }
-    usize Size() { return m_rows * m_cols; }
-
-  private:
-    Box<T> m_data;
-    usize m_rows;
-    usize m_cols;
-};
-
-template <typename T> class Array3D
-{
-  public:
-    Array3D(usize slices, usize rows, usize columns)
-    {
-      m_slices = slices;
-      m_rows = rows;
-      m_cols = columns;
-      m_data = std::unique_ptr<T>(new T[slices * rows * columns]);
-    }
-
-    Array3D(const Array3D &other)
-    {
-      T *data = m_data.get();
-      T *otherData = other.m_data.get();
-      memcpy(data, otherData, Size() * sizeof(T));
-    }
-
-    Array3D(Array3D &&other)
-    {
-      m_data.reset();
-      m_data = std::move(other.m_data);
-    }
-
-    T &operator[](usize slice, usize row, usize col)
-    {
-      Requires(0 <= slice && slice < m_slices);
-      Requires(0 <= row && row < m_rows);
-      Requires(0 <= col && col < m_cols);
-      return m_data.get()[row * m_cols + col];
-    }
-
-    void ZeroOut(T &defaultValue)
-    {
-      for (usize i = 0; i < m_slices * m_rows * m_cols; i++)
-        m_data.get()[i] = defaultValue;
-    }
-
-    usize Slices() { return m_slices; }
-    usize Rows() { return m_rows; }
-    usize Columns() { return m_cols; }
-    usize Size() { return m_slices * m_rows * m_cols; }
-
-  private:
-    Box<T> m_data;
-    usize m_slices;
-    usize m_rows;
-    usize m_cols;
+    std::vector<T> m_data;
+    std::array<u32, sizeof...(Dimensions)> m_coefficients;
 };

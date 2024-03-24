@@ -11,11 +11,12 @@
 class IComponentAllocator
 {
   public:
-    virtual void FreeComponent(EntityID id) = 0;
+    virtual void FreeComponent(Entity entity) = 0;
     virtual ~IComponentAllocator() = default;
 };
 
-template <typename ComponentType> class ComponentAllocator : IComponentAllocator
+template <typename ComponentType>
+class ComponentAllocator : IComponentAllocator
 {
   public:
     ComponentAllocator() { m_typeName = typeid(ComponentType).name(); }
@@ -24,28 +25,27 @@ template <typename ComponentType> class ComponentAllocator : IComponentAllocator
 
     template <typename... Args>
       requires std::is_constructible_v<ComponentType, Args...>
-    void AllocateComponent(EntityID id, Args &&...args)
+    void AllocateComponent(Entity entity, Args &&...args)
     {
-      Requires(
-          !m_indexMap.contains(id),
-          std::format(
-              "Entity of id {} tried allocating component of type {} twice!",
-              id, m_typeName));
+      Requires(!m_indexMap.contains(entity.GetID()),
+               std::format("Entity of entity.GetID() {} tried allocating "
+                           "component of type {} twice!",
+                           entity.GetID(), m_typeName));
 
       usize newIndex = m_size;
       m_components[newIndex] = T(std::forward<Args>(args)...);
-      m_indexMap[id] = newIndex;
-      m_entityMap[newIndex] = id;
+      m_indexMap[entity.GetID()] = newIndex;
+      m_entityMap[newIndex] = entity.GetID();
 
       m_size++;
     }
 
-    void FreeComponent(EntityID id)
+    void FreeComponent(Entity entity)
     {
-      Requires(m_indexMap.contains(id));
+      Requires(m_indexMap.contains(entity.GetID()));
 
       usize lastIndex = m_size - 1;
-      usize index = m_indexMap.at(id);
+      usize index = m_indexMap.at(entity.GetID());
       Assert(0 <= index && index < m_size);
       Assert(m_entityMap.contains(index));
 
@@ -55,17 +55,17 @@ template <typename ComponentType> class ComponentAllocator : IComponentAllocator
       m_components[index] = std::move(m_components[lastIndex]);
 
       m_size--;
-      m_entityMap.erase(id);
+      m_entityMap.erase(entity.GetID());
       m_indexMap.erase(lastIndex);
     }
 
-    ComponentType &GetComponent(EntityID id)
+    ComponentType &GetComponent(Entity entity)
     {
-      Requires(m_indexMap.contains(id),
+      Requires(m_indexMap.contains(entity.GetID()),
                std::format("Entity does not have component of type {}!",
                            m_typeName));
 
-      usize index = m_indexMap.at(id);
+      usize index = m_indexMap.at(entity.GetID());
       Assert(0 <= index && index < m_size);
 
       return m_components[index];
@@ -79,7 +79,8 @@ template <typename ComponentType> class ComponentAllocator : IComponentAllocator
     std::string m_typeName;
 };
 
-template <typename ComponentType> class DynamicComponentAllocator : IComponentAllocator
+template <typename ComponentType>
+class DynamicComponentAllocator : IComponentAllocator
 {
   public:
     DynamicComponentAllocator() { m_typeName = typeid(ComponentType).name(); }
@@ -102,12 +103,12 @@ template <typename ComponentType> class DynamicComponentAllocator : IComponentAl
       m_entityMap[newIndex] = id;
     }
 
-    void FreeComponent(EntityID id)
+    void FreeComponent(Entity entity)
     {
-      Requires(m_indexMap.contains(id));
+      Requires(m_indexMap.contains(entity.GetID()));
 
       usize lastIndex = m_components.size() - 1;
-      usize index = m_indexMap.at(id);
+      usize index = m_indexMap.at(entity.GetID());
       Assert(0 <= index && index < m_components.size());
       Assert(m_entityMap.contains(index));
 
@@ -117,17 +118,17 @@ template <typename ComponentType> class DynamicComponentAllocator : IComponentAl
       m_components[index] = std::move(m_components[lastIndex]);
 
       m_components.pop_back();
-      m_entityMap.erase(id);
+      m_entityMap.erase(entity.GetID());
       m_indexMap.erase(lastIndex);
     }
 
-    ComponentType &GetComponent(EntityID id)
+    ComponentType &GetComponent(Entity entity)
     {
-      Requires(m_indexMap.contains(id),
+      Requires(m_indexMap.contains(entity.GetID()),
                std::format("Entity does not have component of type {}!",
                            m_typeName));
 
-      usize index = m_indexMap.at(id);
+      usize index = m_indexMap.at(entity.GetID());
       Assert(0 <= index && index < m_components.size());
 
       return m_components[index];

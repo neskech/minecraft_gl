@@ -32,9 +32,9 @@ class EntityComponentSystem
 
     void DeleteEntity(Entity entity)
     {
-      m_componentManager.EntityDestroyed(entity.m_id, m_entityManager);
+      m_componentManager.EntityDestroyed(entity, m_entityManager);
       m_systemManager.EntityDestroyed(entity);
-      m_entityManager.DeleteEntity(entity.m_id);
+      m_entityManager.DeleteEntity(entity);
     }
 
     template <typename ComponentType, typename... Args>
@@ -43,14 +43,14 @@ class EntityComponentSystem
     {
       usize componentId =
           TypeIdMaker<Component::Component>::GetId<ComponentType>();
-      Signature sig = m_entityManager.GetSignature(entity.GetID());
+      Signature sig = m_entityManager.GetSignature(entity);
 
-      m_entityManager.AddComponent(entity.m_id, componentId);
+      m_entityManager.AddComponent(entity, componentId);
       m_componentManager.AddComponent<ComponentType>(
-          entity.m_id, std::forward<Args>(args)...);
+          entity.GetID(), std::forward<Args>(args)...);
       m_systemManager.EntitySignatureChanged(entity, sig);
 
-      return m_componentManager.GetComponent<ComponentType>(entity.m_id);
+      return m_componentManager.GetComponent<ComponentType>(entity.GetID());
     }
 
     template <typename ComponentType>
@@ -59,34 +59,34 @@ class EntityComponentSystem
     {
       usize componentId =
           TypeIdMaker<Component::Component>::GetId<ComponentType>();
-      Signature sig = m_entityManager.GetSignature(entity.GetID());
+      Signature sig = m_entityManager.GetSignature(entity);
 
       m_systemManager.EntitySignatureChanged(entity, sig);
-      m_entityManager.RemoveComponent(entity.m_id, componentId);
-      m_componentManager.DeleteComponent<ComponentType>(entity.m_id);
+      m_entityManager.RemoveComponent(entity, componentId);
+      m_componentManager.DeleteComponent<ComponentType>(entity);
     }
 
     template <typename ComponentType>
       requires std::is_base_of_v<Component::Component, ComponentType>
-    bool HasComponent(Entity entity)
+    inline bool HasComponent(Entity entity)
     {
       usize componentId =
           TypeIdMaker<Component::Component>::GetId<ComponentType>();
-      return m_entityManager.HasComponent(entity.m_id, componentId);
+      return m_entityManager.HasComponent(entity, componentId);
     }
 
     template <typename ComponentType>
       requires std::is_base_of_v<Component::Component, ComponentType>
-    ComponentType &GetComponent(Entity entity)
+    inline ComponentType &GetComponent(Entity entity)
     {
-      return m_componentManager.GetComponent<ComponentType>(entity.m_id);
+      return m_componentManager.GetComponent<ComponentType>(entity.GetID());
     }
 
     template <typename ComponentType>
       requires std::is_base_of_v<Component::Component, ComponentType>
-    const ComponentType &GetComponentConst(Entity entity)
+    inline const ComponentType &GetComponentConst(Entity entity)
     {
-      return m_componentManager.GetComponent<ComponentType>(entity.m_id);
+      return m_componentManager.GetComponent<ComponentType>(entity.GetID());
     }
 
   private:

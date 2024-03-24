@@ -16,49 +16,49 @@ class ComponentManager
 
     template <typename ComponentType, typename... Args>
       requires std::is_constructible_v<ComponentType, Args...>
-    void AddComponent(EntityID id, Args &&...args)
+    void AddComponent(Entity entity, Args &&...args)
     {
       if constexpr (IsLargeComponent<ComponentType>()) {
         auto &allocator = GetDynamicComponentAllocator<ComponentType>();
-        allocator.AllocateComponent(id, std::forward<Args>(args)...);
+        allocator.AllocateComponent(entity.GetID(), std::forward<Args>(args)...);
       }
       else {
         auto &allocator = GetComponentAllocator<ComponentType>();
-        allocator.AllocateComponent(id, std::forward<Args>(args)...);
+        allocator.AllocateComponent(entity.GetID(), std::forward<Args>(args)...);
       }
     }
 
     template <typename ComponentType>
-    ComponentType &GetComponent(EntityID id)
+    ComponentType &GetComponent(Entity entity)
     {
       if constexpr (IsLargeComponent<ComponentType>()) {
         auto &allocator = GetDynamicComponentAllocator<ComponentType>();
-        return allocator.GetComponent(id);
+        return allocator.GetComponent(entity.GetID());
       }
       else {
         auto &allocator = GetComponentAllocator<ComponentType>();
-        return allocator.GetComponent(id);
+        return allocator.GetComponent(entity.GetID());
       }
     }
 
     template <typename ComponentType>
-    void DeleteComponent(EntityID id)
+    void DeleteComponent(Entity entity)
     {
       if constexpr (IsLargeComponent<ComponentType>()) {
         auto &allocator = GetDynamicComponentAllocator<ComponentType>();
-        allocator.FreeComponent(id);
+        allocator.FreeComponent(entity);
       }
       else {
         auto &allocator = GetComponentAllocator<ComponentType>();
-        allocator.FreeComponent(id);
+        allocator.FreeComponent(entity);
       }
     }
 
-    void EntityDestroyed(EntityID id, const EntityManager &manager)
+    void EntityDestroyed(Entity entity, const EntityManager &manager)
     {
       for (u32 i = 0; i < m_size; i++) {
-        if (manager.HasComponent(id, i))
-          m_componentLists[i].get()->FreeComponent(id);
+        if (manager.HasComponent(entity, i))
+          m_componentLists[i].get()->FreeComponent(entity);
       }
     }
 

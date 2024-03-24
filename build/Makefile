@@ -48,19 +48,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /opt/homebrew/Cellar/cmake/3.28.3/bin/cmake
+CMAKE_COMMAND = /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake
 
 # The command to remove a file.
-RM = /opt/homebrew/Cellar/cmake/3.28.3/bin/cmake -E rm -f
+RM = /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/ness/Projects/GameDev/minecraft_gl
+CMAKE_SOURCE_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/ness/Projects/GameDev/minecraft_gl/build
+CMAKE_BINARY_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -68,7 +68,7 @@ CMAKE_BINARY_DIR = /Users/ness/Projects/GameDev/minecraft_gl/build
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake cache editor..."
-	/opt/homebrew/Cellar/cmake/3.28.3/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -78,7 +78,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake to regenerate build system..."
-	/opt/homebrew/Cellar/cmake/3.28.3/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -97,44 +97,44 @@ list_install_components/fast: list_install_components
 # Special rule for the target install
 install: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Install the project..."
-	/opt/homebrew/Cellar/cmake/3.28.3/bin/cmake -P cmake_install.cmake
+	/home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -P cmake_install.cmake
 .PHONY : install
 
 # Special rule for the target install
 install/fast: preinstall/fast
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Install the project..."
-	/opt/homebrew/Cellar/cmake/3.28.3/bin/cmake -P cmake_install.cmake
+	/home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -P cmake_install.cmake
 .PHONY : install/fast
 
 # Special rule for the target install/local
 install/local: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Installing only the local directory..."
-	/opt/homebrew/Cellar/cmake/3.28.3/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+	/home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
 .PHONY : install/local
 
 # Special rule for the target install/local
 install/local/fast: preinstall/fast
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Installing only the local directory..."
-	/opt/homebrew/Cellar/cmake/3.28.3/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+	/home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
 .PHONY : install/local/fast
 
 # Special rule for the target install/strip
 install/strip: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Installing the project stripped..."
-	/opt/homebrew/Cellar/cmake/3.28.3/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+	/home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
 .PHONY : install/strip
 
 # Special rule for the target install/strip
 install/strip/fast: preinstall/fast
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Installing the project stripped..."
-	/opt/homebrew/Cellar/cmake/3.28.3/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+	/home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
 .PHONY : install/strip/fast
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles /Users/ness/Projects/GameDev/minecraft_gl/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/CMakeFiles /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ness/Projects/GameDev/minecraft_gl/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -240,67 +240,19 @@ stb_image/fast:
 .PHONY : stb_image/fast
 
 # target to build an object file
-cmake_pch_arm64.hxx.pch:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.pch
-.PHONY : cmake_pch_arm64.hxx.pch
+cmake_pch.hxx.pch:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch
+.PHONY : cmake_pch.hxx.pch
 
 # target to preprocess a source file
-cmake_pch_arm64.hxx.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.i
-.PHONY : cmake_pch_arm64.hxx.i
+cmake_pch.hxx.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.i
+.PHONY : cmake_pch.hxx.i
 
 # target to generate assembly for a file
-cmake_pch_arm64.hxx.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/cmake_pch_arm64.hxx.s
-.PHONY : cmake_pch_arm64.hxx.s
-
-src/ECS/componentManager.o: src/ECS/componentManager.cpp.o
-.PHONY : src/ECS/componentManager.o
-
-# target to build an object file
-src/ECS/componentManager.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/ECS/componentManager.cpp.o
-.PHONY : src/ECS/componentManager.cpp.o
-
-src/ECS/componentManager.i: src/ECS/componentManager.cpp.i
-.PHONY : src/ECS/componentManager.i
-
-# target to preprocess a source file
-src/ECS/componentManager.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/ECS/componentManager.cpp.i
-.PHONY : src/ECS/componentManager.cpp.i
-
-src/ECS/componentManager.s: src/ECS/componentManager.cpp.s
-.PHONY : src/ECS/componentManager.s
-
-# target to generate assembly for a file
-src/ECS/componentManager.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/ECS/componentManager.cpp.s
-.PHONY : src/ECS/componentManager.cpp.s
-
-src/ECS/entityComponentSystem.o: src/ECS/entityComponentSystem.cpp.o
-.PHONY : src/ECS/entityComponentSystem.o
-
-# target to build an object file
-src/ECS/entityComponentSystem.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/ECS/entityComponentSystem.cpp.o
-.PHONY : src/ECS/entityComponentSystem.cpp.o
-
-src/ECS/entityComponentSystem.i: src/ECS/entityComponentSystem.cpp.i
-.PHONY : src/ECS/entityComponentSystem.i
-
-# target to preprocess a source file
-src/ECS/entityComponentSystem.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/ECS/entityComponentSystem.cpp.i
-.PHONY : src/ECS/entityComponentSystem.cpp.i
-
-src/ECS/entityComponentSystem.s: src/ECS/entityComponentSystem.cpp.s
-.PHONY : src/ECS/entityComponentSystem.s
-
-# target to generate assembly for a file
-src/ECS/entityComponentSystem.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/ECS/entityComponentSystem.cpp.s
-.PHONY : src/ECS/entityComponentSystem.cpp.s
+cmake_pch.hxx.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.s
+.PHONY : cmake_pch.hxx.s
 
 src/ECS/entityManager.o: src/ECS/entityManager.cpp.o
 .PHONY : src/ECS/entityManager.o
@@ -325,30 +277,6 @@ src/ECS/entityManager.s: src/ECS/entityManager.cpp.s
 src/ECS/entityManager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/ECS/entityManager.cpp.s
 .PHONY : src/ECS/entityManager.cpp.s
-
-src/ECS/systemManager.o: src/ECS/systemManager.cpp.o
-.PHONY : src/ECS/systemManager.o
-
-# target to build an object file
-src/ECS/systemManager.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/ECS/systemManager.cpp.o
-.PHONY : src/ECS/systemManager.cpp.o
-
-src/ECS/systemManager.i: src/ECS/systemManager.cpp.i
-.PHONY : src/ECS/systemManager.i
-
-# target to preprocess a source file
-src/ECS/systemManager.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/ECS/systemManager.cpp.i
-.PHONY : src/ECS/systemManager.cpp.i
-
-src/ECS/systemManager.s: src/ECS/systemManager.cpp.s
-.PHONY : src/ECS/systemManager.s
-
-# target to generate assembly for a file
-src/ECS/systemManager.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/ECS/systemManager.cpp.s
-.PHONY : src/ECS/systemManager.cpp.s
 
 src/core/main.o: src/core/main.cpp.o
 .PHONY : src/core/main.o
@@ -464,21 +392,12 @@ help:
 	@echo "... glad"
 	@echo "... glfw"
 	@echo "... stb_image"
-	@echo "... cmake_pch_arm64.hxx.pch"
-	@echo "... cmake_pch_arm64.hxx.i"
-	@echo "... cmake_pch_arm64.hxx.s"
-	@echo "... src/ECS/componentManager.o"
-	@echo "... src/ECS/componentManager.i"
-	@echo "... src/ECS/componentManager.s"
-	@echo "... src/ECS/entityComponentSystem.o"
-	@echo "... src/ECS/entityComponentSystem.i"
-	@echo "... src/ECS/entityComponentSystem.s"
+	@echo "... cmake_pch.hxx.pch"
+	@echo "... cmake_pch.hxx.i"
+	@echo "... cmake_pch.hxx.s"
 	@echo "... src/ECS/entityManager.o"
 	@echo "... src/ECS/entityManager.i"
 	@echo "... src/ECS/entityManager.s"
-	@echo "... src/ECS/systemManager.o"
-	@echo "... src/ECS/systemManager.i"
-	@echo "... src/ECS/systemManager.s"
 	@echo "... src/core/main.o"
 	@echo "... src/core/main.i"
 	@echo "... src/core/main.s"
