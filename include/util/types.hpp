@@ -37,11 +37,17 @@ template <typename T, typename E> inline Result<T, E> Ok(T &&t)
   return std::forward<T>(t);
 }
 
-template <typename T, typename E> inline Option<T> Err(E &&e)
+template <typename T, typename E> inline Result<T, E> Err(E &&e)
 {
   return std::expected(std::forward<E>(e));
 }
 
+template <typename T, typename E> inline Result<T, E> ErrWithCopy(E e)
+{
+  return std::expected(e);
+}
+
+struct Unit {};
 typedef glm::vec2 Vector2;
 typedef glm::vec3 Vector3;
 typedef glm::vec4 Vector4;

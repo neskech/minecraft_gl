@@ -1,4 +1,4 @@
-
+#pragma once
 #include "util/macros.hpp"
 #include "util/types.hpp"
 #include "pch.hpp"
