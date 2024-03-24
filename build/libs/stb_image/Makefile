@@ -57,10 +57,10 @@ RM = /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl
+CMAKE_SOURCE_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build
+CMAKE_BINARY_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -132,14 +132,14 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/CMakeFiles /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/stb_image//CMakeFiles/progress.marks
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libs/stb_image/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/CMakeFiles 0
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/stb_image//CMakeFiles/progress.marks
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libs/stb_image/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libs/stb_image/clean
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libs/stb_image/clean
 .PHONY : clean
 
 # The main clean target
@@ -148,22 +148,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libs/stb_image/preinstall
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libs/stb_image/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libs/stb_image/preinstall
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libs/stb_image/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 libs/stb_image/CMakeFiles/stb_image.dir/rule:
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libs/stb_image/CMakeFiles/stb_image.dir/rule
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libs/stb_image/CMakeFiles/stb_image.dir/rule
 .PHONY : libs/stb_image/CMakeFiles/stb_image.dir/rule
 
 # Convenience name for target.
@@ -172,7 +172,7 @@ stb_image: libs/stb_image/CMakeFiles/stb_image.dir/rule
 
 # fast build rule for target.
 stb_image/fast:
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build && $(MAKE) $(MAKESILENT) -f libs/stb_image/CMakeFiles/stb_image.dir/build.make libs/stb_image/CMakeFiles/stb_image.dir/build
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(MAKE) $(MAKESILENT) -f libs/stb_image/CMakeFiles/stb_image.dir/build.make libs/stb_image/CMakeFiles/stb_image.dir/build
 .PHONY : stb_image/fast
 
 stb_image.o: stb_image.cpp.o
@@ -180,7 +180,7 @@ stb_image.o: stb_image.cpp.o
 
 # target to build an object file
 stb_image.cpp.o:
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build && $(MAKE) $(MAKESILENT) -f libs/stb_image/CMakeFiles/stb_image.dir/build.make libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.o
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(MAKE) $(MAKESILENT) -f libs/stb_image/CMakeFiles/stb_image.dir/build.make libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.o
 .PHONY : stb_image.cpp.o
 
 stb_image.i: stb_image.cpp.i
@@ -188,7 +188,7 @@ stb_image.i: stb_image.cpp.i
 
 # target to preprocess a source file
 stb_image.cpp.i:
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build && $(MAKE) $(MAKESILENT) -f libs/stb_image/CMakeFiles/stb_image.dir/build.make libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.i
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(MAKE) $(MAKESILENT) -f libs/stb_image/CMakeFiles/stb_image.dir/build.make libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.i
 .PHONY : stb_image.cpp.i
 
 stb_image.s: stb_image.cpp.s
@@ -196,7 +196,7 @@ stb_image.s: stb_image.cpp.s
 
 # target to generate assembly for a file
 stb_image.cpp.s:
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build && $(MAKE) $(MAKESILENT) -f libs/stb_image/CMakeFiles/stb_image.dir/build.make libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.s
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(MAKE) $(MAKESILENT) -f libs/stb_image/CMakeFiles/stb_image.dir/build.make libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.s
 .PHONY : stb_image.cpp.s
 
 # Help Target
@@ -226,6 +226,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

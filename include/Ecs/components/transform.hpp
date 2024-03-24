@@ -4,12 +4,10 @@
 
 namespace ECS::Component
 {
-  class Camera : Component::Component
+  struct Transform : Component::Component
   {
-    public:
-      Camera();
+      Transform();
 
-    private:
-      f32 fieldOfView;
+      Vector3 position;
   };
 } // namespace ECS::Component

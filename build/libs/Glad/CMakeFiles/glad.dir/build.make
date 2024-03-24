@@ -53,10 +53,10 @@ RM = /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl
+CMAKE_SOURCE_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build
+CMAKE_BINARY_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build
 
 # Include any dependencies generated for this target.
 include libs/Glad/CMakeFiles/glad.dir/depend.make
@@ -70,18 +70,18 @@ include libs/Glad/CMakeFiles/glad.dir/progress.make
 include libs/Glad/CMakeFiles/glad.dir/flags.make
 
 libs/Glad/CMakeFiles/glad.dir/src/glad.c.o: libs/Glad/CMakeFiles/glad.dir/flags.make
-libs/Glad/CMakeFiles/glad.dir/src/glad.c.o: /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/Glad/src/glad.c
+libs/Glad/CMakeFiles/glad.dir/src/glad.c.o: /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/Glad/src/glad.c
 libs/Glad/CMakeFiles/glad.dir/src/glad.c.o: libs/Glad/CMakeFiles/glad.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object libs/Glad/CMakeFiles/glad.dir/src/glad.c.o"
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/Glad && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT libs/Glad/CMakeFiles/glad.dir/src/glad.c.o -MF CMakeFiles/glad.dir/src/glad.c.o.d -o CMakeFiles/glad.dir/src/glad.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/Glad/src/glad.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object libs/Glad/CMakeFiles/glad.dir/src/glad.c.o"
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/Glad && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT libs/Glad/CMakeFiles/glad.dir/src/glad.c.o -MF CMakeFiles/glad.dir/src/glad.c.o.d -o CMakeFiles/glad.dir/src/glad.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/Glad/src/glad.c
 
 libs/Glad/CMakeFiles/glad.dir/src/glad.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/glad.dir/src/glad.c.i"
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/Glad && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/Glad/src/glad.c > CMakeFiles/glad.dir/src/glad.c.i
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/Glad && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/Glad/src/glad.c > CMakeFiles/glad.dir/src/glad.c.i
 
 libs/Glad/CMakeFiles/glad.dir/src/glad.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/glad.dir/src/glad.c.s"
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/Glad && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/Glad/src/glad.c -o CMakeFiles/glad.dir/src/glad.c.s
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/Glad && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/Glad/src/glad.c -o CMakeFiles/glad.dir/src/glad.c.s
 
 # Object files for target glad
 glad_OBJECTS = \
@@ -93,19 +93,19 @@ glad_EXTERNAL_OBJECTS =
 libs/Glad/libglad.a: libs/Glad/CMakeFiles/glad.dir/src/glad.c.o
 libs/Glad/libglad.a: libs/Glad/CMakeFiles/glad.dir/build.make
 libs/Glad/libglad.a: libs/Glad/CMakeFiles/glad.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C static library libglad.a"
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/Glad && $(CMAKE_COMMAND) -P CMakeFiles/glad.dir/cmake_clean_target.cmake
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/Glad && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/glad.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C static library libglad.a"
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/Glad && $(CMAKE_COMMAND) -P CMakeFiles/glad.dir/cmake_clean_target.cmake
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/Glad && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/glad.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 libs/Glad/CMakeFiles/glad.dir/build: libs/Glad/libglad.a
 .PHONY : libs/Glad/CMakeFiles/glad.dir/build
 
 libs/Glad/CMakeFiles/glad.dir/clean:
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/Glad && $(CMAKE_COMMAND) -P CMakeFiles/glad.dir/cmake_clean.cmake
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/Glad && $(CMAKE_COMMAND) -P CMakeFiles/glad.dir/cmake_clean.cmake
 .PHONY : libs/Glad/CMakeFiles/glad.dir/clean
 
 libs/Glad/CMakeFiles/glad.dir/depend:
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/Glad /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/Glad /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/Glad/CMakeFiles/glad.dir/DependInfo.cmake "--color=$(COLOR)"
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/Glad /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/Glad /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/Glad/CMakeFiles/glad.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : libs/Glad/CMakeFiles/glad.dir/depend
 

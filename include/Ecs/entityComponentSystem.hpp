@@ -4,6 +4,7 @@
 #include "Ecs/entityManager.hpp"
 #include "Ecs/systemManager.hpp"
 #include "Layer.hpp"
+#include "entity.hpp"
 #include "event/eventManager.hpp"
 #include "util/contracts.hpp"
 #include "util/macros.hpp"
@@ -13,166 +14,154 @@ namespace Event
 {
   struct EntityDestroyed
   {
-      Entity entity;
+      ECS::Entity entity;
   };
 } // namespace Event
 
-class EntityComponentSystem
+namespace ECS
 {
-  public:
-    EntityComponentSystem()
-    {
-      EventManager::Subscribe<Event::EntityDestroyed>(
-          [&](const Event::EntityDestroyed &event) {
-            DeleteEntity(event.entity);
-          });
-    }
 
-    NO_COPY_OR_MOVE_CONSTRUCTORS(EntityComponentSystem)
+  class EntityComponentSystem
+  {
+    public:
+      EntityComponentSystem()
+      {
+        EventManager::Subscribe<Event::EntityDestroyed>(
+            [&](const Event::EntityDestroyed &event) {
+              DeleteEntity(event.entity);
+            });
+      }
 
-    Entity MakeEntity() { return m_entityManager.MakeEntity(); }
+      NO_COPY_OR_MOVE_CONSTRUCTORS(EntityComponentSystem)
 
-    void DeleteEntity(Entity entity)
-    {
-      Requires(entity.HasValidID());
-      Requires(m_entityManager.IsEntityAlive(entity));
+      Entity MakeEntity() { return m_entityManager.MakeEntity(); }
 
-      m_componentManager.EntityDestroyed(entity, m_entityManager);
-      m_systemManager.EntityDestroyed(entity);
-      m_entityManager.DeleteEntity(entity);
-    }
+      void DeleteEntity(Entity entity)
+      {
+        Requires(entity.HasValidID());
+        Requires(m_entityManager.IsEntityAlive(entity));
 
-    template <typename ComponentType, typename... Args>
-      requires std::is_base_of_v<Component::Component, ComponentType>
-    ComponentType &AddComponent(Entity entity, Args &&...args)
-    {
-      Requires(entity.HasValidID());
-      Requires(m_entityManager.IsEntityAlive(entity));
+        m_componentManager.EntityDestroyed(entity, m_entityManager);
+        m_systemManager.EntityDestroyed(entity);
+        m_entityManager.DeleteEntity(entity);
+      }
 
-      usize componentId =
-          TypeIdMaker<Component::Component>::GetId<ComponentType>();
-      Assert(ComponentManager::IsValidComponentID(componentId),
-             "Too many components!");
+      template <typename ComponentType, typename... Args>
+        requires std::is_base_of_v<Component::Component, ComponentType>
+      ComponentType &AddComponent(Entity entity, Args &&...args)
+      {
+        Requires(entity.HasValidID());
+        Requires(m_entityManager.IsEntityAlive(entity));
 
-      Signature sig = m_entityManager.GetSignature(entity);
+        usize componentId =
+            TypeIdMaker<Component::Component>::GetId<ComponentType>();
+        Assert(ComponentManager::IsValidComponentID(componentId),
+               "Too many components!");
 
-      m_entityManager.AddComponent(entity, componentId);
-      m_componentManager.AddComponent<ComponentType>(
-          entity.GetID(), std::forward<Args>(args)...);
-      m_systemManager.EntitySignatureChanged(entity, sig);
+        Signature sig = m_entityManager.GetSignature(entity);
 
-      return m_componentManager.GetComponent<ComponentType>(entity.GetID());
-    }
+        m_entityManager.AddComponent(entity, componentId);
+        m_componentManager.AddComponent<ComponentType>(
+            entity.GetID(), std::forward<Args>(args)...);
+        m_systemManager.EntitySignatureChanged(entity, sig);
 
-    template <typename ComponentType>
-      requires std::is_base_of_v<Component::Component, ComponentType>
-    void RemoveComponent(Entity entity)
-    {
-      Requires(entity.HasValidID());
-      Requires(m_entityManager.IsEntityAlive(entity));
+        return m_componentManager.GetComponent<ComponentType>(entity.GetID());
+      }
 
-      usize componentId =
-          TypeIdMaker<Component::Component>::GetId<ComponentType>();
-      Assert(ComponentManager::IsValidComponentID(componentId),
-             "Too many components!");
+      template <typename ComponentType>
+        requires std::is_base_of_v<Component::Component, ComponentType>
+      void RemoveComponent(Entity entity)
+      {
+        Requires(entity.HasValidID());
+        Requires(m_entityManager.IsEntityAlive(entity));
 
-      Signature sig = m_entityManager.GetSignature(entity);
+        usize componentId =
+            TypeIdMaker<Component::Component>::GetId<ComponentType>();
+        Assert(ComponentManager::IsValidComponentID(componentId),
+               "Too many components!");
 
-      m_systemManager.EntitySignatureChanged(entity, sig);
-      m_entityManager.RemoveComponent(entity, componentId);
-      m_componentManager.DeleteComponent<ComponentType>(entity);
-    }
+        Signature sig = m_entityManager.GetSignature(entity);
 
-    template <typename ComponentType>
-      requires std::is_base_of_v<Component::Component, ComponentType>
-    inline bool HasComponent(Entity entity)
-    {
-      Requires(entity.HasValidID());
-      Requires(m_entityManager.IsEntityAlive(entity));
+        m_systemManager.EntitySignatureChanged(entity, sig);
+        m_entityManager.RemoveComponent(entity, componentId);
+        m_componentManager.DeleteComponent<ComponentType>(entity);
+      }
 
-      usize componentId =
-          TypeIdMaker<Component::Component>::GetId<ComponentType>();
-      Assert(ComponentManager::IsValidComponentID(componentId),
-             "Too many components!");
+      template <typename ComponentType>
+        requires std::is_base_of_v<Component::Component, ComponentType>
+      inline bool HasComponent(Entity entity)
+      {
+        Requires(entity.HasValidID());
+        Requires(m_entityManager.IsEntityAlive(entity));
 
-      return m_entityManager.HasComponent(entity, componentId);
-    }
+        usize componentId =
+            TypeIdMaker<Component::Component>::GetId<ComponentType>();
+        Assert(ComponentManager::IsValidComponentID(componentId),
+               "Too many components!");
 
-    template <typename ComponentType>
-      requires std::is_base_of_v<Component::Component, ComponentType>
-    inline ComponentType &GetComponent(Entity entity)
-    {
-      Requires(entity.HasValidID());
-      Requires(m_entityManager.IsEntityAlive(entity));
+        return m_entityManager.HasComponent(entity, componentId);
+      }
 
-      return m_componentManager.GetComponent<ComponentType>(entity.GetID());
-    }
+      template <typename ComponentType>
+        requires std::is_base_of_v<Component::Component, ComponentType>
+      inline ComponentType &GetComponent(Entity entity)
+      {
+        Requires(entity.HasValidID());
+        Requires(m_entityManager.IsEntityAlive(entity));
 
-    template <typename ComponentType>
-      requires std::is_base_of_v<Component::Component, ComponentType>
-    inline const ComponentType &GetComponentConst(Entity entity)
-    {
-      Requires(entity.HasValidID());
-      Requires(m_entityManager.IsEntityAlive(entity));
+        return m_componentManager.GetComponent<ComponentType>(entity.GetID());
+      }
 
-      return m_componentManager.GetComponent<ComponentType>(entity.GetID());
-    }
+      template <typename ComponentType>
+        requires std::is_base_of_v<Component::Component, ComponentType>
+      inline const ComponentType &GetComponentConst(Entity entity)
+      {
+        Requires(entity.HasValidID());
+        Requires(m_entityManager.IsEntityAlive(entity));
 
-    inline LayerMask GetLayerMask(Entity entity) const
-    {
-      return m_entityManager.GetLayerMask(entity);
-    }
+        return m_componentManager.GetComponent<ComponentType>(entity.GetID());
+      }
 
-    inline void AddToLayer(Entity entity, std::string_view layerName)
-    {
-      LayerMask mask = m_layerRegistry.GetLayerMaskByName(layerName);
-      m_entityManager.AddToLayer(entity, mask);
-    }
+      inline std::vector<Entity> GetEntitiesByLayer(LayerMask mask) const
+      {
+        return m_entityManager.GetEntitiesByLayer(mask);
+      }
 
-    inline void RemoveFromLayer(Entity entity, std::string_view layerName)
-    {
-      LayerMask mask = m_layerRegistry.GetLayerMaskByName(layerName);
-      m_entityManager.RemoveFromLayer(entity, mask);
-    }
+      inline Option<Entity> GetEntityByName(std::string_view name) const
+      {
+        return m_entityManager.GetEntityByName(name);
+      }
 
-    inline std::vector<Entity> GetEntitiesByLayer(LayerMask mask) const
-    {
-      return m_entityManager.GetEntitiesByLayer(mask);
-    }
+      inline Option<Entity> GetEntityByTag(std::string_view tag) const
+      {
+        return m_entityManager.GetEntityByTag(tag);
+      }
 
-    inline Option<Entity> GetEntityByName(std::string_view name) const
-    {
-      return m_entityManager.GetEntityByName(name);
-    }
+      inline std::vector<Entity> GetEntitiesByName(std::string_view name) const
+      {
+        return m_entityManager.GetEntitiesByName(name);
+      }
 
-    inline Option<Entity> GetEntityByTag(std::string_view tag) const
-    {
-      return m_entityManager.GetEntityByTag(tag);
-    }
+      inline std::vector<Entity> GetEntitiesByTag(std::string_view tag) const
+      {
+        return m_entityManager.GetEntitiesByTag(tag);
+      }
 
-    inline std::vector<Entity> GetEntitiesByName(std::string_view name) const
-    {
-      return m_entityManager.GetEntitiesByName(name);
-    }
+      inline EntityData &GetEntityData(Entity entity)
+      {
+        Requires(entity.HasValidID());
+        Requires(m_entityManager.IsEntityAlive(entity));
 
-    inline std::vector<Entity> GetEntitiesByTag(std::string_view tag) const
-    {
-      return m_entityManager.GetEntitiesByTag(tag);
-    }
+        return m_entityManager.GetEntityData(entity);
+      }
 
-    inline Option<Entity> GetParent(Entity entity) const
-    {
-      return m_entityManager.GetParent(entity);
-    }
+      inline LayerRegistry &GetLayerRegistry() { return m_layerRegistry; }
 
-    inline std::vector<Entity> &GetChildren(Entity entity)
-    {
-      return m_entityManager.GetChildren(entity);
-    }
+    private:
+      SystemManager m_systemManager;
+      ComponentManager m_componentManager;
+      EntityManager m_entityManager;
+      LayerRegistry m_layerRegistry;
+  };
 
-  private:
-    SystemManager m_systemManager;
-    ComponentManager m_componentManager;
-    EntityManager m_entityManager;
-    LayerRegistry m_layerRegistry;
-};
+} // namespace ECS

@@ -1,8 +1,6 @@
 #pragma once
-#include "pch.hpp"
 #include "util/macros.hpp"
 #include "util/types.hpp"
-#include <memory>
 
 class SceneManager;
 

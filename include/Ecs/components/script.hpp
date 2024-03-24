@@ -1,24 +1,26 @@
 #pragma once
 #include "component.hpp"
-#include "entityManager.hpp"
+#include "components/transform.hpp"
+#include "entityWrapper.hpp"
 #include "util/input.hpp"
 
-namespace Component
+namespace ECS::Component
 {
   class ScriptBase : Component::Component
   {
     public:
-      ScriptBase(EntityComponentSystem &ecs, Input &input, Entity entity)
-          : m_Ecs(ecs), m_input(input), m_entity(entity)
-      {}
+      ScriptBase(EntityWrapper entity, Input &input);
 
-      virtual void Start() {}
-      virtual void Update() {}
-      virtual void OnDestroy() {}
+      virtual void Start() = 0;
+      virtual void Update() = 0;
+      virtual void OnDestroy() = 0;
+
+      EntityWrapper MakeEntity();
+      Transform &GetTransform();
+      void DestroyImmediate();
 
     protected:
-      EntityComponentSystem &m_Ecs;
+      EntityWrapper m_entity;
       Input &m_input;
-      Entity m_entity;
   };
-} // namespace Component
+} // namespace ECS::Component

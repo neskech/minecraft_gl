@@ -3,40 +3,6 @@
 #include "util/contracts.hpp"
 #include "util/types.hpp"
 #include <algorithm>
-#include <tuple>
-
-/* https://stackoverflow.com/questions/33511753/how-can-i-generate-a-tuple-of-n-type-ts
- */
-template <typename /*LEFT_TUPLE*/, typename /*RIGHT_TUPLE*/>
-struct join_tuples
-{
-};
-
-template <typename... LEFT, typename... RIGHT>
-struct join_tuples<std::tuple<LEFT...>, std::tuple<RIGHT...>>
-{
-    typedef std::tuple<LEFT..., RIGHT...> type;
-};
-
-template <typename T, unsigned N>
-struct generate_tuple_type
-{
-    typedef typename generate_tuple_type<T, N / 2>::type left;
-    typedef typename generate_tuple_type<T, N / 2 + N % 2>::type right;
-    typedef typename join_tuples<left, right>::type type;
-};
-
-template <typename T>
-struct generate_tuple_type<T, 1>
-{
-    typedef std::tuple<T> type;
-};
-
-template <typename T>
-struct generate_tuple_type<T, 0>
-{
-    typedef std::tuple<> type;
-};
 
 template <typename T, usize... Dimensions>
 class StaticNDArray
@@ -221,7 +187,7 @@ class NDArray
           ((index / m_coefficients[i++]) % Dimensions)...};
     }
 
-    std::array<T, (... * Dimensions)> &GetInnerArray() { return m_data; }
+    std::vector<T> &GetInnerArray() { return m_data; }
     usize GetSize() { return m_data.size(); }
 
   private:

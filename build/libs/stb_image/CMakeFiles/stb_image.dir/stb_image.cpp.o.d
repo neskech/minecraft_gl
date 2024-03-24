@@ -1,6 +1,6 @@
 libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.o: \
-  /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/stb_image/stb_image.cpp \
-  /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/stb_image/stb_image.h \
+  /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/stb_image/stb_image.cpp \
+  /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/stb_image/stb_image.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/bin/../include/c++/v1/stdio.h \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/bin/../include/c++/v1/__config \
   /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/bin/../include/c++/v1/__config_site \

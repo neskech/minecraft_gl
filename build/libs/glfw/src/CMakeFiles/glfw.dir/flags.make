@@ -4,7 +4,7 @@
 # compile C with /usr/bin/cc
 C_DEFINES = -D_DEFAULT_SOURCE -D_GLFW_X11
 
-C_INCLUDES = -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src
+C_INCLUDES = -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src
 
 C_FLAGS = -std=c99 -fPIC -Wall
 

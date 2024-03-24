@@ -53,10 +53,10 @@ RM = /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl
+CMAKE_SOURCE_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build
+CMAKE_BINARY_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build
 
 # Include any dependencies generated for this target.
 include libs/stb_image/CMakeFiles/stb_image.dir/depend.make
@@ -70,18 +70,18 @@ include libs/stb_image/CMakeFiles/stb_image.dir/progress.make
 include libs/stb_image/CMakeFiles/stb_image.dir/flags.make
 
 libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.o: libs/stb_image/CMakeFiles/stb_image.dir/flags.make
-libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.o: /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/stb_image/stb_image.cpp
+libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.o: /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/stb_image/stb_image.cpp
 libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.o: libs/stb_image/CMakeFiles/stb_image.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.o"
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/stb_image && /home/linuxbrew/.linuxbrew/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.o -MF CMakeFiles/stb_image.dir/stb_image.cpp.o.d -o CMakeFiles/stb_image.dir/stb_image.cpp.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/stb_image/stb_image.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.o"
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/stb_image && /home/linuxbrew/.linuxbrew/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.o -MF CMakeFiles/stb_image.dir/stb_image.cpp.o.d -o CMakeFiles/stb_image.dir/stb_image.cpp.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/stb_image/stb_image.cpp
 
 libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/stb_image.dir/stb_image.cpp.i"
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/stb_image && /home/linuxbrew/.linuxbrew/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/stb_image/stb_image.cpp > CMakeFiles/stb_image.dir/stb_image.cpp.i
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/stb_image && /home/linuxbrew/.linuxbrew/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/stb_image/stb_image.cpp > CMakeFiles/stb_image.dir/stb_image.cpp.i
 
 libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/stb_image.dir/stb_image.cpp.s"
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/stb_image && /home/linuxbrew/.linuxbrew/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/stb_image/stb_image.cpp -o CMakeFiles/stb_image.dir/stb_image.cpp.s
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/stb_image && /home/linuxbrew/.linuxbrew/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/stb_image/stb_image.cpp -o CMakeFiles/stb_image.dir/stb_image.cpp.s
 
 # Object files for target stb_image
 stb_image_OBJECTS = \
@@ -93,19 +93,19 @@ stb_image_EXTERNAL_OBJECTS =
 libs/stb_image/libstb_image.a: libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.o
 libs/stb_image/libstb_image.a: libs/stb_image/CMakeFiles/stb_image.dir/build.make
 libs/stb_image/libstb_image.a: libs/stb_image/CMakeFiles/stb_image.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libstb_image.a"
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/stb_image && $(CMAKE_COMMAND) -P CMakeFiles/stb_image.dir/cmake_clean_target.cmake
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/stb_image && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/stb_image.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libstb_image.a"
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/stb_image && $(CMAKE_COMMAND) -P CMakeFiles/stb_image.dir/cmake_clean_target.cmake
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/stb_image && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/stb_image.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 libs/stb_image/CMakeFiles/stb_image.dir/build: libs/stb_image/libstb_image.a
 .PHONY : libs/stb_image/CMakeFiles/stb_image.dir/build
 
 libs/stb_image/CMakeFiles/stb_image.dir/clean:
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/stb_image && $(CMAKE_COMMAND) -P CMakeFiles/stb_image.dir/cmake_clean.cmake
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/stb_image && $(CMAKE_COMMAND) -P CMakeFiles/stb_image.dir/cmake_clean.cmake
 .PHONY : libs/stb_image/CMakeFiles/stb_image.dir/clean
 
 libs/stb_image/CMakeFiles/stb_image.dir/depend:
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/stb_image /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/stb_image /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/stb_image/CMakeFiles/stb_image.dir/DependInfo.cmake "--color=$(COLOR)"
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/stb_image /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/stb_image /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/stb_image/CMakeFiles/stb_image.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : libs/stb_image/CMakeFiles/stb_image.dir/depend
 

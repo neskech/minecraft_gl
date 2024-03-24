@@ -1,9 +1,9 @@
 
-if (NOT EXISTS "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/install_manifest.txt")
-    message(FATAL_ERROR "Cannot find install manifest: \"/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/install_manifest.txt\"")
+if (NOT EXISTS "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/install_manifest.txt")
+    message(FATAL_ERROR "Cannot find install manifest: \"/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/install_manifest.txt\"")
 endif()
 
-file(READ "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/install_manifest.txt" files)
+file(READ "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/install_manifest.txt" files)
 string(REGEX REPLACE "\n" ";" files "${files}")
 
 foreach (file ${files})

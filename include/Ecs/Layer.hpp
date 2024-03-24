@@ -3,19 +3,23 @@
 #include "pch.hpp"
 #include "util/macros.hpp"
 
-using LayerMask = std::bitset<MAX_LAYERS>;
-
-class LayerRegistry
+namespace ECS
 {
-  public:
-    LayerRegistry();
-    NO_COPY_OR_MOVE_CONSTRUCTORS(LayerRegistry)
+  using LayerMask = std::bitset<MAX_LAYERS>;
 
-    void AddLayerName(std::string_view name);
-    LayerMask GetLayerMaskByName(std::string_view name);
-    usize GetLayerIndexByName(std::string_view name);
-    usize GetLayerCount();
+  class LayerRegistry
+  {
+    public:
+      LayerRegistry();
+      NO_COPY_OR_MOVE_CONSTRUCTORS(LayerRegistry)
 
-  private:
-    std::unordered_map<std::string_view, usize> m_layerToIndex;
-};
+      void AddLayerName(std::string_view name);
+      LayerMask GetLayerMaskByName(std::string_view name);
+      usize GetLayerIndexByName(std::string_view name);
+      usize GetLayerCount();
+
+    private:
+      std::unordered_map<std::string_view, usize> m_layerToIndex;
+  };
+
+} // namespace ECS

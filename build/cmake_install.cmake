@@ -1,4 +1,4 @@
-# Install script for directory: /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl
+# Install script for directory: /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

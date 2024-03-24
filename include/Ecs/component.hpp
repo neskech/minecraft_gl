@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Component
+namespace ECS::Component
 {
   struct Component
   {

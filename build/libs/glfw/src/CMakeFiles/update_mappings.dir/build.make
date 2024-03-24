@@ -53,10 +53,10 @@ RM = /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl
+CMAKE_SOURCE_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build
+CMAKE_BINARY_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build
 
 # Utility rule file for update_mappings.
 
@@ -67,8 +67,8 @@ include libs/glfw/src/CMakeFiles/update_mappings.dir/compiler_depend.make
 include libs/glfw/src/CMakeFiles/update_mappings.dir/progress.make
 
 libs/glfw/src/CMakeFiles/update_mappings:
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Updating gamepad mappings from upstream repository"
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src && /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -P /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/CMake/GenerateMappings.cmake mappings.h.in mappings.h
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Updating gamepad mappings from upstream repository"
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src && /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -P /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/CMake/GenerateMappings.cmake mappings.h.in mappings.h
 
 update_mappings: libs/glfw/src/CMakeFiles/update_mappings
 update_mappings: libs/glfw/src/CMakeFiles/update_mappings.dir/build.make
@@ -79,10 +79,10 @@ libs/glfw/src/CMakeFiles/update_mappings.dir/build: update_mappings
 .PHONY : libs/glfw/src/CMakeFiles/update_mappings.dir/build
 
 libs/glfw/src/CMakeFiles/update_mappings.dir/clean:
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src && $(CMAKE_COMMAND) -P CMakeFiles/update_mappings.dir/cmake_clean.cmake
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src && $(CMAKE_COMMAND) -P CMakeFiles/update_mappings.dir/cmake_clean.cmake
 .PHONY : libs/glfw/src/CMakeFiles/update_mappings.dir/clean
 
 libs/glfw/src/CMakeFiles/update_mappings.dir/depend:
-	cd /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src/CMakeFiles/update_mappings.dir/DependInfo.cmake "--color=$(COLOR)"
+	cd /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src/CMakeFiles/update_mappings.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : libs/glfw/src/CMakeFiles/update_mappings.dir/depend
 

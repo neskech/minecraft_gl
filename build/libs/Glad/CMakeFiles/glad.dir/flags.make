@@ -4,7 +4,7 @@
 # compile C with /usr/bin/cc
 C_DEFINES = 
 
-C_INCLUDES = -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/Glad/include
+C_INCLUDES = -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/Glad/include
 
 C_FLAGS = 
 

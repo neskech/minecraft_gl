@@ -1,4 +1,4 @@
-# Install script for directory: /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/Glad
+# Install script for directory: /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/Glad
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

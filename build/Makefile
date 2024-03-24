@@ -57,10 +57,10 @@ RM = /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl
+CMAKE_SOURCE_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build
+CMAKE_BINARY_DIR = /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -132,9 +132,9 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/CMakeFiles /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -278,6 +278,30 @@ src/ECS/entityManager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/ECS/entityManager.cpp.s
 .PHONY : src/ECS/entityManager.cpp.s
 
+src/ECS/layer.o: src/ECS/layer.cpp.o
+.PHONY : src/ECS/layer.o
+
+# target to build an object file
+src/ECS/layer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/ECS/layer.cpp.o
+.PHONY : src/ECS/layer.cpp.o
+
+src/ECS/layer.i: src/ECS/layer.cpp.i
+.PHONY : src/ECS/layer.i
+
+# target to preprocess a source file
+src/ECS/layer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/ECS/layer.cpp.i
+.PHONY : src/ECS/layer.cpp.i
+
+src/ECS/layer.s: src/ECS/layer.cpp.s
+.PHONY : src/ECS/layer.s
+
+# target to generate assembly for a file
+src/ECS/layer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/ECS/layer.cpp.s
+.PHONY : src/ECS/layer.cpp.s
+
 src/core/main.o: src/core/main.cpp.o
 .PHONY : src/core/main.o
 
@@ -398,6 +422,9 @@ help:
 	@echo "... src/ECS/entityManager.o"
 	@echo "... src/ECS/entityManager.i"
 	@echo "... src/ECS/entityManager.s"
+	@echo "... src/ECS/layer.o"
+	@echo "... src/ECS/layer.i"
+	@echo "... src/ECS/layer.s"
 	@echo "... src/core/main.o"
 	@echo "... src/core/main.i"
 	@echo "... src/core/main.s"

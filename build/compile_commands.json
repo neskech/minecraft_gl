@@ -1,182 +1,188 @@
 [
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build",
-  "command": "/home/linuxbrew/.linuxbrew/bin/clang++  -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/include/core -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/include/event -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/include/Ecs -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/FastNoiseLite/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glm -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/Glad/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/stb_image -pedantic -Wall -stdlib=libc++ -std=c++23 -g -std=c++23 -Winvalid-pch -fpch-instantiate-templates -Xclang -emit-pch -Xclang -include -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx -x c++-header -o CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.cxx",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.cxx",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build",
+  "command": "/home/linuxbrew/.linuxbrew/bin/clang++  -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/core -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/event -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/Ecs -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/FastNoiseLite/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glm -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/Glad/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/stb_image -pedantic -Wall -stdlib=libc++ -std=c++23 -g -std=c++23 -Winvalid-pch -fpch-instantiate-templates -Xclang -emit-pch -Xclang -include -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx -x c++-header -o CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.cxx",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.cxx",
   "output": "CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build",
-  "command": "/home/linuxbrew/.linuxbrew/bin/clang++  -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/include/core -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/include/event -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/include/Ecs -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/FastNoiseLite/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glm -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/Glad/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/stb_image -pedantic -Wall -stdlib=libc++ -std=c++23 -g -std=c++23 -Winvalid-pch -Xclang -include-pch -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch -Xclang -include -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx -o CMakeFiles/MinecraftCppGL.dir/src/ECS/entityManager.cpp.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/src/ECS/entityManager.cpp",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/src/ECS/entityManager.cpp",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build",
+  "command": "/home/linuxbrew/.linuxbrew/bin/clang++  -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/core -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/event -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/Ecs -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/FastNoiseLite/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glm -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/Glad/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/stb_image -pedantic -Wall -stdlib=libc++ -std=c++23 -g -std=c++23 -Winvalid-pch -Xclang -include-pch -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch -Xclang -include -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx -o CMakeFiles/MinecraftCppGL.dir/src/ECS/entityManager.cpp.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/ECS/entityManager.cpp",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/ECS/entityManager.cpp",
   "output": "CMakeFiles/MinecraftCppGL.dir/src/ECS/entityManager.cpp.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build",
-  "command": "/home/linuxbrew/.linuxbrew/bin/clang++  -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/include/core -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/include/event -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/include/Ecs -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/FastNoiseLite/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glm -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/Glad/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/stb_image -pedantic -Wall -stdlib=libc++ -std=c++23 -g -std=c++23 -Winvalid-pch -Xclang -include-pch -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch -Xclang -include -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx -o CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/src/core/main.cpp",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/src/core/main.cpp",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build",
+  "command": "/home/linuxbrew/.linuxbrew/bin/clang++  -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/core -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/event -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/Ecs -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/FastNoiseLite/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glm -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/Glad/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/stb_image -pedantic -Wall -stdlib=libc++ -std=c++23 -g -std=c++23 -Winvalid-pch -Xclang -include-pch -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch -Xclang -include -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx -o CMakeFiles/MinecraftCppGL.dir/src/ECS/layer.cpp.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/ECS/layer.cpp",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/ECS/layer.cpp",
+  "output": "CMakeFiles/MinecraftCppGL.dir/src/ECS/layer.cpp.o"
+},
+{
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build",
+  "command": "/home/linuxbrew/.linuxbrew/bin/clang++  -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/core -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/event -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/Ecs -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/FastNoiseLite/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glm -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/Glad/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/stb_image -pedantic -Wall -stdlib=libc++ -std=c++23 -g -std=c++23 -Winvalid-pch -Xclang -include-pch -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch -Xclang -include -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx -o CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/core/main.cpp",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/core/main.cpp",
   "output": "CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build",
-  "command": "/home/linuxbrew/.linuxbrew/bin/clang++  -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/include/core -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/include/event -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/include/Ecs -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/FastNoiseLite/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glm -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/Glad/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/stb_image -pedantic -Wall -stdlib=libc++ -std=c++23 -g -std=c++23 -Winvalid-pch -Xclang -include-pch -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch -Xclang -include -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx -o CMakeFiles/MinecraftCppGL.dir/src/scene/scene.cpp.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/src/scene/scene.cpp",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/src/scene/scene.cpp",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build",
+  "command": "/home/linuxbrew/.linuxbrew/bin/clang++  -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/core -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/event -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/Ecs -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/FastNoiseLite/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glm -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/Glad/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/stb_image -pedantic -Wall -stdlib=libc++ -std=c++23 -g -std=c++23 -Winvalid-pch -Xclang -include-pch -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch -Xclang -include -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx -o CMakeFiles/MinecraftCppGL.dir/src/scene/scene.cpp.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/scene/scene.cpp",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/scene/scene.cpp",
   "output": "CMakeFiles/MinecraftCppGL.dir/src/scene/scene.cpp.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build",
-  "command": "/home/linuxbrew/.linuxbrew/bin/clang++  -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/include/core -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/include/event -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/include/Ecs -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/FastNoiseLite/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glm -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/Glad/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/stb_image -pedantic -Wall -stdlib=libc++ -std=c++23 -g -std=c++23 -Winvalid-pch -Xclang -include-pch -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch -Xclang -include -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx -o CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/src/util/contracts.cpp",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/src/util/contracts.cpp",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build",
+  "command": "/home/linuxbrew/.linuxbrew/bin/clang++  -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/core -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/event -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/Ecs -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/FastNoiseLite/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glm -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/Glad/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/stb_image -pedantic -Wall -stdlib=libc++ -std=c++23 -g -std=c++23 -Winvalid-pch -Xclang -include-pch -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch -Xclang -include -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx -o CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/util/contracts.cpp",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/util/contracts.cpp",
   "output": "CMakeFiles/MinecraftCppGL.dir/src/util/contracts.cpp.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build",
-  "command": "/home/linuxbrew/.linuxbrew/bin/clang++  -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/include/core -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/include/event -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/include/Ecs -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/FastNoiseLite/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glm -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/Glad/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/stb_image -pedantic -Wall -stdlib=libc++ -std=c++23 -g -std=c++23 -Winvalid-pch -Xclang -include-pch -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch -Xclang -include -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx -o CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/src/util/input.cpp",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/src/util/input.cpp",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build",
+  "command": "/home/linuxbrew/.linuxbrew/bin/clang++  -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/core -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/event -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/include/Ecs -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/FastNoiseLite/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glm -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/Glad/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/stb_image -pedantic -Wall -stdlib=libc++ -std=c++23 -g -std=c++23 -Winvalid-pch -Xclang -include-pch -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.pch -Xclang -include -Xclang /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx -o CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/util/input.cpp",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/src/util/input.cpp",
   "output": "CMakeFiles/MinecraftCppGL.dir/src/util/input.cpp.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src",
-  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/context.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/context.c",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/context.c",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src",
+  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/context.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/context.c",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/context.c",
   "output": "libs/glfw/src/CMakeFiles/glfw.dir/context.c.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src",
-  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/init.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/init.c",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/init.c",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src",
+  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/init.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/init.c",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/init.c",
   "output": "libs/glfw/src/CMakeFiles/glfw.dir/init.c.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src",
-  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/input.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/input.c",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/input.c",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src",
+  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/input.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/input.c",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/input.c",
   "output": "libs/glfw/src/CMakeFiles/glfw.dir/input.c.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src",
-  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/monitor.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/monitor.c",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/monitor.c",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src",
+  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/monitor.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/monitor.c",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/monitor.c",
   "output": "libs/glfw/src/CMakeFiles/glfw.dir/monitor.c.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src",
-  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/platform.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/platform.c",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/platform.c",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src",
+  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/platform.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/platform.c",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/platform.c",
   "output": "libs/glfw/src/CMakeFiles/glfw.dir/platform.c.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src",
-  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/vulkan.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/vulkan.c",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/vulkan.c",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src",
+  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/vulkan.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/vulkan.c",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/vulkan.c",
   "output": "libs/glfw/src/CMakeFiles/glfw.dir/vulkan.c.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src",
-  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/window.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/window.c",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/window.c",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src",
+  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/window.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/window.c",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/window.c",
   "output": "libs/glfw/src/CMakeFiles/glfw.dir/window.c.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src",
-  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/egl_context.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/egl_context.c",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/egl_context.c",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src",
+  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/egl_context.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/egl_context.c",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/egl_context.c",
   "output": "libs/glfw/src/CMakeFiles/glfw.dir/egl_context.c.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src",
-  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/osmesa_context.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/osmesa_context.c",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/osmesa_context.c",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src",
+  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/osmesa_context.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/osmesa_context.c",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/osmesa_context.c",
   "output": "libs/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src",
-  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/null_init.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/null_init.c",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/null_init.c",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src",
+  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/null_init.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/null_init.c",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/null_init.c",
   "output": "libs/glfw/src/CMakeFiles/glfw.dir/null_init.c.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src",
-  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/null_monitor.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/null_monitor.c",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/null_monitor.c",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src",
+  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/null_monitor.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/null_monitor.c",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/null_monitor.c",
   "output": "libs/glfw/src/CMakeFiles/glfw.dir/null_monitor.c.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src",
-  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/null_window.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/null_window.c",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/null_window.c",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src",
+  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/null_window.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/null_window.c",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/null_window.c",
   "output": "libs/glfw/src/CMakeFiles/glfw.dir/null_window.c.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src",
-  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/null_joystick.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/null_joystick.c",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/null_joystick.c",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src",
+  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src -std=c99 -fPIC -Wall -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/null_joystick.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/null_joystick.c",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/null_joystick.c",
   "output": "libs/glfw/src/CMakeFiles/glfw.dir/null_joystick.c.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src",
-  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/posix_module.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/posix_module.c",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/posix_module.c",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src",
+  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/posix_module.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/posix_module.c",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/posix_module.c",
   "output": "libs/glfw/src/CMakeFiles/glfw.dir/posix_module.c.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src",
-  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/posix_time.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/posix_time.c",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/posix_time.c",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src",
+  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/posix_time.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/posix_time.c",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/posix_time.c",
   "output": "libs/glfw/src/CMakeFiles/glfw.dir/posix_time.c.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src",
-  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/posix_thread.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/posix_thread.c",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/posix_thread.c",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src",
+  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/posix_thread.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/posix_thread.c",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/posix_thread.c",
   "output": "libs/glfw/src/CMakeFiles/glfw.dir/posix_thread.c.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src",
-  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/x11_init.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/x11_init.c",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/x11_init.c",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src",
+  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/x11_init.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/x11_init.c",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/x11_init.c",
   "output": "libs/glfw/src/CMakeFiles/glfw.dir/x11_init.c.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src",
-  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/x11_monitor.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/x11_monitor.c",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/x11_monitor.c",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src",
+  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/x11_monitor.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/x11_monitor.c",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/x11_monitor.c",
   "output": "libs/glfw/src/CMakeFiles/glfw.dir/x11_monitor.c.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src",
-  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/x11_window.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/x11_window.c",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/x11_window.c",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src",
+  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/x11_window.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/x11_window.c",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/x11_window.c",
   "output": "libs/glfw/src/CMakeFiles/glfw.dir/x11_window.c.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src",
-  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/xkb_unicode.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/xkb_unicode.c",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/xkb_unicode.c",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src",
+  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/xkb_unicode.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/xkb_unicode.c",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/xkb_unicode.c",
   "output": "libs/glfw/src/CMakeFiles/glfw.dir/xkb_unicode.c.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src",
-  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/glx_context.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/glx_context.c",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/glx_context.c",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src",
+  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/glx_context.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/glx_context.c",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/glx_context.c",
   "output": "libs/glfw/src/CMakeFiles/glfw.dir/glx_context.c.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src",
-  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/glfw/src -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/linux_joystick.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/linux_joystick.c",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/glfw/src/linux_joystick.c",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src",
+  "command": "/usr/bin/cc -D_DEFAULT_SOURCE -D_GLFW_X11 -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/include -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/glfw/src -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/linux_joystick.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/linux_joystick.c",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/glfw/src/linux_joystick.c",
   "output": "libs/glfw/src/CMakeFiles/glfw.dir/linux_joystick.c.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/Glad",
-  "command": "/usr/bin/cc  -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/Glad/include  -o CMakeFiles/glad.dir/src/glad.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/Glad/src/glad.c",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/Glad/src/glad.c",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/Glad",
+  "command": "/usr/bin/cc  -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/Glad/include  -o CMakeFiles/glad.dir/src/glad.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/Glad/src/glad.c",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/Glad/src/glad.c",
   "output": "libs/Glad/CMakeFiles/glad.dir/src/glad.c.o"
 },
 {
-  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/build/libs/stb_image",
-  "command": "/home/linuxbrew/.linuxbrew/bin/clang++  -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/stb_image -pedantic -Wall -stdlib=libc++ -std=c++23 -g -std=c++23 -o CMakeFiles/stb_image.dir/stb_image.cpp.o -c /home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/stb_image/stb_image.cpp",
-  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/stb_image/stb_image.cpp",
+  "directory": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/libs/stb_image",
+  "command": "/home/linuxbrew/.linuxbrew/bin/clang++  -I/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/stb_image -pedantic -Wall -stdlib=libc++ -std=c++23 -g -std=c++23 -o CMakeFiles/stb_image.dir/stb_image.cpp.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/stb_image/stb_image.cpp",
+  "file": "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/libs/stb_image/stb_image.cpp",
   "output": "libs/stb_image/CMakeFiles/stb_image.dir/stb_image.cpp.o"
 }
 ]

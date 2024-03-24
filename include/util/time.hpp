@@ -1,8 +1,12 @@
 #pragma once
 
+class Application;
+
 class Time
 {
   public:
+    friend class Application;
+    
     static inline float GetDeltaTime() { return Instance().m_deltaTime; }
     static inline float GetTime() { return 0; }
     static inline float GetTimeScale() { return Instance().m_timeScale; };
