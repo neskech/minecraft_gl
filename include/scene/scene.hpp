@@ -22,7 +22,7 @@ class Scene
 class SceneManager
 {
   public:
-    SceneManager(Box<Scene> &scene);
+    SceneManager();
     NO_COPY_OR_MOVE_CONSTRUCTORS(SceneManager)
 
     void Update();

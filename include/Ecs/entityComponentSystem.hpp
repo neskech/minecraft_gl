@@ -58,14 +58,14 @@ namespace ECS
         Assert(ComponentManager::IsValidComponentID(componentId),
                "Too many components!");
 
-        Signature sig = m_entityManager.GetSignature(entity);
+        Signature sig = m_entityManager.GetEntityData(entity).signature;
 
         m_entityManager.AddComponent(entity, componentId);
         m_componentManager.AddComponent<ComponentType>(
-            entity.GetID(), std::forward<Args>(args)...);
+            entity, std::forward<Args>(args)...);
         m_systemManager.EntitySignatureChanged(entity, sig);
 
-        return m_componentManager.GetComponent<ComponentType>(entity.GetID());
+        return m_componentManager.GetComponent<ComponentType>(entity);
       }
 
       template <typename ComponentType>
@@ -80,7 +80,7 @@ namespace ECS
         Assert(ComponentManager::IsValidComponentID(componentId),
                "Too many components!");
 
-        Signature sig = m_entityManager.GetSignature(entity);
+        Signature sig = m_entityManager.GetEntityData(entity).signature;
 
         m_systemManager.EntitySignatureChanged(entity, sig);
         m_entityManager.RemoveComponent(entity, componentId);
@@ -109,7 +109,7 @@ namespace ECS
         Requires(entity.HasValidID());
         Requires(m_entityManager.IsEntityAlive(entity));
 
-        return m_componentManager.GetComponent<ComponentType>(entity.GetID());
+        return m_componentManager.GetComponent<ComponentType>(entity);
       }
 
       template <typename ComponentType>

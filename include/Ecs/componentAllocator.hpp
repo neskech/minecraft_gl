@@ -17,7 +17,7 @@ namespace ECS
   };
 
   template <typename ComponentType>
-  class ComponentAllocator : IComponentAllocator
+  class ComponentAllocator : public IComponentAllocator
   {
     public:
       ComponentAllocator() { m_typeName = typeid(ComponentType).name(); }
@@ -34,7 +34,7 @@ namespace ECS
                              entity.GetID(), m_typeName));
 
         usize newIndex = m_size;
-        m_components[newIndex] = T(std::forward<Args>(args)...);
+        m_components[newIndex] = ComponentType(std::forward<Args>(args)...);
         m_indexMap[entity.GetID()] = newIndex;
         m_entityMap[newIndex] = entity.GetID();
 
@@ -81,7 +81,7 @@ namespace ECS
   };
 
   template <typename ComponentType>
-  class DynamicComponentAllocator : IComponentAllocator
+  class DynamicComponentAllocator : public IComponentAllocator
   {
     public:
       DynamicComponentAllocator() { m_typeName = typeid(ComponentType).name(); }
@@ -90,18 +90,18 @@ namespace ECS
 
       template <typename... Args>
         requires std::is_constructible_v<ComponentType, Args...>
-      void AllocateComponent(EntityID id, Args &&...args)
+      void AllocateComponent(Entity entity, Args &&...args)
       {
         Requires(
-            !m_indexMap.contains(id),
+            !m_indexMap.contains(entity.GetID()),
             std::format(
-                "Entity of id {} tried allocating component of type {} twice!",
-                id, m_typeName));
+                "Entity of entity.GetID() {} tried allocating component of type {} twice!",
+                entity.GetID(), m_typeName));
 
         usize newIndex = m_components.size();
         m_components.emplace_back(std::forward<Args>(args)...);
-        m_indexMap[id] = newIndex;
-        m_entityMap[newIndex] = id;
+        m_indexMap[entity.GetID()] = newIndex;
+        m_entityMap[newIndex] = entity.GetID();
       }
 
       void FreeComponent(Entity entity)

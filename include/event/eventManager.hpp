@@ -5,7 +5,8 @@
 #include <functional>
 #include <utility>
 
-template <typename EventType> class CallbackContainer
+template <typename EventType>
+class CallbackContainer
 {
   public:
     using Callback = std::function<void(const EventType &)>;
@@ -55,7 +56,8 @@ template <typename EventType> class CallbackContainer
 };
 
 /* To Shorten */
-template <typename EvType> using Class = CallbackContainer<EvType>;
+template <typename EvType>
+using Class = CallbackContainer<EvType>;
 template <typename EvType>
 using SubscriberHandle = CallbackContainer<EvType>::SubscriberHandle;
 
@@ -99,7 +101,8 @@ void Class<EType>::UnSubscribe(SubscriberHandle deletionHandle)
   m_freeHandles.push_back(deletionHandle);
 }
 
-template <typename EType> void Class<EType>::Invoke(const EType &event)
+template <typename EType>
+void Class<EType>::Invoke(const EType &event)
 {
   for (const auto &[callback, _] : m_callbacks)
     callback(event);
@@ -108,7 +111,11 @@ template <typename EType> void Class<EType>::Invoke(const EType &event)
 class EventManager
 {
   public:
-    EventManager() {}
+    EventManager()
+    {
+      Assert(s_instance == nullptr, "Can only initialize event manager once!");
+      s_instance = this;
+    }
 
     template <typename EventType, typename Function>
     typename CallbackContainer<EventType>::SubscriberHandle static Subscribe(
@@ -122,16 +129,14 @@ class EventManager
     void static UnSubscribe(
         typename CallbackContainer<EventType>::SubscriberHandle handle);
 
-    template <typename EventType> static void Invoke(const EventType &event);
+    template <typename EventType>
+    static void Invoke(const EventType &event);
 
-    template <typename EventType> static void Invoke(EventType &&event);
+    template <typename EventType>
+    static void Invoke(EventType &&event);
 
   private:
-    static EventManager &Instance()
-    {
-      static EventManager manager{};
-      return manager;
-    }
+    static inline EventManager *s_instance;
     template <typename EventType>
     static inline CallbackContainer<EventType> s_callbackContainer;
 };
@@ -159,12 +164,14 @@ void EventManager::UnSubscribe(
   s_callbackContainer<EventType>.UnSubscribe(handle);
 }
 
-template <typename EventType> void EventManager::Invoke(const EventType &event)
+template <typename EventType>
+void EventManager::Invoke(const EventType &event)
 {
   s_callbackContainer<EventType>.Invoke(event);
 }
 
-template <typename EventType> void EventManager::Invoke(EventType &&event)
+template <typename EventType>
+void EventManager::Invoke(EventType &&event)
 {
   s_callbackContainer<EventType>.Invoke(std::forward<EventType>(event));
 }

@@ -1,9 +1,9 @@
 #include "scene/scene.hpp"
 #include "util/types.hpp"
 
-SceneManager::SceneManager(Box<Scene> &scene) : m_currentScene(std::move(scene))
+SceneManager::SceneManager() : m_currentScene(nullptr)
 {
-  m_currentScene->OnEnter();
+  //m_currentScene->OnEnter();
 }
 
 void SceneManager::Update() { m_currentScene->Update(); }

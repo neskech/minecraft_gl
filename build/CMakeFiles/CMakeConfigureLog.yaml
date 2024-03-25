@@ -61,8 +61,8 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-Vuxm2d"
-      binary: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-Vuxm2d"
+      source: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-ZubDkI"
+      binary: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-ZubDkI"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/bin/clang-scan-deps"
       CMAKE_C_FLAGS: ""
@@ -72,13 +72,13 @@ events:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-Vuxm2d'
+        Change Dir: '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-ZubDkI'
         
-        Run Build Command(s): /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_e46d4/fast
-        /usr/bin/gmake  -f CMakeFiles/cmTC_e46d4.dir/build.make CMakeFiles/cmTC_e46d4.dir/build
-        gmake[1]: Entering directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-Vuxm2d'
-        Building C object CMakeFiles/cmTC_e46d4.dir/CMakeCCompilerABI.c.o
-        /usr/bin/cc   -v -o CMakeFiles/cmTC_e46d4.dir/CMakeCCompilerABI.c.o -c /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCCompilerABI.c
+        Run Build Command(s): /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_df418/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_df418.dir/build.make CMakeFiles/cmTC_df418.dir/build
+        gmake[1]: Entering directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-ZubDkI'
+        Building C object CMakeFiles/cmTC_df418.dir/CMakeCCompilerABI.c.o
+        /usr/bin/cc   -v -o CMakeFiles/cmTC_df418.dir/CMakeCCompilerABI.c.o -c /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCCompilerABI.c
         Using built-in specs.
         COLLECT_GCC=/usr/bin/cc
         OFFLOAD_TARGET_NAMES=nvptx-none:amdgcn-amdhsa
@@ -88,8 +88,8 @@ events:
         Thread model: posix
         Supported LTO compression algorithms: zlib zstd
         gcc version 11.4.0 (Ubuntu 11.4.0-1ubuntu1~22.04) 
-        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_e46d4.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_e46d4.dir/'
-         /usr/lib/gcc/x86_64-linux-gnu/11/cc1 -quiet -v -imultiarch x86_64-linux-gnu /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_e46d4.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -fcf-protection -o /tmp/ccgGV3yU.s
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_df418.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_df418.dir/'
+         /usr/lib/gcc/x86_64-linux-gnu/11/cc1 -quiet -v -imultiarch x86_64-linux-gnu /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_df418.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -fcf-protection -o /tmp/ccWoELbB.s
         GNU C17 (Ubuntu 11.4.0-1ubuntu1~22.04) version 11.4.0 (x86_64-linux-gnu)
         	compiled by GNU C version 11.4.0, GMP version 6.2.1, MPFR version 4.1.0, MPC version 1.2.1, isl version isl-0.24-GMP
         
@@ -109,15 +109,15 @@ events:
         
         GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
         Compiler executable checksum: 50eaa2331df977b8016186198deb2d18
-        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_e46d4.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_e46d4.dir/'
-         as -v --64 -o CMakeFiles/cmTC_e46d4.dir/CMakeCCompilerABI.c.o /tmp/ccgGV3yU.s
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_df418.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_df418.dir/'
+         as -v --64 -o CMakeFiles/cmTC_df418.dir/CMakeCCompilerABI.c.o /tmp/ccWoELbB.s
         GNU assembler version 2.38 (x86_64-linux-gnu) using BFD version (GNU Binutils for Ubuntu) 2.38
         COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/
         LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../:/lib/:/usr/lib/
-        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_e46d4.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_e46d4.dir/CMakeCCompilerABI.c.'
-        Linking C executable cmTC_e46d4
-        /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e46d4.dir/link.txt --verbose=1
-        /usr/bin/cc  -v CMakeFiles/cmTC_e46d4.dir/CMakeCCompilerABI.c.o -o cmTC_e46d4 
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_df418.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_df418.dir/CMakeCCompilerABI.c.'
+        Linking C executable cmTC_df418
+        /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_df418.dir/link.txt --verbose=1
+        /usr/bin/cc  -v CMakeFiles/cmTC_df418.dir/CMakeCCompilerABI.c.o -o cmTC_df418 
         Using built-in specs.
         COLLECT_GCC=/usr/bin/cc
         COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper
@@ -130,10 +130,10 @@ events:
         gcc version 11.4.0 (Ubuntu 11.4.0-1ubuntu1~22.04) 
         COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/
         LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../:/lib/:/usr/lib/
-        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_e46d4' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_e46d4.'
-         /usr/lib/gcc/x86_64-linux-gnu/11/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/11/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccR2itNm.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_e46d4 /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/11 -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/11/../../.. CMakeFiles/cmTC_e46d4.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/11/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crtn.o
-        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_e46d4' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_e46d4.'
-        gmake[1]: Leaving directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-Vuxm2d'
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_df418' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_df418.'
+         /usr/lib/gcc/x86_64-linux-gnu/11/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/11/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccCFMLcX.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_df418 /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/11 -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/11/../../.. CMakeFiles/cmTC_df418.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/11/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crtn.o
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_df418' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_df418.'
+        gmake[1]: Leaving directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-ZubDkI'
         
       exitCode: 0
   -
@@ -167,13 +167,13 @@ events:
     message: |
       Parsed C implicit link information:
         link line regex: [^( *|.*[/\\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
-        ignore line: [Change Dir: '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-Vuxm2d']
+        ignore line: [Change Dir: '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-ZubDkI']
         ignore line: []
-        ignore line: [Run Build Command(s): /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_e46d4/fast]
-        ignore line: [/usr/bin/gmake  -f CMakeFiles/cmTC_e46d4.dir/build.make CMakeFiles/cmTC_e46d4.dir/build]
-        ignore line: [gmake[1]: Entering directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-Vuxm2d']
-        ignore line: [Building C object CMakeFiles/cmTC_e46d4.dir/CMakeCCompilerABI.c.o]
-        ignore line: [/usr/bin/cc   -v -o CMakeFiles/cmTC_e46d4.dir/CMakeCCompilerABI.c.o -c /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCCompilerABI.c]
+        ignore line: [Run Build Command(s): /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_df418/fast]
+        ignore line: [/usr/bin/gmake  -f CMakeFiles/cmTC_df418.dir/build.make CMakeFiles/cmTC_df418.dir/build]
+        ignore line: [gmake[1]: Entering directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-ZubDkI']
+        ignore line: [Building C object CMakeFiles/cmTC_df418.dir/CMakeCCompilerABI.c.o]
+        ignore line: [/usr/bin/cc   -v -o CMakeFiles/cmTC_df418.dir/CMakeCCompilerABI.c.o -c /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCCompilerABI.c]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/usr/bin/cc]
         ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none:amdgcn-amdhsa]
@@ -183,8 +183,8 @@ events:
         ignore line: [Thread model: posix]
         ignore line: [Supported LTO compression algorithms: zlib zstd]
         ignore line: [gcc version 11.4.0 (Ubuntu 11.4.0-1ubuntu1~22.04) ]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_e46d4.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_e46d4.dir/']
-        ignore line: [ /usr/lib/gcc/x86_64-linux-gnu/11/cc1 -quiet -v -imultiarch x86_64-linux-gnu /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_e46d4.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -fcf-protection -o /tmp/ccgGV3yU.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_df418.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_df418.dir/']
+        ignore line: [ /usr/lib/gcc/x86_64-linux-gnu/11/cc1 -quiet -v -imultiarch x86_64-linux-gnu /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_df418.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -fcf-protection -o /tmp/ccWoELbB.s]
         ignore line: [GNU C17 (Ubuntu 11.4.0-1ubuntu1~22.04) version 11.4.0 (x86_64-linux-gnu)]
         ignore line: [	compiled by GNU C version 11.4.0  GMP version 6.2.1  MPFR version 4.1.0  MPC version 1.2.1  isl version isl-0.24-GMP]
         ignore line: []
@@ -204,15 +204,15 @@ events:
         ignore line: []
         ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
         ignore line: [Compiler executable checksum: 50eaa2331df977b8016186198deb2d18]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_e46d4.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_e46d4.dir/']
-        ignore line: [ as -v --64 -o CMakeFiles/cmTC_e46d4.dir/CMakeCCompilerABI.c.o /tmp/ccgGV3yU.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_df418.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_df418.dir/']
+        ignore line: [ as -v --64 -o CMakeFiles/cmTC_df418.dir/CMakeCCompilerABI.c.o /tmp/ccWoELbB.s]
         ignore line: [GNU assembler version 2.38 (x86_64-linux-gnu) using BFD version (GNU Binutils for Ubuntu) 2.38]
         ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/]
         ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../:/lib/:/usr/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_e46d4.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_e46d4.dir/CMakeCCompilerABI.c.']
-        ignore line: [Linking C executable cmTC_e46d4]
-        ignore line: [/home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e46d4.dir/link.txt --verbose=1]
-        ignore line: [/usr/bin/cc  -v CMakeFiles/cmTC_e46d4.dir/CMakeCCompilerABI.c.o -o cmTC_e46d4 ]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_df418.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_df418.dir/CMakeCCompilerABI.c.']
+        ignore line: [Linking C executable cmTC_df418]
+        ignore line: [/home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_df418.dir/link.txt --verbose=1]
+        ignore line: [/usr/bin/cc  -v CMakeFiles/cmTC_df418.dir/CMakeCCompilerABI.c.o -o cmTC_df418 ]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/usr/bin/cc]
         ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper]
@@ -225,13 +225,13 @@ events:
         ignore line: [gcc version 11.4.0 (Ubuntu 11.4.0-1ubuntu1~22.04) ]
         ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/]
         ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../:/lib/:/usr/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_e46d4' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_e46d4.']
-        link line: [ /usr/lib/gcc/x86_64-linux-gnu/11/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/11/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccR2itNm.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_e46d4 /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/11 -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/11/../../.. CMakeFiles/cmTC_e46d4.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/11/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crtn.o]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_df418' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_df418.']
+        link line: [ /usr/lib/gcc/x86_64-linux-gnu/11/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/11/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccCFMLcX.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_df418 /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/11 -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/11/../../.. CMakeFiles/cmTC_df418.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/11/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crtn.o]
           arg [/usr/lib/gcc/x86_64-linux-gnu/11/collect2] ==> ignore
           arg [-plugin] ==> ignore
           arg [/usr/lib/gcc/x86_64-linux-gnu/11/liblto_plugin.so] ==> ignore
           arg [-plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper] ==> ignore
-          arg [-plugin-opt=-fresolution=/tmp/ccR2itNm.res] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/ccCFMLcX.res] ==> ignore
           arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
           arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
           arg [-plugin-opt=-pass-through=-lc] ==> ignore
@@ -249,7 +249,7 @@ events:
           arg [-znow] ==> ignore
           arg [-zrelro] ==> ignore
           arg [-o] ==> ignore
-          arg [cmTC_e46d4] ==> ignore
+          arg [cmTC_df418] ==> ignore
           arg [/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/Scrt1.o] ==> obj [/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/Scrt1.o]
           arg [/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crti.o] ==> obj [/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crti.o]
           arg [/usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o] ==> obj [/usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o]
@@ -261,7 +261,7 @@ events:
           arg [-L/usr/lib/x86_64-linux-gnu] ==> dir [/usr/lib/x86_64-linux-gnu]
           arg [-L/usr/lib/../lib] ==> dir [/usr/lib/../lib]
           arg [-L/usr/lib/gcc/x86_64-linux-gnu/11/../../..] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/11/../../..]
-          arg [CMakeFiles/cmTC_e46d4.dir/CMakeCCompilerABI.c.o] ==> ignore
+          arg [CMakeFiles/cmTC_df418.dir/CMakeCCompilerABI.c.o] ==> ignore
           arg [-lgcc] ==> lib [gcc]
           arg [--push-state] ==> ignore
           arg [--as-needed] ==> ignore
@@ -301,8 +301,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-maJywn"
-      binary: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-maJywn"
+      source: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-ENSzKQ"
+      binary: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-ENSzKQ"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/bin/clang-scan-deps"
       CMAKE_CXX_FLAGS: "-pedantic -Wall -stdlib=libc++ -std=c++23 -g"
@@ -312,13 +312,13 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-maJywn'
+        Change Dir: '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-ENSzKQ'
         
-        Run Build Command(s): /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_8197a/fast
-        /usr/bin/gmake  -f CMakeFiles/cmTC_8197a.dir/build.make CMakeFiles/cmTC_8197a.dir/build
-        gmake[1]: Entering directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-maJywn'
-        Building CXX object CMakeFiles/cmTC_8197a.dir/CMakeCXXCompilerABI.cpp.o
-        /home/linuxbrew/.linuxbrew/bin/clang++   -pedantic -Wall -stdlib=libc++ -std=c++23 -g  -std=c++23   -v -MD -MT CMakeFiles/cmTC_8197a.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_8197a.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_8197a.dir/CMakeCXXCompilerABI.cpp.o -c /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+        Run Build Command(s): /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_8d344/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_8d344.dir/build.make CMakeFiles/cmTC_8d344.dir/build
+        gmake[1]: Entering directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-ENSzKQ'
+        Building CXX object CMakeFiles/cmTC_8d344.dir/CMakeCXXCompilerABI.cpp.o
+        /home/linuxbrew/.linuxbrew/bin/clang++   -pedantic -Wall -stdlib=libc++ -std=c++23 -g  -std=c++23   -v -MD -MT CMakeFiles/cmTC_8d344.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_8d344.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_8d344.dir/CMakeCXXCompilerABI.cpp.o -c /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXCompilerABI.cpp
         Homebrew clang version 17.0.6
         Target: x86_64-unknown-linux-gnu
         Thread model: posix
@@ -328,7 +328,7 @@ events:
         Candidate multilib: .;@m64
         Selected multilib: .;@m64
          (in-process)
-         "/home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/bin/clang-17" -cc1 -triple x86_64-unknown-linux-gnu -emit-obj -mrelax-all -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=all -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -tune-cpu generic -debug-info-kind=constructor -dwarf-version=5 -debugger-tuning=gdb -v -fcoverage-compilation-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-maJywn -resource-dir /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/lib/clang/17 -dependency-file CMakeFiles/cmTC_8197a.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_8197a.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -internal-isystem /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/bin/../include/c++/v1 -internal-isystem /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/lib/clang/17/include -internal-isystem /usr/local/include -internal-isystem /usr/lib/gcc/x86_64-linux-gnu/11/../../../../x86_64-linux-gnu/include -internal-externc-isystem /usr/include/x86_64-linux-gnu -internal-externc-isystem /include -internal-externc-isystem /usr/include -Wall -pedantic -std=c++23 -fdeprecated-macro -fdebug-compilation-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-maJywn -ferror-limit 19 -fgnuc-version=4.2.1 -fno-implicit-modules -fcxx-exceptions -fexceptions -faddrsig -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_8197a.dir/CMakeCXXCompilerABI.cpp.o -x c++ /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+         "/home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/bin/clang-17" -cc1 -triple x86_64-unknown-linux-gnu -emit-obj -mrelax-all -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=all -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -tune-cpu generic -debug-info-kind=constructor -dwarf-version=5 -debugger-tuning=gdb -v -fcoverage-compilation-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-ENSzKQ -resource-dir /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/lib/clang/17 -dependency-file CMakeFiles/cmTC_8d344.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_8d344.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -internal-isystem /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/bin/../include/c++/v1 -internal-isystem /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/lib/clang/17/include -internal-isystem /usr/local/include -internal-isystem /usr/lib/gcc/x86_64-linux-gnu/11/../../../../x86_64-linux-gnu/include -internal-externc-isystem /usr/include/x86_64-linux-gnu -internal-externc-isystem /include -internal-externc-isystem /usr/include -Wall -pedantic -std=c++23 -fdeprecated-macro -fdebug-compilation-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-ENSzKQ -ferror-limit 19 -fgnuc-version=4.2.1 -fno-implicit-modules -fcxx-exceptions -fexceptions -faddrsig -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_8d344.dir/CMakeCXXCompilerABI.cpp.o -x c++ /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXCompilerABI.cpp
         clang -cc1 version 17.0.6 based upon LLVM 17.0.6 default target x86_64-unknown-linux-gnu
         ignoring nonexistent directory "/usr/lib/gcc/x86_64-linux-gnu/11/../../../../x86_64-linux-gnu/include"
         ignoring nonexistent directory "/include"
@@ -340,9 +340,9 @@ events:
          /usr/include/x86_64-linux-gnu
          /usr/include
         End of search list.
-        Linking CXX executable cmTC_8197a
-        /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8197a.dir/link.txt --verbose=1
-        /home/linuxbrew/.linuxbrew/bin/clang++ -pedantic -Wall -stdlib=libc++ -std=c++23 -g   -v CMakeFiles/cmTC_8197a.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_8197a 
+        Linking CXX executable cmTC_8d344
+        /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8d344.dir/link.txt --verbose=1
+        /home/linuxbrew/.linuxbrew/bin/clang++ -pedantic -Wall -stdlib=libc++ -std=c++23 -g   -v CMakeFiles/cmTC_8d344.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_8d344 
         Homebrew clang version 17.0.6
         Target: x86_64-unknown-linux-gnu
         Thread model: posix
@@ -351,8 +351,8 @@ events:
         Selected GCC installation: /usr/lib/gcc/x86_64-linux-gnu/11
         Candidate multilib: .;@m64
         Selected multilib: .;@m64
-         "/usr/bin/ld" -pie -z relro --hash-style=gnu --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_8197a /lib/x86_64-linux-gnu/Scrt1.o /lib/x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o -L/home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/lib/clang/17/lib/x86_64-unknown-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/11 -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib64 -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib64 -L/lib -L/usr/lib CMakeFiles/cmTC_8197a.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/11/crtendS.o /lib/x86_64-linux-gnu/crtn.o
-        gmake[1]: Leaving directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-maJywn'
+         "/usr/bin/ld" -pie -z relro --hash-style=gnu --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_8d344 /lib/x86_64-linux-gnu/Scrt1.o /lib/x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o -L/home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/lib/clang/17/lib/x86_64-unknown-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/11 -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib64 -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib64 -L/lib -L/usr/lib CMakeFiles/cmTC_8d344.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/11/crtendS.o /lib/x86_64-linux-gnu/crtn.o
+        gmake[1]: Leaving directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-ENSzKQ'
         
       exitCode: 0
   -
@@ -388,13 +388,13 @@ events:
     message: |
       Parsed CXX implicit link information:
         link line regex: [^( *|.*[/\\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
-        ignore line: [Change Dir: '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-maJywn']
+        ignore line: [Change Dir: '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-ENSzKQ']
         ignore line: []
-        ignore line: [Run Build Command(s): /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_8197a/fast]
-        ignore line: [/usr/bin/gmake  -f CMakeFiles/cmTC_8197a.dir/build.make CMakeFiles/cmTC_8197a.dir/build]
-        ignore line: [gmake[1]: Entering directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-maJywn']
-        ignore line: [Building CXX object CMakeFiles/cmTC_8197a.dir/CMakeCXXCompilerABI.cpp.o]
-        ignore line: [/home/linuxbrew/.linuxbrew/bin/clang++   -pedantic -Wall -stdlib=libc++ -std=c++23 -g  -std=c++23   -v -MD -MT CMakeFiles/cmTC_8197a.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_8197a.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_8197a.dir/CMakeCXXCompilerABI.cpp.o -c /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [Run Build Command(s): /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_8d344/fast]
+        ignore line: [/usr/bin/gmake  -f CMakeFiles/cmTC_8d344.dir/build.make CMakeFiles/cmTC_8d344.dir/build]
+        ignore line: [gmake[1]: Entering directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-ENSzKQ']
+        ignore line: [Building CXX object CMakeFiles/cmTC_8d344.dir/CMakeCXXCompilerABI.cpp.o]
+        ignore line: [/home/linuxbrew/.linuxbrew/bin/clang++   -pedantic -Wall -stdlib=libc++ -std=c++23 -g  -std=c++23   -v -MD -MT CMakeFiles/cmTC_8d344.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_8d344.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_8d344.dir/CMakeCXXCompilerABI.cpp.o -c /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
         ignore line: [Homebrew clang version 17.0.6]
         ignore line: [Target: x86_64-unknown-linux-gnu]
         ignore line: [Thread model: posix]
@@ -406,7 +406,7 @@ events:
         ignore line: [Selected multilib: .]
         ignore line: [@m64]
         ignore line: [ (in-process)]
-        ignore line: [ "/home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/bin/clang-17" -cc1 -triple x86_64-unknown-linux-gnu -emit-obj -mrelax-all -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=all -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -tune-cpu generic -debug-info-kind=constructor -dwarf-version=5 -debugger-tuning=gdb -v -fcoverage-compilation-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-maJywn -resource-dir /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/lib/clang/17 -dependency-file CMakeFiles/cmTC_8197a.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_8197a.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -internal-isystem /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/bin/../include/c++/v1 -internal-isystem /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/lib/clang/17/include -internal-isystem /usr/local/include -internal-isystem /usr/lib/gcc/x86_64-linux-gnu/11/../../../../x86_64-linux-gnu/include -internal-externc-isystem /usr/include/x86_64-linux-gnu -internal-externc-isystem /include -internal-externc-isystem /usr/include -Wall -pedantic -std=c++23 -fdeprecated-macro -fdebug-compilation-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-maJywn -ferror-limit 19 -fgnuc-version=4.2.1 -fno-implicit-modules -fcxx-exceptions -fexceptions -faddrsig -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_8197a.dir/CMakeCXXCompilerABI.cpp.o -x c++ /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [ "/home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/bin/clang-17" -cc1 -triple x86_64-unknown-linux-gnu -emit-obj -mrelax-all -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=all -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -tune-cpu generic -debug-info-kind=constructor -dwarf-version=5 -debugger-tuning=gdb -v -fcoverage-compilation-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-ENSzKQ -resource-dir /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/lib/clang/17 -dependency-file CMakeFiles/cmTC_8d344.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_8d344.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -internal-isystem /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/bin/../include/c++/v1 -internal-isystem /home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/lib/clang/17/include -internal-isystem /usr/local/include -internal-isystem /usr/lib/gcc/x86_64-linux-gnu/11/../../../../x86_64-linux-gnu/include -internal-externc-isystem /usr/include/x86_64-linux-gnu -internal-externc-isystem /include -internal-externc-isystem /usr/include -Wall -pedantic -std=c++23 -fdeprecated-macro -fdebug-compilation-dir=/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-ENSzKQ -ferror-limit 19 -fgnuc-version=4.2.1 -fno-implicit-modules -fcxx-exceptions -fexceptions -faddrsig -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_8d344.dir/CMakeCXXCompilerABI.cpp.o -x c++ /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
         ignore line: [clang -cc1 version 17.0.6 based upon LLVM 17.0.6 default target x86_64-unknown-linux-gnu]
         ignore line: [ignoring nonexistent directory "/usr/lib/gcc/x86_64-linux-gnu/11/../../../../x86_64-linux-gnu/include"]
         ignore line: [ignoring nonexistent directory "/include"]
@@ -418,9 +418,9 @@ events:
         ignore line: [ /usr/include/x86_64-linux-gnu]
         ignore line: [ /usr/include]
         ignore line: [End of search list.]
-        ignore line: [Linking CXX executable cmTC_8197a]
-        ignore line: [/home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8197a.dir/link.txt --verbose=1]
-        ignore line: [/home/linuxbrew/.linuxbrew/bin/clang++ -pedantic -Wall -stdlib=libc++ -std=c++23 -g   -v CMakeFiles/cmTC_8197a.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_8197a ]
+        ignore line: [Linking CXX executable cmTC_8d344]
+        ignore line: [/home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8d344.dir/link.txt --verbose=1]
+        ignore line: [/home/linuxbrew/.linuxbrew/bin/clang++ -pedantic -Wall -stdlib=libc++ -std=c++23 -g   -v CMakeFiles/cmTC_8d344.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_8d344 ]
         ignore line: [Homebrew clang version 17.0.6]
         ignore line: [Target: x86_64-unknown-linux-gnu]
         ignore line: [Thread model: posix]
@@ -431,7 +431,7 @@ events:
         ignore line: [@m64]
         ignore line: [Selected multilib: .]
         ignore line: [@m64]
-        link line: [ "/usr/bin/ld" -pie -z relro --hash-style=gnu --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_8197a /lib/x86_64-linux-gnu/Scrt1.o /lib/x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o -L/home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/lib/clang/17/lib/x86_64-unknown-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/11 -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib64 -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib64 -L/lib -L/usr/lib CMakeFiles/cmTC_8197a.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/11/crtendS.o /lib/x86_64-linux-gnu/crtn.o]
+        link line: [ "/usr/bin/ld" -pie -z relro --hash-style=gnu --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_8d344 /lib/x86_64-linux-gnu/Scrt1.o /lib/x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o -L/home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/lib/clang/17/lib/x86_64-unknown-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/11 -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib64 -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib64 -L/lib -L/usr/lib CMakeFiles/cmTC_8d344.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/11/crtendS.o /lib/x86_64-linux-gnu/crtn.o]
           arg [/usr/bin/ld] ==> ignore
           arg [-pie] ==> ignore
           arg [-zrelro] ==> ignore
@@ -442,7 +442,7 @@ events:
           arg [-dynamic-linker] ==> ignore
           arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
           arg [-o] ==> ignore
-          arg [cmTC_8197a] ==> ignore
+          arg [cmTC_8d344] ==> ignore
           arg [/lib/x86_64-linux-gnu/Scrt1.o] ==> obj [/lib/x86_64-linux-gnu/Scrt1.o]
           arg [/lib/x86_64-linux-gnu/crti.o] ==> obj [/lib/x86_64-linux-gnu/crti.o]
           arg [/usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o] ==> obj [/usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o]
@@ -455,7 +455,7 @@ events:
           arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
           arg [-L/lib] ==> dir [/lib]
           arg [-L/usr/lib] ==> dir [/usr/lib]
-          arg [CMakeFiles/cmTC_8197a.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+          arg [CMakeFiles/cmTC_8d344.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
           arg [-lc++] ==> lib [c++]
           arg [-lm] ==> lib [m]
           arg [-lgcc_s] ==> lib [gcc_s]
@@ -491,8 +491,8 @@ events:
     checks:
       - "Performing Test CMAKE_HAVE_LIBC_PTHREAD"
     directories:
-      source: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-5VuplW"
-      binary: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-5VuplW"
+      source: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-YdhMCo"
+      binary: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-YdhMCo"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/bin/clang-scan-deps"
       CMAKE_C_FLAGS: ""
@@ -503,17 +503,17 @@ events:
       variable: "CMAKE_HAVE_LIBC_PTHREAD"
       cached: true
       stdout: |
-        Change Dir: '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-5VuplW'
+        Change Dir: '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-YdhMCo'
         
-        Run Build Command(s): /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_3cae4/fast
-        /usr/bin/gmake  -f CMakeFiles/cmTC_3cae4.dir/build.make CMakeFiles/cmTC_3cae4.dir/build
-        gmake[1]: Entering directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-5VuplW'
-        Building C object CMakeFiles/cmTC_3cae4.dir/src.c.o
-        /usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_3cae4.dir/src.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-5VuplW/src.c
-        Linking C executable cmTC_3cae4
-        /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3cae4.dir/link.txt --verbose=1
-        /usr/bin/cc CMakeFiles/cmTC_3cae4.dir/src.c.o -o cmTC_3cae4 
-        gmake[1]: Leaving directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-5VuplW'
+        Run Build Command(s): /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_e0d7b/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_e0d7b.dir/build.make CMakeFiles/cmTC_e0d7b.dir/build
+        gmake[1]: Entering directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-YdhMCo'
+        Building C object CMakeFiles/cmTC_e0d7b.dir/src.c.o
+        /usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_e0d7b.dir/src.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-YdhMCo/src.c
+        Linking C executable cmTC_e0d7b
+        /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e0d7b.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_e0d7b.dir/src.c.o -o cmTC_e0d7b 
+        gmake[1]: Leaving directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-YdhMCo'
         
       exitCode: 0
   -
@@ -525,8 +525,8 @@ events:
     checks:
       - "Looking for XOpenDisplay in /usr/lib/x86_64-linux-gnu/libX11.so;/usr/lib/x86_64-linux-gnu/libXext.so"
     directories:
-      source: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-3iH9Pw"
-      binary: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-3iH9Pw"
+      source: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-NDjbRO"
+      binary: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-NDjbRO"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/bin/clang-scan-deps"
       CMAKE_C_FLAGS: ""
@@ -537,17 +537,17 @@ events:
       variable: "X11_LIB_X11_SOLO"
       cached: true
       stdout: |
-        Change Dir: '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-3iH9Pw'
+        Change Dir: '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-NDjbRO'
         
-        Run Build Command(s): /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_71662/fast
-        /usr/bin/gmake  -f CMakeFiles/cmTC_71662.dir/build.make CMakeFiles/cmTC_71662.dir/build
-        gmake[1]: Entering directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-3iH9Pw'
-        Building C object CMakeFiles/cmTC_71662.dir/CheckFunctionExists.c.o
-        /usr/bin/cc   -DCHECK_FUNCTION_EXISTS=XOpenDisplay -o CMakeFiles/cmTC_71662.dir/CheckFunctionExists.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-3iH9Pw/CheckFunctionExists.c
-        Linking C executable cmTC_71662
-        /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_71662.dir/link.txt --verbose=1
-        /usr/bin/cc  -DCHECK_FUNCTION_EXISTS=XOpenDisplay CMakeFiles/cmTC_71662.dir/CheckFunctionExists.c.o -o cmTC_71662  /usr/lib/x86_64-linux-gnu/libX11.so /usr/lib/x86_64-linux-gnu/libXext.so 
-        gmake[1]: Leaving directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-3iH9Pw'
+        Run Build Command(s): /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_ba4a5/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_ba4a5.dir/build.make CMakeFiles/cmTC_ba4a5.dir/build
+        gmake[1]: Entering directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-NDjbRO'
+        Building C object CMakeFiles/cmTC_ba4a5.dir/CheckFunctionExists.c.o
+        /usr/bin/cc   -DCHECK_FUNCTION_EXISTS=XOpenDisplay -o CMakeFiles/cmTC_ba4a5.dir/CheckFunctionExists.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-NDjbRO/CheckFunctionExists.c
+        Linking C executable cmTC_ba4a5
+        /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ba4a5.dir/link.txt --verbose=1
+        /usr/bin/cc  -DCHECK_FUNCTION_EXISTS=XOpenDisplay CMakeFiles/cmTC_ba4a5.dir/CheckFunctionExists.c.o -o cmTC_ba4a5  /usr/lib/x86_64-linux-gnu/libX11.so /usr/lib/x86_64-linux-gnu/libXext.so 
+        gmake[1]: Leaving directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-NDjbRO'
         
       exitCode: 0
   -
@@ -559,8 +559,8 @@ events:
     checks:
       - "Looking for gethostbyname"
     directories:
-      source: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-764QBw"
-      binary: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-764QBw"
+      source: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-B6Gbfj"
+      binary: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-B6Gbfj"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/bin/clang-scan-deps"
       CMAKE_C_FLAGS: ""
@@ -571,17 +571,17 @@ events:
       variable: "CMAKE_HAVE_GETHOSTBYNAME"
       cached: true
       stdout: |
-        Change Dir: '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-764QBw'
+        Change Dir: '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-B6Gbfj'
         
-        Run Build Command(s): /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_91a66/fast
-        /usr/bin/gmake  -f CMakeFiles/cmTC_91a66.dir/build.make CMakeFiles/cmTC_91a66.dir/build
-        gmake[1]: Entering directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-764QBw'
-        Building C object CMakeFiles/cmTC_91a66.dir/CheckFunctionExists.c.o
-        /usr/bin/cc   -DCHECK_FUNCTION_EXISTS=gethostbyname -o CMakeFiles/cmTC_91a66.dir/CheckFunctionExists.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-764QBw/CheckFunctionExists.c
-        Linking C executable cmTC_91a66
-        /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_91a66.dir/link.txt --verbose=1
-        /usr/bin/cc  -DCHECK_FUNCTION_EXISTS=gethostbyname CMakeFiles/cmTC_91a66.dir/CheckFunctionExists.c.o -o cmTC_91a66 
-        gmake[1]: Leaving directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-764QBw'
+        Run Build Command(s): /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_084b1/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_084b1.dir/build.make CMakeFiles/cmTC_084b1.dir/build
+        gmake[1]: Entering directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-B6Gbfj'
+        Building C object CMakeFiles/cmTC_084b1.dir/CheckFunctionExists.c.o
+        /usr/bin/cc   -DCHECK_FUNCTION_EXISTS=gethostbyname -o CMakeFiles/cmTC_084b1.dir/CheckFunctionExists.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-B6Gbfj/CheckFunctionExists.c
+        Linking C executable cmTC_084b1
+        /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_084b1.dir/link.txt --verbose=1
+        /usr/bin/cc  -DCHECK_FUNCTION_EXISTS=gethostbyname CMakeFiles/cmTC_084b1.dir/CheckFunctionExists.c.o -o cmTC_084b1 
+        gmake[1]: Leaving directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-B6Gbfj'
         
       exitCode: 0
   -
@@ -593,8 +593,8 @@ events:
     checks:
       - "Looking for connect"
     directories:
-      source: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-eIP7KN"
-      binary: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-eIP7KN"
+      source: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-acAqNj"
+      binary: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-acAqNj"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/bin/clang-scan-deps"
       CMAKE_C_FLAGS: ""
@@ -605,17 +605,17 @@ events:
       variable: "CMAKE_HAVE_CONNECT"
       cached: true
       stdout: |
-        Change Dir: '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-eIP7KN'
+        Change Dir: '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-acAqNj'
         
-        Run Build Command(s): /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_5ed93/fast
-        /usr/bin/gmake  -f CMakeFiles/cmTC_5ed93.dir/build.make CMakeFiles/cmTC_5ed93.dir/build
-        gmake[1]: Entering directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-eIP7KN'
-        Building C object CMakeFiles/cmTC_5ed93.dir/CheckFunctionExists.c.o
-        /usr/bin/cc   -DCHECK_FUNCTION_EXISTS=connect -o CMakeFiles/cmTC_5ed93.dir/CheckFunctionExists.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-eIP7KN/CheckFunctionExists.c
-        Linking C executable cmTC_5ed93
-        /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5ed93.dir/link.txt --verbose=1
-        /usr/bin/cc  -DCHECK_FUNCTION_EXISTS=connect CMakeFiles/cmTC_5ed93.dir/CheckFunctionExists.c.o -o cmTC_5ed93 
-        gmake[1]: Leaving directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-eIP7KN'
+        Run Build Command(s): /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_115a3/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_115a3.dir/build.make CMakeFiles/cmTC_115a3.dir/build
+        gmake[1]: Entering directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-acAqNj'
+        Building C object CMakeFiles/cmTC_115a3.dir/CheckFunctionExists.c.o
+        /usr/bin/cc   -DCHECK_FUNCTION_EXISTS=connect -o CMakeFiles/cmTC_115a3.dir/CheckFunctionExists.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-acAqNj/CheckFunctionExists.c
+        Linking C executable cmTC_115a3
+        /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_115a3.dir/link.txt --verbose=1
+        /usr/bin/cc  -DCHECK_FUNCTION_EXISTS=connect CMakeFiles/cmTC_115a3.dir/CheckFunctionExists.c.o -o cmTC_115a3 
+        gmake[1]: Leaving directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-acAqNj'
         
       exitCode: 0
   -
@@ -627,8 +627,8 @@ events:
     checks:
       - "Looking for remove"
     directories:
-      source: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-urjIrA"
-      binary: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-urjIrA"
+      source: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-5yVTss"
+      binary: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-5yVTss"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/bin/clang-scan-deps"
       CMAKE_C_FLAGS: ""
@@ -639,17 +639,17 @@ events:
       variable: "CMAKE_HAVE_REMOVE"
       cached: true
       stdout: |
-        Change Dir: '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-urjIrA'
+        Change Dir: '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-5yVTss'
         
-        Run Build Command(s): /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_5b00d/fast
-        /usr/bin/gmake  -f CMakeFiles/cmTC_5b00d.dir/build.make CMakeFiles/cmTC_5b00d.dir/build
-        gmake[1]: Entering directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-urjIrA'
-        Building C object CMakeFiles/cmTC_5b00d.dir/CheckFunctionExists.c.o
-        /usr/bin/cc   -DCHECK_FUNCTION_EXISTS=remove -o CMakeFiles/cmTC_5b00d.dir/CheckFunctionExists.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-urjIrA/CheckFunctionExists.c
-        Linking C executable cmTC_5b00d
-        /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5b00d.dir/link.txt --verbose=1
-        /usr/bin/cc  -DCHECK_FUNCTION_EXISTS=remove CMakeFiles/cmTC_5b00d.dir/CheckFunctionExists.c.o -o cmTC_5b00d 
-        gmake[1]: Leaving directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-urjIrA'
+        Run Build Command(s): /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_e7b46/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_e7b46.dir/build.make CMakeFiles/cmTC_e7b46.dir/build
+        gmake[1]: Entering directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-5yVTss'
+        Building C object CMakeFiles/cmTC_e7b46.dir/CheckFunctionExists.c.o
+        /usr/bin/cc   -DCHECK_FUNCTION_EXISTS=remove -o CMakeFiles/cmTC_e7b46.dir/CheckFunctionExists.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-5yVTss/CheckFunctionExists.c
+        Linking C executable cmTC_e7b46
+        /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e7b46.dir/link.txt --verbose=1
+        /usr/bin/cc  -DCHECK_FUNCTION_EXISTS=remove CMakeFiles/cmTC_e7b46.dir/CheckFunctionExists.c.o -o cmTC_e7b46 
+        gmake[1]: Leaving directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-5yVTss'
         
       exitCode: 0
   -
@@ -661,8 +661,8 @@ events:
     checks:
       - "Looking for shmat"
     directories:
-      source: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-vaWRCx"
-      binary: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-vaWRCx"
+      source: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-GjMvO6"
+      binary: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-GjMvO6"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/bin/clang-scan-deps"
       CMAKE_C_FLAGS: ""
@@ -673,17 +673,17 @@ events:
       variable: "CMAKE_HAVE_SHMAT"
       cached: true
       stdout: |
-        Change Dir: '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-vaWRCx'
+        Change Dir: '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-GjMvO6'
         
-        Run Build Command(s): /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_96938/fast
-        /usr/bin/gmake  -f CMakeFiles/cmTC_96938.dir/build.make CMakeFiles/cmTC_96938.dir/build
-        gmake[1]: Entering directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-vaWRCx'
-        Building C object CMakeFiles/cmTC_96938.dir/CheckFunctionExists.c.o
-        /usr/bin/cc   -DCHECK_FUNCTION_EXISTS=shmat -o CMakeFiles/cmTC_96938.dir/CheckFunctionExists.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-vaWRCx/CheckFunctionExists.c
-        Linking C executable cmTC_96938
-        /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_96938.dir/link.txt --verbose=1
-        /usr/bin/cc  -DCHECK_FUNCTION_EXISTS=shmat CMakeFiles/cmTC_96938.dir/CheckFunctionExists.c.o -o cmTC_96938 
-        gmake[1]: Leaving directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-vaWRCx'
+        Run Build Command(s): /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_cbb8d/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_cbb8d.dir/build.make CMakeFiles/cmTC_cbb8d.dir/build
+        gmake[1]: Entering directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-GjMvO6'
+        Building C object CMakeFiles/cmTC_cbb8d.dir/CheckFunctionExists.c.o
+        /usr/bin/cc   -DCHECK_FUNCTION_EXISTS=shmat -o CMakeFiles/cmTC_cbb8d.dir/CheckFunctionExists.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-GjMvO6/CheckFunctionExists.c
+        Linking C executable cmTC_cbb8d
+        /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cbb8d.dir/link.txt --verbose=1
+        /usr/bin/cc  -DCHECK_FUNCTION_EXISTS=shmat CMakeFiles/cmTC_cbb8d.dir/CheckFunctionExists.c.o -o cmTC_cbb8d 
+        gmake[1]: Leaving directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-GjMvO6'
         
       exitCode: 0
   -
@@ -695,8 +695,8 @@ events:
     checks:
       - "Looking for IceConnectionNumber in ICE"
     directories:
-      source: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-JOfVga"
-      binary: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-JOfVga"
+      source: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-GxbNeP"
+      binary: "/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-GxbNeP"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/home/linuxbrew/.linuxbrew/Cellar/llvm/17.0.6_1/bin/clang-scan-deps"
       CMAKE_C_FLAGS: ""
@@ -707,17 +707,17 @@ events:
       variable: "CMAKE_LIB_ICE_HAS_ICECONNECTIONNUMBER"
       cached: true
       stdout: |
-        Change Dir: '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-JOfVga'
+        Change Dir: '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-GxbNeP'
         
-        Run Build Command(s): /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_1d266/fast
-        /usr/bin/gmake  -f CMakeFiles/cmTC_1d266.dir/build.make CMakeFiles/cmTC_1d266.dir/build
-        gmake[1]: Entering directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-JOfVga'
-        Building C object CMakeFiles/cmTC_1d266.dir/CheckFunctionExists.c.o
-        /usr/bin/cc   -DCHECK_FUNCTION_EXISTS=IceConnectionNumber -o CMakeFiles/cmTC_1d266.dir/CheckFunctionExists.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-JOfVga/CheckFunctionExists.c
-        Linking C executable cmTC_1d266
-        /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1d266.dir/link.txt --verbose=1
-        /usr/bin/cc  -DCHECK_FUNCTION_EXISTS=IceConnectionNumber CMakeFiles/cmTC_1d266.dir/CheckFunctionExists.c.o -o cmTC_1d266  -lICE 
-        gmake[1]: Leaving directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-JOfVga'
+        Run Build Command(s): /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_a3cd8/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_a3cd8.dir/build.make CMakeFiles/cmTC_a3cd8.dir/build
+        gmake[1]: Entering directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-GxbNeP'
+        Building C object CMakeFiles/cmTC_a3cd8.dir/CheckFunctionExists.c.o
+        /usr/bin/cc   -DCHECK_FUNCTION_EXISTS=IceConnectionNumber -o CMakeFiles/cmTC_a3cd8.dir/CheckFunctionExists.c.o -c /home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-GxbNeP/CheckFunctionExists.c
+        Linking C executable cmTC_a3cd8
+        /home/linuxbrew/.linuxbrew/Cellar/cmake/3.28.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a3cd8.dir/link.txt --verbose=1
+        /usr/bin/cc  -DCHECK_FUNCTION_EXISTS=IceConnectionNumber CMakeFiles/cmTC_a3cd8.dir/CheckFunctionExists.c.o -o cmTC_a3cd8  -lICE 
+        gmake[1]: Leaving directory '/home/ness/Projects/Personal/GameDev/Minecraft/MinecraftCpp/build/CMakeFiles/CMakeScratch/TryCompile-GxbNeP'
         
       exitCode: 0
 ...

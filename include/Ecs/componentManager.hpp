@@ -2,11 +2,11 @@
 #include "Ecs/EcsConstants.hpp"
 #include "Ecs/component.hpp"
 #include "Ecs/componentAllocator.hpp"
+#include "entityManager.hpp"
 #include "pch.hpp"
 #include "util/contracts.hpp"
 #include "util/macros.hpp"
 #include "util/types.hpp"
-#include "entityManager.hpp"
 #include <type_traits>
 
 namespace ECS
@@ -21,28 +21,28 @@ namespace ECS
         requires std::is_constructible_v<ComponentType, Args...>
       void AddComponent(Entity entity, Args &&...args)
       {
-        if constexpr (IsLargeComponent<ComponentType>()) {
+        if constexpr (std::is_base_of_v<Component::LargeComponent,
+                                        ComponentType>) {
           auto &allocator = GetDynamicComponentAllocator<ComponentType>();
-          allocator.AllocateComponent(entity.GetID(),
-                                      std::forward<Args>(args)...);
+          allocator.AllocateComponent(entity, std::forward<Args>(args)...);
         }
         else {
           auto &allocator = GetComponentAllocator<ComponentType>();
-          allocator.AllocateComponent(entity.GetID(),
-                                      std::forward<Args>(args)...);
+          allocator.AllocateComponent(entity, std::forward<Args>(args)...);
         }
       }
 
       template <typename ComponentType>
       ComponentType &GetComponent(Entity entity)
       {
-        if constexpr (IsLargeComponent<ComponentType>()) {
+        if constexpr (std::is_base_of_v<Component::LargeComponent,
+                                        ComponentType>) {
           auto &allocator = GetDynamicComponentAllocator<ComponentType>();
-          return allocator.GetComponent(entity.GetID());
+          return allocator.GetComponent(entity);
         }
         else {
           auto &allocator = GetComponentAllocator<ComponentType>();
-          return allocator.GetComponent(entity.GetID());
+          return allocator.GetComponent(entity);
         }
       }
 
@@ -111,12 +111,13 @@ namespace ECS
             std::format("Exceeded maximum number of components (which is {})",
                         MAX_COMPONENTS));
 
-        if constexpr (IsLargeComponent<ComponentType>()) {
+        if constexpr (std::is_base_of_v<Component::LargeComponent,
+                                        ComponentType>) {
           m_componentLists[id] =
-              MakeBox<DynamicComponentAllocator<ComponentType>>();
+              Box<IComponentAllocator>(new DynamicComponentAllocator<ComponentType>());
         }
         else {
-          m_componentLists[id] = MakeBox<ComponentAllocator<ComponentType>>();
+          m_componentLists[id] = Box<IComponentAllocator>(new ComponentAllocator<ComponentType>());
         }
 
         m_size++;
@@ -131,9 +132,9 @@ namespace ECS
       }
 
       template <typename ComponentType>
-      constexpr bool IsLargeComponent()
+      usize ComponentID()
       {
-        return std::is_base_of_v<Component::LargeComponent, ComponentType>;
+        return TypeIdMaker<Component::Component>::GetId<ComponentType>();
       }
 
       std::array<Box<IComponentAllocator>, MAX_COMPONENTS> m_componentLists;

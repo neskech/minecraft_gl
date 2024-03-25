@@ -254,6 +254,30 @@ cmake_pch.hxx.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/cmake_pch.hxx.s
 .PHONY : cmake_pch.hxx.s
 
+src/ECS/components/script.o: src/ECS/components/script.cpp.o
+.PHONY : src/ECS/components/script.o
+
+# target to build an object file
+src/ECS/components/script.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/ECS/components/script.cpp.o
+.PHONY : src/ECS/components/script.cpp.o
+
+src/ECS/components/script.i: src/ECS/components/script.cpp.i
+.PHONY : src/ECS/components/script.i
+
+# target to preprocess a source file
+src/ECS/components/script.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/ECS/components/script.cpp.i
+.PHONY : src/ECS/components/script.cpp.i
+
+src/ECS/components/script.s: src/ECS/components/script.cpp.s
+.PHONY : src/ECS/components/script.s
+
+# target to generate assembly for a file
+src/ECS/components/script.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/ECS/components/script.cpp.s
+.PHONY : src/ECS/components/script.cpp.s
+
 src/ECS/entityManager.o: src/ECS/entityManager.cpp.o
 .PHONY : src/ECS/entityManager.o
 
@@ -302,6 +326,30 @@ src/ECS/layer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/ECS/layer.cpp.s
 .PHONY : src/ECS/layer.cpp.s
 
+src/core/application.o: src/core/application.cpp.o
+.PHONY : src/core/application.o
+
+# target to build an object file
+src/core/application.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/core/application.cpp.o
+.PHONY : src/core/application.cpp.o
+
+src/core/application.i: src/core/application.cpp.i
+.PHONY : src/core/application.i
+
+# target to preprocess a source file
+src/core/application.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/core/application.cpp.i
+.PHONY : src/core/application.cpp.i
+
+src/core/application.s: src/core/application.cpp.s
+.PHONY : src/core/application.s
+
+# target to generate assembly for a file
+src/core/application.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/core/application.cpp.s
+.PHONY : src/core/application.cpp.s
+
 src/core/main.o: src/core/main.cpp.o
 .PHONY : src/core/main.o
 
@@ -325,6 +373,30 @@ src/core/main.s: src/core/main.cpp.s
 src/core/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/core/main.cpp.s
 .PHONY : src/core/main.cpp.s
+
+src/core/window.o: src/core/window.cpp.o
+.PHONY : src/core/window.o
+
+# target to build an object file
+src/core/window.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/core/window.cpp.o
+.PHONY : src/core/window.cpp.o
+
+src/core/window.i: src/core/window.cpp.i
+.PHONY : src/core/window.i
+
+# target to preprocess a source file
+src/core/window.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/core/window.cpp.i
+.PHONY : src/core/window.cpp.i
+
+src/core/window.s: src/core/window.cpp.s
+.PHONY : src/core/window.s
+
+# target to generate assembly for a file
+src/core/window.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MinecraftCppGL.dir/build.make CMakeFiles/MinecraftCppGL.dir/src/core/window.cpp.s
+.PHONY : src/core/window.cpp.s
 
 src/scene/scene.o: src/scene/scene.cpp.o
 .PHONY : src/scene/scene.o
@@ -419,15 +491,24 @@ help:
 	@echo "... cmake_pch.hxx.pch"
 	@echo "... cmake_pch.hxx.i"
 	@echo "... cmake_pch.hxx.s"
+	@echo "... src/ECS/components/script.o"
+	@echo "... src/ECS/components/script.i"
+	@echo "... src/ECS/components/script.s"
 	@echo "... src/ECS/entityManager.o"
 	@echo "... src/ECS/entityManager.i"
 	@echo "... src/ECS/entityManager.s"
 	@echo "... src/ECS/layer.o"
 	@echo "... src/ECS/layer.i"
 	@echo "... src/ECS/layer.s"
+	@echo "... src/core/application.o"
+	@echo "... src/core/application.i"
+	@echo "... src/core/application.s"
 	@echo "... src/core/main.o"
 	@echo "... src/core/main.i"
 	@echo "... src/core/main.s"
+	@echo "... src/core/window.o"
+	@echo "... src/core/window.i"
+	@echo "... src/core/window.s"
 	@echo "... src/scene/scene.o"
 	@echo "... src/scene/scene.i"
 	@echo "... src/scene/scene.s"

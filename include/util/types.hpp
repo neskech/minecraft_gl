@@ -1,6 +1,7 @@
 #pragma once
 #include "glm/fwd.hpp"
 #include "pch.hpp"
+#include <__expected/unexpected.h>
 
 template <typename T> using Box = std::unique_ptr<T>;
 
@@ -39,12 +40,12 @@ template <typename T, typename E> inline Result<T, E> Ok(T &&t)
 
 template <typename T, typename E> inline Result<T, E> Err(E &&e)
 {
-  return std::expected(std::forward<E>(e));
+  return std::unexpected<E>(std::forward<E>(e));
 }
 
 template <typename T, typename E> inline Result<T, E> ErrWithCopy(E e)
 {
-  return std::expected(e);
+  return std::unexpected<E>(e);
 }
 
 struct Unit {};

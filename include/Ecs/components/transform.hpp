@@ -6,7 +6,6 @@ namespace ECS::Component
 {
   struct Transform : Component::Component
   {
-      Transform();
 
       Vector3 position;
   };

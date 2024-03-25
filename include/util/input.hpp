@@ -12,28 +12,29 @@ constexpr usize NUM_MOUSE_BUTTONS = 8;
 class Input
 {
   public:
-    Input() {}
+    Input();
     NO_COPY_OR_MOVE_CONSTRUCTORS(Input)
 
-    bool IsKeyPressed(KeyInput key,
+    static bool IsKeyPressed(KeyInput key,
                       KeyModifiers modifiers = KeyModifiers::None);
-    bool IsMouseButtonDown(MouseInput button,
+    static bool IsMouseButtonDown(MouseInput button,
                            KeyModifiers modifiers = KeyModifiers::None);
 
-    inline float GetMouseX() { return m_mouseX; }
-    inline float GetMouseY() { return m_mouseY; }
-    inline float GetScrollX() { return m_scrollX; }
-    inline float GetScrollY() { return m_scrollY; }
+    static inline float GetMouseX() { return s_instance->m_mouseX; }
+    static inline float GetMouseY() { return s_instance->m_mouseY; }
+    static inline float GetScrollX() { return s_instance->m_scrollX; }
+    static inline float GetScrollY() { return s_instance->m_scrollY; }
 
-    void OnWindowKeyEvent(GLFWwindow *, i32 key, i32 scancode, i32 action,
+    static void OnWindowKeyEvent(GLFWwindow *, i32 key, i32 scancode, i32 action,
                           i32 mods);
-    void OnWindowMousePressedEvent(GLFWwindow *, i32 button, i32 action,
+    static void OnWindowMousePressedEvent(GLFWwindow *, i32 button, i32 action,
                                    i32 mods);
-    void OnWindowMouseMoveEvent(GLFWwindow *, double xpos, double ypos);
-    void OnWindowMouseScrolledEvent(GLFWwindow *, double xoffset,
+    static void OnWindowMouseMoveEvent(GLFWwindow *, double xpos, double ypos);
+    static void OnWindowMouseScrolledEvent(GLFWwindow *, double xoffset,
                                     double yoffset);
 
   private:
+    inline static Input *s_instance;
     std::array<std::bitset<8>, NUM_KEYS> m_keyPresses;
     std::array<std::bitset<8>, NUM_MOUSE_BUTTONS> m_mouseButtons;
     float m_mouseX, m_mouseY;

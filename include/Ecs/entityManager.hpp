@@ -47,7 +47,6 @@ namespace ECS
       Entity MakeEntity(std::string name = "");
       void DeleteEntity(Entity entity);
 
-      Signature GetSignature(Entity entity) const;
       bool HasComponent(Entity entity, usize componentID) const;
       void AddComponent(Entity entity, usize componentID);
       void RemoveComponent(Entity entity, usize componentID);
