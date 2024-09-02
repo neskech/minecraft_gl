@@ -1,17 +1,15 @@
+use super::{
+    componentAllocator::{self, ComponentAllocator},
+    entity::EntityId,
+};
 use std::{
     any::{type_name, TypeId},
     borrow::BorrowMut,
     collections::HashMap,
 };
 
-use super::{
-    componentAllocator::{ComponentAllocator, IComponentAllocator},
-    entity::Entity,
-    opaqueComponentAllocator::OpaqueComponentAllocator,
-};
-
 pub struct ComponentManager {
-    componentAllocators: Vec<OpaqueComponentAllocator>,
+    componentAllocators: Vec<ComponentAllocator>,
     typeIdToIndex: HashMap<TypeId, usize>,
 }
 
@@ -23,31 +21,41 @@ impl ComponentManager {
         }
     }
 
-    pub fn GetComponent<T: 'static>(&mut self, entity: Entity) -> &mut T {
+    pub fn GetComponent<T: 'static>(
+        &mut self,
+        entity: EntityId,
+    ) -> Result<&mut T, componentAllocator::Error> {
         let allocator = self.GetAllocator::<T>();
-        allocator.GetComponent::<T>(entity).unwrap()
+        allocator.GetComponent::<T>(entity)
     }
 
-    pub fn AddComponent<T: 'static>(&mut self, entity: Entity, component: T) -> &mut T {
+    pub fn AddComponent<T: 'static>(
+        &mut self,
+        entity: EntityId,
+        component: T,
+    ) -> Result<&mut T, componentAllocator::Error> {
         let allocator = self.GetAllocator::<T>();
-        allocator.AllocateComponent::<T>(entity, component).unwrap();
+        allocator.AllocateComponent::<T>(entity, component)?;
         self.GetComponent(entity)
     }
 
-    pub fn HasComponent<T: 'static>(&mut self, entity: Entity) -> bool {
+    pub fn HasComponent<T: 'static>(&mut self, entity: EntityId) -> bool {
         let allocator = self.GetAllocator::<T>();
         allocator.HasComponent::<T>(entity)
     }
 
-    pub fn RemoveComponent<T: 'static>(&mut self, entity: Entity) {
+    pub fn RemoveComponent<T: 'static>(
+        &mut self,
+        entity: EntityId,
+    ) -> Result<(), componentAllocator::Error> {
         let allocator = self.GetAllocator::<T>();
-        allocator.FreeComponent::<T>(entity).unwrap();
+        allocator.FreeComponent::<T>(entity)
     }
 
-    fn GetAllocator<T: 'static>(&mut self) -> &mut OpaqueComponentAllocator {
+    fn GetAllocator<T: 'static>(&mut self) -> &mut ComponentAllocator {
         let typeId = TypeId::of::<T>();
         if !self.typeIdToIndex.contains_key(&typeId) {
-            let allocator = OpaqueComponentAllocator::New::<T>(type_name::<T>());
+            let allocator = ComponentAllocator::New::<T>(type_name::<T>());
             self.componentAllocators.push(allocator);
             self.typeIdToIndex
                 .insert(typeId, self.componentAllocators.len() - 1);

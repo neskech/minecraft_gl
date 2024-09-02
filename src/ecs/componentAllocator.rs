@@ -1,5 +1,6 @@
 use thiserror::Error;
-use super::entity::Entity;
+use crate::utility::opaqueVector::OpaqueVector;
+use super::{constants::MAX_ALLOCATED_COMPONENTS, entity::EntityId};
 use std::collections::HashMap;
 
 #[derive(Error, Debug)]
@@ -12,32 +13,30 @@ pub enum Error {
     MaximumComponentsExceeded,
 }
 
-const MAX_COMPONENTS: usize = 5128;
-
-pub trait IComponentAllocator {}
-
 #[derive(Debug)]
-pub struct ComponentAllocator<T: Copy> {
-    components: Vec<T>,
-    entityToIndex: HashMap<Entity, usize>,
-    indexToEntity: HashMap<usize, Entity>,
+pub struct ComponentAllocator {
+    components: OpaqueVector,
+    entityToIndex: HashMap<EntityId, usize>,
+    indexToEntity: HashMap<usize, EntityId>,
     componentTypeName: String,
 }
 
-impl<T: Copy> IComponentAllocator for ComponentAllocator<T> {}
-
-impl<T: Copy> ComponentAllocator<T> {
-    pub fn New(componentTypeName: impl Into<String>) -> ComponentAllocator<T> {
+impl ComponentAllocator {
+    pub fn New<T: 'static>(componentTypeName: impl Into<String>) -> ComponentAllocator {
         ComponentAllocator {
-            components: Vec::new(),
+            components: OpaqueVector::New::<T>(10),
             entityToIndex: HashMap::new(),
             indexToEntity: HashMap::new(),
             componentTypeName: componentTypeName.into(),
         }
     }
 
-    pub fn AllocateComponent(&mut self, entity: Entity, component: T) -> Result<(), Error> {
-        if self.components.len() >= MAX_COMPONENTS {
+    pub fn AllocateComponent<T: 'static>(
+        &mut self,
+        entity: EntityId,
+        component: T,
+    ) -> Result<(), Error> {
+        if self.components.GetLength() >= MAX_ALLOCATED_COMPONENTS {
             return Err(Error::MaximumComponentsExceeded);
         }
 
@@ -45,44 +44,47 @@ impl<T: Copy> ComponentAllocator<T> {
             return Err(Error::ComponentAlreadyAllocated);
         }
 
-        let newIndex = self.components.len();
+        let newIndex = self.components.GetLength();
         self.entityToIndex.insert(entity, newIndex);
         self.indexToEntity.insert(newIndex, entity);
-        self.components.push(component);
+        self.components.Push(component);
 
         Ok(())
     }
 
-    pub fn FreeComponent(&mut self, entity: Entity) -> Result<(), Error> {
+    pub fn FreeComponent<T: 'static>(&mut self, entity: EntityId) -> Result<(), Error> {
         let currentIndex = *self
             .entityToIndex
             .get(&entity)
             .ok_or(Error::EntityNotFound)?;
 
-        debug_assert!(currentIndex <= self.components.len() - 1);
-        self.components[currentIndex] = self.components[self.components.len() - 1];
+        let lastIndex = self.components.GetLength() - 1;
+        debug_assert!(currentIndex <= lastIndex);
+        *self.components.Get(currentIndex) = self.components.Pop::<T>();
 
         let lastEntityId = *self
             .indexToEntity
-            .get(&(self.components.len() - 1))
+            .get(&lastIndex)
             .ok_or(Error::EntityNotFound)?;
         self.entityToIndex.insert(lastEntityId, currentIndex);
         self.indexToEntity.insert(currentIndex, lastEntityId);
 
-        self.indexToEntity.remove(&(self.components.len() - 1));
+        self.indexToEntity.remove(&lastIndex);
         self.entityToIndex.remove(&entity);
-
-        self.components.pop();
 
         Ok(())
     }
 
-    pub fn GetComponent(&mut self, entity: Entity) -> Result<&mut T, Error> {
+    pub fn HasComponent<T: 'static>(&self, entity: EntityId) -> bool {
+        self.entityToIndex.contains_key(&entity)
+    }
+
+    pub fn GetComponent<T: 'static>(&mut self, entity: EntityId) -> Result<&mut T, Error> {
         let index = *self
             .entityToIndex
             .get(&entity)
             .ok_or(Error::EntityNotFound)?;
-        Ok(&mut self.components[index])
+        Ok(self.components.Get(index))
     }
 
     pub fn GetComponentTypeName(&self) -> &str {
