@@ -8,7 +8,7 @@ using LayerMask = std::bitset<MAX_LAYERS>;
 class LayerRegistry
 {
   public:
-    LayerRegistry();
+    LayerRegistry() {}
     NO_COPY_OR_MOVE_CONSTRUCTORS(LayerRegistry)
 
     void AddLayerName(std::string_view name);

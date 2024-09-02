@@ -5,5 +5,8 @@
 #include <print>
 void *operator new(usize stuff) { return malloc(stuff); }
 
-int main() { std::vector<int> a = {1};
-a.clear(); }
+int main()
+{
+  std::vector<int> a = {1};
+  a.clear();
+}

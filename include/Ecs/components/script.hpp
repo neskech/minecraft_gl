@@ -1,6 +1,6 @@
 #pragma once
-#include "component.hpp"
-#include "entityManager.hpp"
+#include "Ecs/component.hpp"
+#include "Ecs/entityManager.hpp"
 #include "util/input.hpp"
 
 namespace Component

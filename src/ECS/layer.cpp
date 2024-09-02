@@ -1,5 +1,5 @@
 #include "Ecs/Layer.hpp"
-#include "EcsConstants.hpp"
+#include "Ecs/EcsConstants.hpp"
 #include "util/contracts.hpp"
 
 void LayerRegistry::AddLayerName(std::string_view name) {

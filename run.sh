@@ -9,6 +9,11 @@ elif [[ "$1" = "val" ]]; then
     cd build
     make
     valgrind ./MinecraftCppGL
+elif [[ "$1" = "test" ]]; then
+    cmake -S . -B ./build -DCMAKE_BUILD_TYPE="Debug"
+    cd build
+    make
+    ./tests
 else
     cmake -S . -B ./build -DCMAKE_BUILD_TYPE="$1"
     cd build

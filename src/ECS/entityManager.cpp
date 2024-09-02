@@ -1,7 +1,7 @@
 #include "Ecs/entityManager.hpp"
 #include "Ecs/EcsConstants.hpp"
-#include "Layer.hpp"
-#include "signature.hpp"
+#include "Ecs/Layer.hpp"
+#include "Ecs/signature.hpp"
 #include "util/contracts.hpp"
 #include "util/types.hpp"
 

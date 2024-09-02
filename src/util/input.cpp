@@ -1,6 +1,6 @@
 #include "util/input.hpp"
 #include "GLFW/glfw3.h"
-#include "eventManager.hpp"
+#include "event/eventManager.hpp"
 #include "util/contracts.hpp"
 #include "util/inputMap.hpp"
 #include <bitset>

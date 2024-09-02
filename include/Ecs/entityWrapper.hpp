@@ -20,8 +20,6 @@ class EntityWrapper
 
     inline void SetTag(std::string_view tag) {}
 
-    inline 
-
   private:
     Entity m_entity;
     EntityComponentSystem &m_Ecs;

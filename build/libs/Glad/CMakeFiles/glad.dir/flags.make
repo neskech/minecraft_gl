@@ -6,5 +6,5 @@ C_DEFINES =
 
 C_INCLUDES = -I/home/ness/Projects/Personal/GameDev/Minecraft/minecraft_gl/libs/Glad/include
 
-C_FLAGS = 
+C_FLAGS = -g
 

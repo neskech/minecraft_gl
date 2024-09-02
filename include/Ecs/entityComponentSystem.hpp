@@ -4,7 +4,6 @@
 #include "Ecs/entityManager.hpp"
 #include "Ecs/systemManager.hpp"
 #include "Layer.hpp"
-#include "event/eventManager.hpp"
 #include "util/contracts.hpp"
 #include "util/macros.hpp"
 #include <type_traits>
@@ -20,13 +19,7 @@ namespace Event
 class EntityComponentSystem
 {
   public:
-    EntityComponentSystem()
-    {
-      EventManager::Subscribe<Event::EntityDestroyed>(
-          [&](const Event::EntityDestroyed &event) {
-            DeleteEntity(event.entity);
-          });
-    }
+    EntityComponentSystem() {}
 
     NO_COPY_OR_MOVE_CONSTRUCTORS(EntityComponentSystem)
 
@@ -43,7 +36,8 @@ class EntityComponentSystem
     }
 
     template <typename ComponentType, typename... Args>
-      requires std::is_base_of_v<Component::Component, ComponentType>
+      requires std::is_base_of_v<Component::Component, ComponentType> &&
+               std::is_constructible_v<ComponentType, Args...>
     ComponentType &AddComponent(Entity entity, Args &&...args)
     {
       Requires(entity.HasValidID());
@@ -58,7 +52,7 @@ class EntityComponentSystem
 
       m_entityManager.AddComponent(entity, componentId);
       m_componentManager.AddComponent<ComponentType>(
-          entity.GetID(), std::forward<Args>(args)...);
+          entity, std::forward<Args>(args)...);
       m_systemManager.EntitySignatureChanged(entity, sig);
 
       return m_componentManager.GetComponent<ComponentType>(entity.GetID());

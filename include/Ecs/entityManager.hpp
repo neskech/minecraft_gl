@@ -20,7 +20,6 @@ class Entity
     bool operator==(const Entity &other) const { return m_id == other.m_id; }
     struct Hasher
     {
-
         usize operator()(const Entity &handle) const
         {
           return std::hash<usize>{}(handle.m_id);

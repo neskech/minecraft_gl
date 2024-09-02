@@ -15,10 +15,9 @@ project(MinecraftCppGL)
 
 file(GLOB_RECURSE file_sources src/**.cpp)
 add_executable(${PROJECT_NAME} ${file_sources})
+
+# TODO remove this, should have to do Ecs/shit for imports
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include)
-target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include/core)
-target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include/event)
-target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include/Ecs)
 target_precompile_headers(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include/pch.hpp)
 
 # GLFW
@@ -37,3 +36,17 @@ target_include_directories(${PROJECT_NAME} PUBLIC libs/FastNoiseLite/include)
 add_subdirectory(libs/stb_image EXCLUDE_FROM_ALL)
 
 target_link_libraries(${PROJECT_NAME} glfw glm glad stb_image)
+
+# Testing
+add_subdirectory(libs/Catch2)
+file(GLOB_RECURSE test_sources tests/**.cpp)
+add_executable(tests ${test_sources} ${file_sources})
+
+target_link_libraries(tests PRIVATE Catch2::Catch2WithMain glfw glm glad stb_image)
+target_include_directories(tests PUBLIC ${PROJECT_SOURCE_DIR}/include)
+
+list(APPEND CMAKE_MODULE_PATH libs/Catch2/extras)
+include(CTest)
+include(Catch)
+catch_discover_tests(tests)
+target_precompile_headers(tests PUBLIC ${PROJECT_SOURCE_DIR}/tests/pch.hpp)
