@@ -1,14 +1,83 @@
 {
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-      {
-        "name": "C/C++: g++ build and debug project",
-        "type": "lldb",
-        "request": "launch",
-        "program": "${workspaceFolder}/build/MinecraftCppGL",
-        "args": [],
-        "cwd": "${workspaceFolder}",
-        "preLaunchTask": "Build"
-      },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'minecraft_gl'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=minecraft_gl",
+                    "--package=minecraft_gl"
+                ],
+                "filter": {
+                    "name": "minecraft_gl",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'minecraft_gl'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=minecraft_gl",
+                    "--package=minecraft_gl"
+                ],
+                "filter": {
+                    "name": "minecraft_gl",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug integration test 'componentAllocatorTest'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--test=componentAllocatorTest",
+                    "--package=minecraft_gl"
+                ],
+                "filter": {
+                    "name": "componentAllocatorTest",
+                    "kind": "test"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug integration test 'opaqueVectorTest'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--test=opaqueVectorTest",
+                    "--package=minecraft_gl"
+                ],
+                "filter": {
+                    "name": "opaqueVectorTest",
+                    "kind": "test"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
     ]
 }
