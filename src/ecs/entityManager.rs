@@ -5,9 +5,10 @@ use std::{
 use thiserror::Error;
 
 use super::{
-    componentIdMaker::ComponentIdMaker,
     entity::EntityId,
+    layerManager::LayerMask,
     signature::{Signature, SignatureBuilder},
+    typeIdMaker::TypeIdMaker,
 };
 
 #[derive(Error, Debug)]
@@ -16,12 +17,13 @@ pub struct EntityDoesNotExist;
 
 #[derive(Debug)]
 pub struct EntityData {
-    baseEntity: EntityId,
-    name: String,
-    tag: String,
-    signature: Signature,
-    children: Vec<EntityId>,
-    parent: Option<EntityId>,
+    pub baseEntity: EntityId,
+    pub name: String,
+    pub tag: String,
+    pub signature: Signature,
+    pub layerMask: LayerMask,
+    pub children: Vec<EntityId>,
+    pub parent: Option<EntityId>,
 }
 
 pub struct EntityManager {
@@ -39,7 +41,7 @@ impl EntityManager {
         }
     }
 
-    pub fn CreateEntity(&mut self, componentIdMaker: &mut ComponentIdMaker) -> EntityId {
+    pub fn CreateEntity(&mut self, componentIdMaker: &mut TypeIdMaker) -> EntityId {
         let numEntities = self.entityData.len();
         let newId = self.entityIdQueue.pop_front().unwrap_or(numEntities);
 
@@ -48,6 +50,7 @@ impl EntityManager {
             baseEntity: newEntity,
             name: String::new(),
             tag: String::new(),
+            layerMask: LayerMask::New(),
             signature: SignatureBuilder::New(componentIdMaker).Build(),
             children: Vec::new(),
             parent: None,
@@ -87,7 +90,7 @@ impl EntityManager {
         inRange && isSome
     }
 
-    pub fn EntityData(&mut self, entityId: EntityId) -> Result<&EntityData, EntityDoesNotExist> {
+    pub fn EntityData(&self, entityId: EntityId) -> Result<&EntityData, EntityDoesNotExist> {
         if (!self.IsEntityAlive(entityId)) {
             return Err(EntityDoesNotExist);
         }

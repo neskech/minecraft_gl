@@ -4,12 +4,13 @@ use crate::ecs::constants::MAX_COMPONENT_TYPES;
 
 use super::constants::MAX_LAYERS;
 
+#[derive(Debug)]
 pub struct LayerMask {
-    bitSet: bit_set::BitSet,
+    pub bitSet: bit_set::BitSet,
 }
 
 impl LayerMask {
-    fn New() -> LayerMask {
+    pub fn New() -> LayerMask {
         LayerMask {
             bitSet: bit_set::BitSet::with_capacity(MAX_LAYERS),
         }
@@ -34,20 +35,20 @@ impl LayerManager {
             .insert(layerName.into(), self.layerNameToIndex.len());
     }
 
-    pub fn GetLayerMaskFromLayer(&self, layerName: &str) -> LayerMask {
+    pub fn AddLayerToMask(&self, layerName: &str, layerMask: &mut LayerMask) {
         assert!(self.layerNameToIndex.contains_key(layerName));
-        let mut mask = LayerMask::New();
-        mask.bitSet.insert(self.GetLayerIndexByName(layerName));
-        mask
+        layerMask.bitSet.insert(self.GetLayerIndexByName(layerName));
     }
 
-    pub fn GetLayerMaskFromLayers(&self, layerNames: Vec<&str>) -> LayerMask {
-        let mut mask = LayerMask::New();
+    pub fn AddLayersToMask(&self, layerNames: Vec<&str>, layerMask: &mut LayerMask) {
         for name in layerNames {
             assert!(self.layerNameToIndex.contains_key(name));
-            mask.bitSet.insert(self.GetLayerIndexByName(name));
+            layerMask.bitSet.insert(self.GetLayerIndexByName(name));
         }
-        mask
+    }
+
+    pub fn HasLayer(&self, layerName: &str) -> bool {
+        self.layerNameToIndex.contains_key(layerName)
     }
 
     pub fn GetLayerCount(&self) -> usize {

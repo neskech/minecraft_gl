@@ -9,3 +9,7 @@ thiserror = "*"
 log = "*"
 pretty_env_logger = "*"
 bit-set = "0.8"
+vulkanalia = { version = "=0.25.0", features = ["libloading", "provisional", "window"] }
+winit = "*"
+image = "*"
+anyhow = "1"
